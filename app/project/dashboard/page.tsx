@@ -101,7 +101,7 @@ export default function DashBoard() {
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-freground text-2xl font-bold">プロジェクト一覧</h1>
+        <h1 className="text-2xl text-foreground font-semibold">履歴</h1>
           <Button
             size="sm"
             className="bg-foreground px-4 overflow-hidden relative hover:bg-blue-500"
