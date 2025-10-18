@@ -15,6 +15,7 @@ function LoggedInMenu({ user, profile, onLogout }: {user: any, profile: any, onL
     user?.email ||
     "ゲスト"
   const avatarUrl = user?.user_metadata?.avatar_url
+  const router = useRouter()
 
   return (
     <>
@@ -38,6 +39,7 @@ function LoggedInMenu({ user, profile, onLogout }: {user: any, profile: any, onL
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => router.push("/project/dashboard")}>ダッシュボード</DropdownMenuItem>
         <DropdownMenuItem onClick={onLogout}>ログアウト</DropdownMenuItem>
       </DropdownMenuContent>
       </DropdownMenu>

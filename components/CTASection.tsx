@@ -1,11 +1,12 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
 
 export default function CTASection() {
+  const router = useRouter()
   return (
     <section className="container mx-auto px-4 py-8">
       <motion.div
@@ -20,13 +21,14 @@ export default function CTASection() {
             高額商品の購入、重要な決断に！
           </h3>
           <p className="text-lg text-muted-foreground">
-            ご検討の程よろしく願いします。
           </p>
-          <Link href="/auth/login" className="flex gap-4 justify-center pt-4">
-            <Button size="lg" className="bg-foreground text-lg px-8">
+            <Button
+              size="lg"
+              className="bg-foreground text-lg px-8"
+              onClick={() => router.push("/project/dashboard")}
+            >
               無料で始める
             </Button>
-          </Link>
         </Card>
       </motion.div>
     </section>

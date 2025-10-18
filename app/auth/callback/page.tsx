@@ -15,7 +15,7 @@ export default function AuthCallback() {
   }, [user, authLoading, router])
 
   useEffect(() => {
-    router.push("/")
+    router.push("/project/dashboard")
   }, [])
 
   return <LoadingSpinner />

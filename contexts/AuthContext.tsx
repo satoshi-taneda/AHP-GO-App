@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(null)
     setProfile(null)
     toast.success("ログアウトしました!")
-    router.replace("/home")
+    router.replace("/")
   }
 
   // 初回読み込み時に実行される処理

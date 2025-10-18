@@ -108,10 +108,7 @@ export default function NewProjectPage() {
         // 4.成功トースト
         toast.success("保存しました!")
         // 仮でプロジェクト一覧へ移動
-        router.replace("/")
-        await new Promise(() => setTimeout(() => {
-          window.location.reload()
-        }, 500))
+        router.replace("/project/dashboard")
 
     } catch(err) {
       console.error(err)

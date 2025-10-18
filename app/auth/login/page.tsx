@@ -36,7 +36,7 @@ export default function LoginPage() {
       })
 
       toast.success("ログインしました!")
-      router.replace("/")
+      router.replace("/project/dashboard")
       await new Promise(() => setTimeout(() => {
         window.location.reload()
       }, 500))

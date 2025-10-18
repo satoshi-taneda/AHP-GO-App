@@ -1,11 +1,12 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
 import Image from "next/image"
 
 export default function HeroSection2() {
+  const router = useRouter()
   return (
    <section className="container mx-auto px-4 py-24 text-center bg-gradient-to-b from-white to-gray-50">
    <div className="flex justify-between gap-6">
@@ -25,11 +26,13 @@ export default function HeroSection2() {
           AHP-GOは、より良い意思決定のためのサポートアプリです。
         </p>
         </div>
-        <Link href="/auth/login">
-          <Button size="lg" className="mt-8 bg-foreground text-lg px-8">
-            無料で始める
-          </Button>
-        </Link>
+        <Button
+        size="lg"
+        className="mt-8 bg-foreground text-lg px-8"
+        onClick={() => router.push("/project/dashboard")}
+        >
+          無料で始める
+        </Button>
       </motion.div>
 
       {/* 左側: イメージ */}
