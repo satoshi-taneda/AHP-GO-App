@@ -203,39 +203,39 @@ export function AlternativesManager() {
       )}
       {/* 検索フォーム */}
       {isSearching && (
-      <>
-      <div className="flex gap-2">
-        <input
-          className="text-sm border px-3 py-2 flex-1 rounded"
-          placeholder="例) 冷蔵庫 一人暮らし"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-        />
-        <Button
-          onClick={handleSearch}
-          disabled={searchLoading}
-          variant="default"
-        >
-          {searchLoading ? "検索中..." : "検索"}
-        </Button>
-        <Button
-          onClick={() => {
-            setKeyword("")
-            setResults([])
-            setIsSearching(false)
-          }}
-          size="sm"
-          variant="ghost"
-        >
-          キャンセル
-        </Button>
+      <div>
+        <div className="flex gap-2 p-4 bg-muted/50 rounded-lg">
+          <input
+            className="text-sm border px-3 py-2 flex-1 rounded"
+            placeholder="例) 冷蔵庫 一人暮らし"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+          />
+          <Button
+            onClick={handleSearch}
+            disabled={searchLoading}
+            variant="default"
+          >
+            {searchLoading ? "検索中..." : "検索"}
+          </Button>
+          <Button
+            onClick={() => {
+              setKeyword("")
+              setResults([])
+              setIsSearching(false)
+            }}
+            size="sm"
+            variant="ghost"
+          >
+            キャンセル
+          </Button>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          {results.map((item, i) => (
+            <ProductCard key={i} item={item} onSave={() => handleAddAlternative2(keyword, item)} />
+          ))}
+        </div>
       </div>
-      <div className="grid grid-cols-2 gap-4">
-        {results.map((item, i) => (
-          <ProductCard key={i} item={item} onSave={() => handleAddAlternative2(keyword, item)} />
-        ))}
-      </div>
-      </>
       )}
       {/* 登録済み候補リスト */}
       {project?.alternatives.length === 0 && !isAdding && !isSearching ? (
