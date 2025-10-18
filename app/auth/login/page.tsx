@@ -49,13 +49,14 @@ export default function LoginPage() {
     }
   }
   const handleGoogleLogin = async () => {
+    const redirectURL = process.env.NEXT_PUBLIC_SITE_URL || `${window.location.origin}/auth/callback`
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback` // 任意
+        redirectTo: redirectURL
       }
     })
-    if (error) console.error("ログインエラー:", error)
+    if (error) console.error("Googleログインエラー:", error)
   }
 
   return (
