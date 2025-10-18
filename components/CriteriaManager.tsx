@@ -44,30 +44,27 @@ export function CriteriaManager() {
     <Card className="p-6 space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex flex-col">
-          <h3 className="text-xl font-semibold">評価基準(Criteria)</h3>
-          <p className="text-sm text-center py-2 text-muted-foreground">
-            -- 目標に対する評価基準を入力 --
-          </p>
+          <h3 className="mb-2 text-xl font-semibold">評価基準(Criteria)</h3>
+          {project?.criteria ? project.criteria.length < 3
+            ? (
+                <div className="flex items-center text-sm gap-2 p-1 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
+                  <AlertTriangle className="w-5 h-5 text-yellow-600" />
+                   <span>重要: 3つ以上追加してください</span>
+                </div>
+              )
+            : project?.criteria ? project.criteria.length > 5
+            ? (
+                <div className="flex items-center text-sm gap-2 p-2 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
+                  <AlertTriangle className="w-5 h-5 text-yellow-600" />
+                   <span>重要: 5より大きいと比較回数が膨大になります</span>
+                </div>
+              )
+            : null : null : null}
         </div>
           {!isAdding && (
             <div className="flex items-center gap-4">
-              {project?.criteria ? project.criteria.length < 3
-                ? (
-                    <div className="flex items-center text-sm gap-2 p-2 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
-                      <AlertTriangle className="w-5 h-5 text-yellow-600" />
-                       <span>重要: 3つ以上追加してください</span>
-                    </div>
-                  )
-                : project?.criteria ? project.criteria.length > 5
-                ? (
-                    <div className="flex items-center text-sm gap-2 p-2 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
-                      <AlertTriangle className="w-5 h-5 text-yellow-600" />
-                       <span>重要: 5より大きいと比較回数が膨大になります</span>
-                    </div>
-                  )
-                : null : null : null}
               <Button onClick={() => setIsAdding(true)} size="sm" variant="outline">
-                <Plus className="w-4 h-4 mr-2" />追加する
+                <Plus className="w-4 h-4 mr-2" />追加
               </Button>
             </div>
           )}
@@ -106,7 +103,7 @@ export function CriteriaManager() {
       {project?.criteria.length === 0 && !isAdding
         ?
           <p className="text-center text-sm py-6 text-muted-foreground">
-            未選択
+            評価基準を追加してください。
           </p>
         : (
           <div className="space-y-2">

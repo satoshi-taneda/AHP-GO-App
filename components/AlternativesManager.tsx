@@ -6,7 +6,7 @@ import { fetchRakutenItems } from "@/lib/rakutenApi"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
-import { Plus, Trash2, Edit, AlertTriangle } from "lucide-react"
+import { Plus, Search,  Trash2, Edit, AlertTriangle } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import ProductCard from "@/components/ProductCard"
 
@@ -55,7 +55,7 @@ export function AlternativesManager() {
         `${item.price.toLocaleString()}円 ` + item.name,
         item.image || "",
       )
-      setKeyword("")
+      // setKeyword("")
       setResults([])
       setIsSearching(false)
   }
@@ -105,45 +105,45 @@ export function AlternativesManager() {
 
   return (
     <Card className="p-6 space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-top justify-between">
         <div className="flex flex-col">
-          <h3 className="text-xl font-semibold">候補(Alternatives)</h3>
-          <p className="text-sm py-2 text-muted-foreground">
-            -- 比較する候補を入力 --
-          </p>
+          <h3 className="mb-2 text-xl font-semibold">候補(Alternatives)</h3>
+          {project?.alternatives ? project.alternatives.length < 3
+            ? (
+                <div className="flex items-center text-sm gap-2 p-1 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
+                  <AlertTriangle className="w-5 h-5 text-yellow-600" />
+                   <span>重要: 3つ以上追加してください</span>
+                </div>
+              )
+            : project?.alternatives ?  project.alternatives.length > 5
+            ? (
+                <div className="flex items-center text-sm gap-2 p-2 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
+                  <AlertTriangle className="w-5 h-5 text-yellow-600" />
+                   <span>重要: 5より大きいと比較回数が膨大になります</span>
+                </div>
+              ) : null : null : null}
         </div>
           {!isAdding &&  !isSearching  && (
-            <div className="flex items-center gap-4">
-              {project?.alternatives ? project.alternatives.length < 3
-                ? (
-                    <div className="flex items-center text-sm gap-2 p-2 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
-                      <AlertTriangle className="w-5 h-5 text-yellow-600" />
-                       <span>重要: 3つ以上追加してください</span>
-                    </div>
-                  )
-                : project?.alternatives ?  project.alternatives.length > 5
-                ? (
-                    <div className="flex items-center text-sm gap-2 p-2 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
-                      <AlertTriangle className="w-5 h-5 text-yellow-600" />
-                       <span>重要: 5より大きいと比較回数が膨大になります</span>
-                    </div>
-                  ) : null : null : null}
-              <Button onClick={() => {
-                        setIsAdding(false)
-                        setIsSearching(true)
-                      }}
-                      size="sm"
-                      variant="outline">
-                楽天検索
-              </Button>
-              <Button onClick={() => {
-                        setIsAdding(true)
-                        setIsSearching(false)
-                      }}
-                      size="sm"
-                      variant="outline"
+            <div className="flex items-center gap-2">
+              <Button
+                onClick={() => {
+                  setIsAdding(false)
+                  setIsSearching(true)
+                }}
+                size="sm"
+                variant="ghost"
               >
-                <Plus className="w-4 h-4 mr-2" />追加する
+                <Search className="w-4 h-4 mr-2" />楽天で検索
+              </Button>
+              <Button
+                onClick={() => {
+                  setIsAdding(true)
+                  setIsSearching(false)
+                }}
+                size="sm"
+                variant="outline"
+              >
+                <Plus className="w-4 h-4 mr-2" />追加
               </Button>
             </div>
           )}
@@ -159,7 +159,7 @@ export function AlternativesManager() {
           />
           <Input
             className="flex-1"
-            placeholder="例) 1000円 ブラック 携帯可 A社 ..."
+            placeholder="例) 25,000円 ブラック 省電力 A社 ..."
             value={newAlternativeDescription}
             onChange={(e) => setNewAlternativeDescription(e.target.value)}
           />
@@ -212,9 +212,9 @@ export function AlternativesManager() {
           onChange={(e) => setKeyword(e.target.value)}
         />
         <Button
-          className="bg-blue-600 text-white px-4 py-2 rounded"
           onClick={handleSearch}
           disabled={searchLoading}
+          variant="default"
         >
           {searchLoading ? "検索中..." : "検索"}
         </Button>
@@ -238,9 +238,9 @@ export function AlternativesManager() {
       </>
       )}
       {/* 登録済み候補リスト */}
-      {project?.alternatives.length === 0 && !isAdding ? (
+      {project?.alternatives.length === 0 && !isAdding && !isSearching ? (
         <p className="text-center text-sm py-2 text-muted-foreground">
-          未選択
+          候補を追加してください。
         </p>
       ) : (
         <div className="space-y-2">

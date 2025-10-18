@@ -30,10 +30,9 @@ export function GoalInput() {
         <Label htmlFor="goal" className="text-xl font-semibold">
           最終目標(Goal)
           <div className="flex justify-between">
-          <p className="font-normal py-2 text-sm text-muted-foreground"> -- 最終的に決めたいことを入力 --</p>
           {project?.goal === ""
                 ? (
-                    <div className="font-normal flex items-center text-sm gap-2 p-2 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
+                    <div className="font-normal flex items-center text-sm gap-2 p-1 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
                       <AlertTriangle className="w-5 h-5 text-yellow-600" />
                        <span>必須入力項目です</span>
                     </div>
@@ -43,7 +42,7 @@ export function GoalInput() {
         </Label>
         <Input
           id="goal"
-          placeholder="例)最適なノートパソコンを選ぶ！"
+          placeholder="例) 一人暮らし用の冷蔵庫を選ぶ！"
           value={localGoal}
           onChange={(e) => setLocalGoal(e.target.value)}
           onBlur={handleBlur}

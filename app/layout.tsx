@@ -1,6 +1,7 @@
 import "./globals.css"
 import type React from "react"
 import Image from "next/image"
+import Link  from "next/link"
 import Navbar from "@/components/Navbar"
 import { Inter } from "next/font/google"
 import { Toaster } from "sonner"
@@ -32,13 +33,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <footer className="border-t border-border mt-20">
             <div className="flex justify-center items-center gap-4 py-8 text-muted-foreground">
               <p>&copy; 2025 AHP-GO. All rights reserved.</p>
-              <Image
-                src="/images/credit_31130.gif"
-                alt="Supported by Rakuten Developers."
-                width={0}
-                height={0}
-                className="w-48 h-auto rounded-sm shadow"
-              />
+              <Link href="https://webservice.rakuten.co.jp/" target="_blank">
+                <Image
+                  src="/images/credit_31130.gif"
+                  alt="Supported by Rakuten Developers."
+                  width={100}
+                  height={100}
+                  className="w-auto h-auto rounded-sm"
+                />
+              </Link>
             </div>
           </footer>
         </AuthProvider>
