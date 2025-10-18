@@ -105,7 +105,7 @@ export function AlternativesManager() {
 
   return (
     <Card className="p-6 space-y-4">
-      <div className="flex items-top justify-between">
+      <div className="flex items-center justify-between">
         <div className="flex flex-col">
           <h3 className="mb-2 text-xl font-semibold">候補(Alternatives)</h3>
           {project?.alternatives ? project.alternatives.length < 3
