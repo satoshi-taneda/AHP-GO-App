@@ -28,6 +28,7 @@ export default function NewProjectPage() {
   useEffect(() => {
     setProject(createDefaultProject())
   }, [])
+  console.log(project)
 
   const handleSaveAll = async (user: any, project: AHPProject | null) => {
     if (!user) return

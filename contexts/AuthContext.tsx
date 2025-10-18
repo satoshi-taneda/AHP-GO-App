@@ -2,7 +2,6 @@
 
 import type React from "react"
 import { createContext, useContext, useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabaseClient"
 import { toast } from "sonner"
 
@@ -56,13 +55,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   // --サインアウトを共通化--
-  const router = useRouter()
   const signOut = async () => {
     await supabase.auth.signOut()
     setUser(null)
     setProfile(null)
     toast.success("ログアウトしました!")
-    router.replace("/")
   }
 
   // 初回読み込み時に実行される処理

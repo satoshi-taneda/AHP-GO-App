@@ -20,7 +20,7 @@ export default function HeroSection2() {
         <div className="max-w-3xl mx-auto space-y-6">
         <h2 className="text-5xl font-bold text-foreground">
         {"『AHP』で最適な選択を"}
-          <span className="text-primary">シンプルに</span>
+          <span className="font-bold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">シンプルに</span>
         </h2>
         <p className="text-xl text-muted-foreground text-pretty leading-relaxed">
           AHP-GOは、より良い意思決定のためのサポートアプリです。

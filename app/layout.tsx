@@ -1,5 +1,6 @@
 import "./globals.css"
 import type React from "react"
+import Image from "next/image"
 import Navbar from "@/components/Navbar"
 import { Inter } from "next/font/google"
 import { Toaster } from "sonner"
@@ -29,8 +30,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </AHPProvider>
           </main>
           <footer className="border-t border-border mt-20">
-            <div className="container mx-auto px-4 py-8 text-center text-sm text-muted-foreground">
+            <div className="flex justify-center items-center gap-4 py-8 text-muted-foreground">
               <p>&copy; 2025 AHP-GO. All rights reserved.</p>
+              <Image
+                src="/images/credit_31130.gif"
+                alt="Supported by Rakuten Developers."
+                width={0}
+                height={0}
+                className="w-48 h-auto rounded-sm shadow"
+              />
             </div>
           </footer>
         </AuthProvider>
