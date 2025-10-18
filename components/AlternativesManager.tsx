@@ -6,7 +6,7 @@ import { fetchRakutenItems } from "@/lib/rakutenApi"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
-import { Plus, Search,  Trash2, Edit, AlertTriangle, X } from "lucide-react"
+import { Plus, Search,  Trash2, Edit, AlertTriangle } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import ProductCard from "@/components/ProductCard"
 
@@ -211,24 +211,25 @@ export function AlternativesManager() {
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
           />
-          <Button
-            onClick={handleSearch}
-            disabled={searchLoading}
-            variant="default"
-          >
-            {searchLoading ? "検索中..." : "検索"}
-          </Button>
-          <Button
-            onClick={() => {
-              setKeyword("")
-              setResults([])
-              setIsSearching(false)
-            }}
-            size="sm"
-            variant="ghost"
-          >
-            <X />
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={handleSearch}
+              disabled={searchLoading}
+              variant="default"
+            >
+              {searchLoading ? "検索中..." : "検索"}
+            </Button>
+            <Button
+              onClick={() => {
+                setKeyword("")
+                setResults([])
+                setIsSearching(false)
+              }}
+              size="sm"
+              variant="ghost"
+            >
+              キャンセル
+            </Button>
+          </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
           {results.map((item, i) => (
