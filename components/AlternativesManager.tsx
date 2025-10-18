@@ -204,17 +204,18 @@ export function AlternativesManager() {
       {/* 検索フォーム */}
       {isSearching && (
       <div>
-        <div className="flex gap-2 p-4 bg-muted/50 rounded-lg">
+        <div className="flex flex-wrap items-center gap-2 p-4 bg-muted/50 rounded-lg">
           <input
-            className="flex-1 mr-2"
+            className="flex-1 min-w-[180px] px-3 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder="例) 冷蔵庫 一人暮らし"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
           />
-          <div className="flex gap-2">
+          <div className="flex gap-2 shrink-0">
             <Button onClick={handleSearch}
               disabled={searchLoading}
               variant="default"
+              className="whitespace-nowrap"
             >
               {searchLoading ? "検索中..." : "検索"}
             </Button>
