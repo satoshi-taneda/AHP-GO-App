@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext"
 import { supabase } from "@/lib/supabaseClient"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
-import { Plus, Trash } from "lucide-react"
+import { Info, Plus, Trash } from "lucide-react"
 import Link from "next/link"
 import LoadingSpinner from "@/components/LoadingSpinner"
 
@@ -101,7 +101,7 @@ export default function DashBoard() {
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-freground text-2xl font-bold">すべてのプロジェクト</h1>
+        <h1 className="text-freground text-2xl font-bold">プロジェクト一覧</h1>
           <Button
             size="sm"
             className="bg-foreground px-4 overflow-hidden relative hover:bg-blue-500"
@@ -129,7 +129,10 @@ export default function DashBoard() {
                       </p>
                       <p>{p.customer.name || "ゲスト"}</p>
                     </div>
+                    <div className="flex items-center gap-2">
+                    <Info />
                     <h2 className="font-semibold text-lg mt-2">{p.goal}</h2>
+                    </div>
                   </Link>
                   {authLoading ? null : user ? user.id === p.customer_id
                     ? (
@@ -141,7 +144,7 @@ export default function DashBoard() {
                             size="sm"
                             variant="ghost"
                           >
-                            {deletingId === p.project_id ? <LoadingSpinner /> : <Trash className="h-4 w-4 mr-2" /> }
+                            {deletingId === p.project_id ? <LoadingSpinner /> : <Trash className="h-4 w-4 mr-1" /> }
                             {deletingId === p.project_id ? "削除中..." : "削除" }
                           </Button>
                         </div>

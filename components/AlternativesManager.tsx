@@ -206,31 +206,29 @@ export function AlternativesManager() {
       <div>
         <div className="flex flex-wrap items-center gap-2 p-4 bg-muted/50 rounded-lg">
           <input
-            className="flex-1 min-w-[180px] px-3 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
+            className="flex-1 mr-2 p-2"
             placeholder="例) 冷蔵庫 一人暮らし"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
           />
-          <div className="flex gap-2 shrink-0">
-            <Button onClick={handleSearch}
-              disabled={searchLoading}
-              variant="default"
-              className="whitespace-nowrap"
-            >
-              {searchLoading ? "検索中..." : "検索"}
-            </Button>
-            <Button
-              onClick={() => {
-                setKeyword("")
-                setResults([])
-                setIsSearching(false)
-              }}
-              size="sm"
-              variant="ghost"
-            >
-              キャンセル
-            </Button>
-          </div>
+          <Button onClick={handleSearch}
+            disabled={searchLoading}
+            variant="default"
+            className="whitespace-nowrap"
+          >
+            {searchLoading ? "検索中..." : "検索"}
+          </Button>
+          <Button
+            onClick={() => {
+              setKeyword("")
+              setResults([])
+              setIsSearching(false)
+            }}
+            size="sm"
+            variant="ghost"
+          >
+            キャンセル
+          </Button>
         </div>
         <div className="grid grid-cols-2 gap-4">
           {results.map((item, i) => (
