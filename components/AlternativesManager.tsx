@@ -133,7 +133,7 @@ export function AlternativesManager() {
                 size="sm"
                 variant="ghost"
               >
-                <Search className="w-4 h-4 mr-2" />楽天で検索
+                <Search className="w-4 h-4 mr-1" />楽天検索
               </Button>
               <Button
                 onClick={() => {
@@ -143,7 +143,7 @@ export function AlternativesManager() {
                 size="sm"
                 variant="outline"
               >
-                <Plus className="w-4 h-4 mr-2" />追加
+                <Plus className="w-4 h-4 mr-1" />追加
               </Button>
             </div>
           )}

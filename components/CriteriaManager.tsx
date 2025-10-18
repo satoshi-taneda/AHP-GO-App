@@ -64,7 +64,7 @@ export function CriteriaManager() {
           {!isAdding && (
             <div className="flex items-center gap-4">
               <Button onClick={() => setIsAdding(true)} size="sm" variant="outline">
-                <Plus className="w-4 h-4 mr-2" />追加
+                <Plus className="w-4 h-4 mr-1" />追加
               </Button>
             </div>
           )}
