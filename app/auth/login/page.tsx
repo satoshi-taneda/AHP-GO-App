@@ -135,11 +135,10 @@ export default function LoginPage() {
         <GoogleLoginButton onClick={handleGoogleLogin} />
         <p className="mt-8 text-center">
           アカウントをお持ちでない方は
-          <Link
-            href="/auth/signup"
-            className="text-foreground hover:underline hover:text-blue-500 ml-1"
-          >
-            新規登録
+          <Link href="/auth/signup">
+            <span className="text-blue-500 hover:underline ml-2">
+              新規登録
+            </span>
           </Link>
         </p>
       </div>

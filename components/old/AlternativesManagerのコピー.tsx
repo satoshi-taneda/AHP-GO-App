@@ -254,11 +254,11 @@ export function AlternativesManager() {
             onChange={(e) => setKeyword(e.target.value)}
           />
           <Button onClick={() => handleSearch()}
-            disabled={searchLoading && !isSearched}
+            disabled={searchLoading}
             variant="default"
             className="whitespace-nowrap"
           >
-            {searchLoading && !isSearched ? "検索中..." : "検索"}
+            {searchLoading ? "検索中..." : "検索"}
           </Button>
           <Button
             onClick={() => {

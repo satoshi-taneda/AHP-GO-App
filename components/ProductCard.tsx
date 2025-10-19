@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { Plus } from "lucide-react"
 
 type Props = {
   item: {
@@ -35,8 +36,9 @@ export default function ProductCard({ item, onSave }: Props) {
         <Button
           className="bg-green-600 hover:bg-green-600/50 text-white px-3 py-1 rounded text-sm"
           onClick={onSave}
+          size="sm"
         >
-          追加
+          <Plus className="h-4 w-4 mr-1" />追加
         </Button>
       </div>
     </div>

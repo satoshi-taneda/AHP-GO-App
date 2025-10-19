@@ -2,7 +2,10 @@
 export async function fetchRakutenItems(keyword: string) {
   const appId = process.env.NEXT_PUBLIC_RAKUTEN_APP_ID
   if (!appId) throw new Error("Rakuten APP ID が設定されていません")
-  const url = `https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601?applicationId=${appId}&keyword=${encodeURIComponent(keyword)}&hits=10`
+  const url = `https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601?applicationId=${appId}`
+    + `&keyword=${encodeURIComponent(keyword)}`
+    + `&sort=standard`
+    + `&hits=30`
 
   const res = await fetch(url)
   if (!res.ok) throw new Error("楽天APIの取得に失敗しました")

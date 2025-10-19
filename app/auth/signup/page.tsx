@@ -120,8 +120,10 @@ export default function SignupPage() {
 
       <p className="mt-4 text-center">
         すでにアカウントをお持ちの方は
-        <Link href="/auth/login" className="text-foreground hover:underline hover:text-blue-500  ml-1">
-          ログイン
+        <Link href="/auth/login">
+          <span className="ml-2 text-blue-500 hover:underline">
+            ログイン
+          </span>
         </Link>
       </p>
     </div>
