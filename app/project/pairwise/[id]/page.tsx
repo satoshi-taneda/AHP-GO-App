@@ -22,7 +22,6 @@ function importance(value: number) {
   }
 }
 
-
 function handleValue(value: number) {
   if (value < 0) {
     return `「A」が${importance(value)}重要`
@@ -32,12 +31,6 @@ function handleValue(value: number) {
   } else {
     return "同じくらい重要"
   }
-          {value < 0
-            ? `Aを${Math.abs(value)+1} 段階 優先`
-            : value > 0
-            ? `Bを${value+1} 段階 優先`
-            : "同じくらい重要"
-          }
 }
 
 export default function PairWiseComparison() {
