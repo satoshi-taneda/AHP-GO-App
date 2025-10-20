@@ -49,7 +49,7 @@ export default function ProjectPage() {
         .order("no")
       if (projectError || !projectData ) {
         toast.error("プロジェクトが見つかりませんでした")
-        router.push("/")
+        router.push("/project/dashboard")
         return
       }
       setOwner(projectData.owner)

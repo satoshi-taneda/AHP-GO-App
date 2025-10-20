@@ -39,7 +39,7 @@ function LoggedInMenu({ user, profile, onLogout }: {user: any, profile: any, onL
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => router.push("/project/dashboard")}>ダッシュボード</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push("/")}>ホーム</DropdownMenuItem>
         <DropdownMenuItem onClick={onLogout}>ログアウト</DropdownMenuItem>
       </DropdownMenuContent>
       </DropdownMenu>
@@ -81,11 +81,12 @@ export default function Navbar() {
     <div className="container mx-auto px-4 py-4 flex justify-between items-center">
       <h1 className="flex items-center gap-2">
         <div className="inline-block relative group">
+        {loading ? null : user ? (
           <Button
             className="text-xl font-semibold overflow-hidden relative"
             size="sm"
             variant="ghost"
-            onClick={() => router.replace("/")}
+            onClick={() => router.replace("/project/dashboard")}
           >
             AHP-GO
             {/* 光のエフェクト */}
@@ -93,6 +94,16 @@ export default function Navbar() {
             translate-x-[-100%] group-hover:translate-x-[100%]
             transition-transform duration-700 ease-out" />
           </Button>
+        ) : (
+          <Button
+            className="text-xl font-semibold overflow-hidden relative"
+            size="sm"
+            variant="ghost"
+            onClick={() => router.replace("/")}
+          >
+          AHP-GO
+          </Button>
+        )}
         </div>
       </h1>
       <nav className="flex items-center gap-2">

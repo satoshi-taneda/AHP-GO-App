@@ -28,7 +28,7 @@ export default function EditProjectPage() {
     if (!user) router.push("/auth/login")
   }, [user, authLoading, router])
 
-  // データ取得
+  // Supabaseからのデータ取得
   useEffect(() => {
     const fetchData = async () => {
       const { data: projectData, error: projectError } = await supabase
@@ -145,11 +145,16 @@ export default function EditProjectPage() {
 
         // 4.成功トースト
         toast.success("保存しました!")
-        // 仮でプロジェクト一覧へ移動
-        router.replace(`/project/${projectId}`)
-        await new Promise(() => setTimeout(() => {
-          window.location.reload()
-        }, 500))
+
+        // 5. プロジェクトごとの一対比較画面へ遷移
+        router.replace(`/project/pairwise/${project.id}`)
+
+        /* 仮でプロジェクト一覧へ移動
+          router.replace(`/project/ahp/${projectId}`)
+          await new Promise(() => setTimeout(() => {
+            window.location.reload()
+          }, 500))
+        */
 
     } catch(err) {
       console.error(err)

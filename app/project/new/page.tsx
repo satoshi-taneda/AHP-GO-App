@@ -105,10 +105,11 @@ export default function NewProjectPage() {
         )
         if (alternativesError) throw alternativesError
 
-        // 4.成功トースト
+        // 4. 成功トースト
         toast.success("保存しました!")
-        // 仮でプロジェクト一覧へ移動
-        router.replace("/project/dashboard")
+
+        // 5. プロジェクトごとの一対比較画面へ遷移
+        router.replace(`/project/pairwise/${project.id}`)
 
     } catch(err) {
       console.error(err)

@@ -280,27 +280,28 @@ export function AlternativesManager() {
           ))}
         </div>
         {isSearched  && (
-          <>        <div className="mt-4 flex justify-center gap-10">
-            <Button
-              size="sm"
-              variant="ghost"
-              disabled={searchLoading || itemCount === 0}
-              onClick={handleArrowLeft}
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />前のページ
-            </Button>
-           <Button
-             size="sm"
-             variant="ghost"
-             disabled={searchLoading || itemCount === 28}
-             onClick={handleArrowRight}
-            >
-              次のページ<ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
-          <div className="flex justify-center text-xs mt-2">
-            <p>{itemCount / 2 + 1} / 15</p>
-          </div>
+          <>
+            <div className="max-w-sm mx-auto mt-4 flex justify-between">
+              <Button
+                size="sm"
+                variant="ghost"
+                disabled={searchLoading || itemCount === 0}
+                onClick={handleArrowLeft}
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />前のページ
+              </Button>
+              <Button
+               size="sm"
+               variant="ghost"
+               disabled={searchLoading || itemCount === 28}
+               onClick={handleArrowRight}
+              >
+                次のページ<ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
+            <div className="text-center text-xs mt-2">
+              <p>{itemCount / 2 + 1} / 15</p>
+            </div>
           </>
         )}
       </div>
