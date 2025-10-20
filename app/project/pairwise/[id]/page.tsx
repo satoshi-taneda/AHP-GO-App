@@ -12,6 +12,7 @@ import Image from "next/image"
 import LoadingSpinner from "@/components/LoadingSpinner"
 
 function importance(value: number) {
+  // 重要度を表現
   const num = Math.abs(value) + 1
   if (num === 3) {
     return "少し"
