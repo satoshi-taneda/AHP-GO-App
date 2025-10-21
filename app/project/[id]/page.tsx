@@ -23,14 +23,12 @@ export default function ProjectPage() {
   const { user, loading: authLoading } = useAuth()
   const projectId = params?.id as string
 
-  // 認証チェック
   useEffect(() => {
-    if (authLoading) return
+    // 認証チェック
+    if (authLoading || !user) return
     if (!user) router.push("/auth/login")
-  }, [user, authLoading, router])
 
-  // データ取得
-  useEffect(() => {
+    // データ取得
     const fetchData = async () => {
       const { data: projectData, error: projectError } = await supabase
         .from("project")
@@ -74,7 +72,7 @@ export default function ProjectPage() {
       setLoading(false)
     }
     fetchData()
-  }, [projectId, setProject, router])
+  }, [authLoading, projectId, setProject, router])
 
   console.log(project)
   if (loading || !project) return <LoadingSpinner />
@@ -92,7 +90,7 @@ export default function ProjectPage() {
             </p>
             <p className="text-sm text-muted-foreground mt-1">作成者: {owner || "匿名"}</p>
           </div>
-          {user.id === customerId && (
+          {user?.id === customerId && (
             <Button
               size="sm"
               variant="ghost"

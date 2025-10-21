@@ -41,7 +41,7 @@ export default function NewProjectPage() {
           // 画像がローカルURL(blob)の場合のみアップロード
           if (alt.imageUrl?.startsWith("blob:")) {
             const blob = await fetch(alt.imageUrl).then(res => res.blob())
-            const filePath = `alternatives/${user.id}/${project.id}/${Date.now()}_${i}.jpg`
+            const filePath = `alternatives/${user?.id}/${project.id}/${Date.now()}_${i}.jpg`
             const { error: uploadError } = await supabase.storage
               .from("images") // あらかじめ作ったバケット
              .upload(filePath, blob, { contentType: "image/jpeg", upsert: true })
@@ -57,14 +57,14 @@ export default function NewProjectPage() {
       const { data, error: customerError } = await supabase
         .from("customer")
         .select("name")
-        .eq("customer_id", user.id)
+        .eq("customer_id", user?.id)
         .single()
       if (customerError) throw customerError
 
       const { error: projectError } = await supabase
         .from("project")
         .upsert([{
-            customer_id: user.id,
+            customer_id: user?.id,
             project_id: project.id,
             goal: project.goal,
             created_at: project.createdAt,
@@ -80,7 +80,7 @@ export default function NewProjectPage() {
           project.criteria.map((c, i) => ({
             criteria_id: c.id,
             project_id: project.id,
-            customer_id: user.id,
+            customer_id: user?.id,
             name: c.name,
             weight: 0.0,
             no: i + 1,
@@ -95,7 +95,7 @@ export default function NewProjectPage() {
           uploadedAlternatives.map((a, i) => ({
             alternatives_id: a.id,
             project_id: project.id,
-            customer_id: user.id,
+            customer_id: user?.id,
             name: a.name,
             description: a.description,
             image_url: a.imageUrl,
