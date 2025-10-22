@@ -30,9 +30,9 @@ function importance(selected: number) {
 
 function handleSelected(selected: number) {
   if (selected < 0) {
-    return `「A」の方が${importance(selected)}重要`
+    return `Aの方が${importance(selected)}重要`
   } else if (selected > 0) {
-    return `「B」の方が${importance(selected)}重要`
+    return `Bの方が${importance(selected)}重要`
 
   } else {
     return "同じくらい重要"
@@ -188,8 +188,12 @@ export default function PairWiseComparison() {
   console.log(project)
   console.log(matrixNum)
   console.log(row, column)
-  const aImage = project?.alternatives[row].imageUrl
-  const bImage = project?.alternatives[column].imageUrl
+  const criteriaNameA = project?.criteria[row].name
+  const criteriaNameB = project?.criteria[column].name
+  const altImageA = project?.alternatives[row].imageUrl
+  const altImageB = project?.alternatives[column].imageUrl
+  const altNameA = project?.alternatives[row].name
+  const altNameB = project?.alternatives[column].name
 
 
   // Supabaseから取得中であればローディングスピナーを表示
@@ -198,7 +202,8 @@ export default function PairWiseComparison() {
   // 一対比較の準備
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
+    <>
+    <div className="h-[55vh] max-w-5xl mx-auto space-y-6">
       <h1 className="text-2xl font-bold mb-6">
         {matrixNum > 0
           ? `『${matrices[matrixNum].id}』を基にした各候補の一対比較`
@@ -208,24 +213,56 @@ export default function PairWiseComparison() {
       <div className="p-6 bg-muted/30 rounded-xl shadow">
         <div className="flex justify-between items-center">
           <div className="flex flex-col items-center flex-1 text-center">
-            <Image
-              src={aImage || ""}
-              alt="No Image"
-              width={120}
-              height={120}
-              className="rounded-lg" />
-            <h3 className="font-semibold mt-2">A: 価格重視モデル</h3>
-          </div>
+            {matrixNum > 0 ? (
+              <>
+              {altImageA ? (
+                    <Image
+                      src={altImageA || ""}
+                      alt="No Image"
+                      width={120}
+                      height={120}
+                      className="rounded-lg" />
+                  ) : (
+                  <div className="w-12 h-12 rounded bg-muted-foreground/10 flex items-center justify-center text-xs text-muted-foreground border">
+                    No Image
+                  </div>)
+              }
+                <h3 className="font-semibold mt-2">A: {altNameA}</h3>
+              </>
 
+              ) : (
+              <div className="w-32 h-24 rounded bg-muted-foreground/10
+                flex items-center justify-center text-3xl text-foreground border">
+                {criteriaNameA}
+              </div>
+              )
+            }
+          </div>
           <span className="text-xl text-muted-foreground px-4">vs</span>
           <div className="flex flex-col items-center flex-1 text-center">
-            <Image
-              src={bImage || ""}
-              alt="No Image"
-              width={120}
-              height={120}
-              className="rounded-lg" />
-            <h3 className="font-semibold mt-2">B: 価格重視モデル</h3>
+            {matrixNum > 0 ? (
+              <>
+               {altImageB ? (
+                    <Image
+                      src={altImageB || ""}
+                      alt="No Image"
+                      width={120}
+                      height={120}
+                      className="rounded-lg" />
+                  ) : (
+                  <div className="w-12 h-12 rounded bg-muted-foreground/10 flex items-center justify-center text-xs text-muted-foreground border">
+                    No Image
+                  </div>)
+               }
+               <h3 className="font-semibold mt-2">B: {altNameB}</h3>
+              </>
+              ) : (
+              <div className="w-32 h-24 rounded bg-muted-foreground/10
+                flex items-center justify-center text-3xl text-foreground border">
+                {criteriaNameB}
+              </div>
+              )
+            }
           </div>
         </div>
 
@@ -266,27 +303,28 @@ export default function PairWiseComparison() {
           </div>
         </div>
       </div>
-      <div className="max-w-lg mx-auto flex justify-between items-center">
-        <Button
-          size="lg"
-          variant="ghost"
-          disabled={loading || counter === 1}
-          onClick={() => {matrixNum > 0 ? handlePrev(totalAlternatives) : handlePrev(totalCriteria)}}
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />戻る
-        </Button>
-        <Button
-          size="lg"
-          variant="ghost"
-          disabled={loading || counter === totalPage}
-          onClick={() => {matrixNum > 0 ? handleNext(totalAlternatives) : handleNext(totalCriteria)}}
-        >
-          次へ<ArrowRight className="w-4 h-4 ml-2" />
-        </Button>
-      </div>
+    </div>
+    <div className="max-w-lg mx-auto flex justify-between items-center">
+      <Button
+        size="lg"
+        variant="ghost"
+        disabled={loading || counter === 1}
+        onClick={() => {matrixNum > 0 ? handlePrev(totalAlternatives) : handlePrev(totalCriteria)}}
+      >
+        <ArrowLeft className="w-4 h-4 mr-2" />戻る
+      </Button>
       <p className="text-sm text-center text-muted-foreground">
         {counter} / {totalPage}
       </p>
+      <Button
+        size="lg"
+        variant="ghost"
+        disabled={loading || counter === totalPage}
+        onClick={() => {matrixNum > 0 ? handleNext(totalAlternatives) : handleNext(totalCriteria)}}
+      >
+        次へ<ArrowRight className="w-4 h-4 ml-2" />
+      </Button>
     </div>
+    </>
   )
 }

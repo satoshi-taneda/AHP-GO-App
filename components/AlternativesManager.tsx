@@ -274,14 +274,14 @@ export function AlternativesManager() {
             キャンセル
           </Button>
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="h-[300px] overflow-y-auto grid grid-cols-2 gap-4">
           {results.map((item, i) => (
             <ProductCard key={i} item={item} onSave={() => handleAddAlternative2(keyword, item)} />
           ))}
         </div>
         {isSearched  && (
           <>
-            <div className="max-w-sm mx-auto mt-4 flex justify-between">
+            <div className="max-w-sm mx-auto mt-4 flex justify-between items-center">
               <Button
                 size="sm"
                 variant="ghost"
@@ -290,6 +290,7 @@ export function AlternativesManager() {
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />前のページ
               </Button>
+              <p className="text-center text-xs mt-2">{itemCount / 2 + 1} / 15</p>
               <Button
                size="sm"
                variant="ghost"
@@ -298,9 +299,6 @@ export function AlternativesManager() {
               >
                 次のページ<ArrowRight className="w-4 h-4 ml-2" />
               </Button>
-            </div>
-            <div className="text-center text-xs mt-2">
-              <p>{itemCount / 2 + 1} / 15</p>
             </div>
           </>
         )}

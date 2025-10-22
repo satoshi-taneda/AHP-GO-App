@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Toaster richColors position="top-center" />
             </AHPProvider>
           </main>
-          <footer className="border-t border-border mt-20">
+          <footer className="border-t border-border mt-10">
             <div className="flex justify-center items-center gap-4 py-8 text-muted-foreground">
               <p>&copy; 2025 AHP-GO. All rights reserved.</p>
               <Link href="https://webservice.rakuten.co.jp/" target="_blank">
