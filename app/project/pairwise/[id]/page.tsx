@@ -15,6 +15,12 @@ type ComparisonMatrix = {
   id: string
   matrix: number[][]
 }
+type pairwiseInfo = {
+  criteriaName: { a: string, b: string }
+  altImage: { a: string, b: string }
+  altName: { a: string, b: string }
+  altDescription: { a: string, b: string }
+}
 
 function importance(selected: number) {
   // 重要度を言葉で表現
@@ -54,6 +60,12 @@ export default function PairWiseComparison() {
   const [column, setColumn] = useState<number>(1)
   const [counter, setCounter] = useState<number>(1)
   const [matrices, setMatrices] = useState<ComparisonMatrix[]>([])
+  const [info, setInfo] = useState<pairwiseInfo>({
+    criteriaName: {a: "", b: "" },
+    altImage: {a: "", b: "" },
+    altName: {a: "", b: "" },
+    altDescription: {a: "", b: "" },
+  })
   const projectId = params?.id as string
   const marks = [-6, -4, -2, 0, 2, 4, 6] // 目盛り位置
 
@@ -140,6 +152,7 @@ export default function PairWiseComparison() {
   const handlePrev = (total: number) =>  {
     let prevRow = row
     let prevCol = column
+    let prevMatrixNum = matrixNum
     while (true) {
       if (prevCol > prevRow) {
         prevCol -= 1
@@ -147,10 +160,15 @@ export default function PairWiseComparison() {
         prevRow = prevRow - 1
         prevCol = total - 1
       } else {
-        prevRow = 1
+        prevRow = total - 2
         prevCol = total - 1
-        if (matrixNum > 0) {
-          setMatrixNum(prev => prev - 1)
+        if (prevMatrixNum === 1) {
+          prevRow = totalCriteria - 2
+          prevCol = totalCriteria - 1
+        }
+        if (prevMatrixNum > 0) {
+          prevMatrixNum -= 1
+          setMatrixNum(prevMatrixNum)
         }
         break
       }
@@ -164,6 +182,7 @@ export default function PairWiseComparison() {
   const handleNext = (total: number) =>  {
     let nextRow = row
     let nextCol = column
+    let prevMatrixNum = matrixNum
     while (true) {
       if (nextCol < total - 1) {
         nextCol += 1
@@ -173,8 +192,9 @@ export default function PairWiseComparison() {
       } else {
         nextRow = 0
         nextCol = 1
-        if (matrixNum < totalAlternatives) {
-          setMatrixNum(prev => prev + 1)
+        if (matrixNum < total - 1 + 1) {
+          prevMatrixNum += 1
+          setMatrixNum(prevMatrixNum)
         }
         break
       }
@@ -184,30 +204,52 @@ export default function PairWiseComparison() {
     setColumn(nextCol)
     setCounter(prev => prev + 1)
   }
-  console.log(totalCriteria)
-  console.log(project)
-  console.log(matrixNum)
-  console.log(row, column)
-  const criteriaNameA = project?.criteria[row].name
-  const criteriaNameB = project?.criteria[column].name
-  const altImageA = project?.alternatives[row].imageUrl
-  const altImageB = project?.alternatives[column].imageUrl
-  const altNameA = project?.alternatives[row].name
-  const altNameB = project?.alternatives[column].name
 
+  useEffect(() => {
+    if (row < totalCriteria && column < totalCriteria && matrixNum === 0 && project) {
+      const names = {
+        a: project.criteria[row].name,
+        b: project.criteria[column].name,
+      }
+      setInfo((prev: any) => ({
+        ...prev,
+        criteriaName: {...names},
+      }))
+    }
+    if (row < totalAlternatives && column < totalAlternatives && matrixNum > 0 && project) {
+      const altImages = {
+        a: project.alternatives[row].imageUrl,
+        b: project.alternatives[column].imageUrl,
+      }
+      const altNames = {
+        a: project.alternatives[row].name,
+        b: project.alternatives[column].name,
+      }
+      const altDescriptions = {
+        a: project.alternatives[row].description,
+        b: project.alternatives[column].description,
+      }
+      setInfo((prev: any) => ({
+        ...prev,
+        altImage: {...altImages},
+        altName: {...altNames},
+        altDescription: {...altDescriptions},
+      }))
+    }
+  }, [row, column, project])
+
+  console.log(info)
 
   // Supabaseから取得中であればローディングスピナーを表示
   if (loading) return <LoadingSpinner />
 
-  // 一対比較の準備
-
   return (
     <>
-    <div className="h-[55vh] max-w-5xl mx-auto space-y-6">
+    <div className="h-[55vh] overflow-y-auto max-w-5xl mx-auto space-y-6">
       <h1 className="text-2xl font-bold mb-6">
         {matrixNum > 0
-          ? `『${matrices[matrixNum].id}』を基にした各候補の一対比較`
-          : "各評価基準の一対比較"
+          ? `候補の『${matrices[matrixNum].id}』の観点の比較`
+          : "評価基準の比較"
         }
       </h1>
       <div className="p-6 bg-muted/30 rounded-xl shadow">
@@ -215,25 +257,40 @@ export default function PairWiseComparison() {
           <div className="flex flex-col items-center flex-1 text-center">
             {matrixNum > 0 ? (
               <>
-              {altImageA ? (
+              {info.altImage.a ? (
+                  <div className="relative group w-64 h-40 overflow-hidden rounded-lg">
                     <Image
-                      src={altImageA || ""}
-                      alt="No Image"
-                      width={120}
-                      height={120}
-                      className="rounded-lg" />
+                        src={info.altImage.a}
+                        alt="No Image"
+                        width={120}
+                        height={120}
+                        className="rounded-lg group-hover:scale-110" />
+                    <div className="absolute inset-0 bg-black/50 text-white
+                      flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <p className="text-sm">{info.altDescription.a}</p>
+                    </div>
+                  </div>
+
                   ) : (
-                  <div className="w-12 h-12 rounded bg-muted-foreground/10 flex items-center justify-center text-xs text-muted-foreground border">
-                    No Image
-                  </div>)
+                  <div className="relative group w-64 h-40 overflow-hidden rounded-lg">
+                    <div className="w-12 h-12 rounded bg-muted-foreground/10 group-hover:scale-110
+                      flex items-center justify-center text-xs text-muted-foreground border">
+                      No Image
+                    </div>
+                    <div className="absolute inset-0 bg-black/50 text-white
+                      flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <p className="text-sm">{info.altDescription.a}</p>
+                    </div>
+                  </div>
+                )
               }
-                <h3 className="font-semibold mt-2">A: {altNameA}</h3>
+                <h3 className="font-semibold mt-2">A: {info.altName.a}</h3>
               </>
 
               ) : (
               <div className="w-32 h-24 rounded bg-muted-foreground/10
                 flex items-center justify-center text-3xl text-foreground border">
-                {criteriaNameA}
+                {info.criteriaName.a}
               </div>
               )
             }
@@ -242,9 +299,9 @@ export default function PairWiseComparison() {
           <div className="flex flex-col items-center flex-1 text-center">
             {matrixNum > 0 ? (
               <>
-               {altImageB ? (
+               {info.altImage.b ? (
                     <Image
-                      src={altImageB || ""}
+                      src={info.altImage.b || ""}
                       alt="No Image"
                       width={120}
                       height={120}
@@ -254,12 +311,12 @@ export default function PairWiseComparison() {
                     No Image
                   </div>)
                }
-               <h3 className="font-semibold mt-2">B: {altNameB}</h3>
+               <h3 className="font-semibold mt-2">B: {info.altName.b}</h3>
               </>
               ) : (
               <div className="w-32 h-24 rounded bg-muted-foreground/10
                 flex items-center justify-center text-3xl text-foreground border">
-                {criteriaNameB}
+                {info.criteriaName.b}
               </div>
               )
             }
