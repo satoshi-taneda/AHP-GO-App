@@ -193,11 +193,11 @@ export default function EditProjectPage() {
           {isSaving ? (
             <>
               <div className="animate-spin mr-2 w-4 h-4 border-2 border-t-transparent rounded-full border-primary"></div>
-              更新中...
+              保存中...
             </>
           ) : (
             <>
-              更新
+              保存
             </>
           )}
         </Button>

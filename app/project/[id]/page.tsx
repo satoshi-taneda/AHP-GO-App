@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { Card } from "@/components/ui/card"
-import { Award, BarChart3, Pencil } from "lucide-react"
+import { Award, BarChart3, Pencil, Trash } from "lucide-react"
 import ReturnButton from "@/components/ReturnButton"
 import LoadingSpinner from "@/components/LoadingSpinner"
 
@@ -18,9 +18,10 @@ export default function ProjectPage() {
   const [owner, setOwner] = useState("")
   const [loading, setLoading] = useState(true)
   const [result, setResult] = useState(true)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const { user, loading: authLoading } = useAuth()
   const params = useParams()
   const router = useRouter()
-  const { user, loading: authLoading } = useAuth()
   const projectId = params?.id as string
 
   useEffect(() => {
@@ -74,7 +75,65 @@ export default function ProjectPage() {
     fetchData()
   }, [authLoading, projectId, setProject, router])
 
-  console.log(project)
+  // 削除処理
+  async function deleteFolder(userId: string, projectId: string) {
+    const folderPath = `alternatives/${userId}/${projectId}`
+    // 1. フォルダ内のファイル一覧を取得
+    const { data: files, error: listError} = await supabase.storage
+      .from("images")
+      .list(folderPath, { limit: 100 })
+      console.log(files)
+    if (listError) {
+      console.error("List error:", listError)
+      return
+    }
+    if (!files || files.length === 0) {
+      return
+    }
+    // 2. ファイルパスを全て削除
+    const filePaths = files.map((file) => `${folderPath}/${file.name}`)
+    const { error: deleteError } = await supabase.storage
+      .from("images")
+      .remove(filePaths)
+    if (deleteError) {
+      console.error("Delete error:", deleteError)
+    } else {
+      console.log("フォルダを削除しました:", folderPath)
+    }
+  }
+
+  const handleDelete = async (userId: string, id: string) => {
+    if (!confirm("本当にこのプロジェクトを削除しますか？\n※この操作は元に戻せません")) {
+      return
+    }
+    setDeletingId(id)
+
+    try {
+      // alternativesテーブルにあるプロジェクト削除
+      deleteFolder(userId, id)
+      const { error: alternativesError } = await supabase.from("alternatives").delete().eq("project_id", id)
+      if (alternativesError) throw alternativesError
+
+      // criteriaテーブルにあるプロジェクト削除
+      const { error: criteriaError } = await supabase.from("criteria").delete().eq("project_id", id)
+      if (criteriaError) throw criteriaError
+
+      // projectテーブルにあるプロジェクト削除
+      const { error } = await supabase.from("project").delete().eq("project_id", id)
+      if (error) throw error
+
+      // 成功トースト
+      toast.success("削除しました!")
+      router.replace("/project/dashboard")
+
+    } catch (error) {
+      console.error("削除エラー:", error)
+      toast.error("削除に失敗しました")
+    } finally {
+      setDeletingId(null)
+    }
+  }
+
   if (loading || !project) return <LoadingSpinner />
 
   return (
@@ -91,13 +150,25 @@ export default function ProjectPage() {
             <p className="text-sm text-muted-foreground mt-1">作成者: {owner || "匿名"}</p>
           </div>
           {user?.id === customerId && (
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={ () => router.push(`/project/edit/${project.id}`) }
-            >
-              <Pencil className="w-4 h-4 mr-2" />編集
-            </Button>
+            <div className="flex gap-4">
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={ () => router.push(`/project/edit/${project.id}`) }
+              >
+                <Pencil className="w-4 h-4 mr-2" />編集
+              </Button>
+              <Button
+                onClick={() => handleDelete(user.id, projectId)}
+                className="text-destructive hover:text-destructive"
+                disabled={loading}
+                size="sm"
+                variant="ghost"
+              >
+                {deletingId === projectId ? <LoadingSpinner /> : <Trash className="h-4 w-4 mr-1" /> }
+                {deletingId === projectId ? "削除中..." : "削除" }
+              </Button>
+            </div>
           )}
         </div>
         <div className="flex justify-end items-end gap-2 mt-2">
