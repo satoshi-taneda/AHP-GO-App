@@ -4,7 +4,7 @@ import { useRouter, useParams } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, ArrowLeft } from "lucide-react"
+import { ArrowRight, ArrowLeft, Flame } from "lucide-react"
 import { toast } from "sonner"
 import { useAHP } from "@/contexts/AHPContext"
 import { supabase } from "@/lib/supabaseClient"
@@ -43,6 +43,11 @@ function handleSelected(selected: number) {
   } else {
     return "同じくらい重要"
   }
+}
+function handleSpan(criteriaName: string) {
+  return (
+    <span className="text-blue-500">{criteriaName}</span>
+  )
 }
 
 export default function PairWiseComparison() {
@@ -246,78 +251,105 @@ export default function PairWiseComparison() {
   return (
     <>
     <div className="h-[55vh] overflow-y-auto max-w-5xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold mb-6">
         {matrixNum > 0
-          ? `候補の『${matrices[matrixNum].id}』の観点の比較`
-          : "評価基準の比較"
+          ? (
+            <h3 className="flex text-3xl font-semibold">
+              候補の
+              <span className="text-blue-500 font-bold
+              bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                {matrices[matrixNum].id}
+              </span>
+              の観点の比較<Flame className="w-8 h-8 ml-4" />
+            </h3>
+            )
+          :<h3 className="flex text-3xl font-semibold">評価基準の比較<Flame className="w-8 h-8 ml-4" /></h3>
         }
-      </h1>
       <div className="p-6 bg-muted/30 rounded-xl shadow">
         <div className="flex justify-between items-center">
-          <div className="flex flex-col items-center flex-1 text-center">
+          <div className="flex flex-col items-center flex-1">
             {matrixNum > 0 ? (
               <>
-              {info.altImage.a ? (
-                  <div className="relative group w-64 h-40 overflow-hidden rounded-lg">
+                <div className="relative inline-block group">
+                  {info.altImage.a ? (
                     <Image
-                        src={info.altImage.a}
-                        alt="No Image"
-                        width={120}
-                        height={120}
-                        className="rounded-lg group-hover:scale-110" />
-                    <div className="absolute inset-0 bg-black/50 text-white
-                      flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <p className="text-sm">{info.altDescription.a}</p>
-                    </div>
-                  </div>
-
-                  ) : (
-                  <div className="relative group w-64 h-40 overflow-hidden rounded-lg">
-                    <div className="w-12 h-12 rounded bg-muted-foreground/10 group-hover:scale-110
-                      flex items-center justify-center text-xs text-muted-foreground border">
-                      No Image
-                    </div>
-                    <div className="absolute inset-0 bg-black/50 text-white
-                      flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <p className="text-sm">{info.altDescription.a}</p>
-                    </div>
-                  </div>
-                )
-              }
-                <h3 className="font-semibold mt-2">A: {info.altName.a}</h3>
-              </>
-
-              ) : (
-              <div className="w-32 h-24 rounded bg-muted-foreground/10
-                flex items-center justify-center text-3xl text-foreground border">
-                {info.criteriaName.a}
-              </div>
-              )
-            }
-          </div>
-          <span className="text-xl text-muted-foreground px-4">vs</span>
-          <div className="flex flex-col items-center flex-1 text-center">
-            {matrixNum > 0 ? (
-              <>
-               {info.altImage.b ? (
+                      src={info.altImage.a}
+                      alt={info.altName.a}
+                      width={120}
+                      height={120}
+                      className="rounded-lg group-hover:scale-125 transition-transform duration-300"
+                    />) : (
                     <Image
-                      src={info.altImage.b || ""}
+                      src="/images/noimage_w.png"
                       alt="No Image"
                       width={120}
                       height={120}
-                      className="rounded-lg" />
-                  ) : (
-                  <div className="w-12 h-12 rounded bg-muted-foreground/10 flex items-center justify-center text-xs text-muted-foreground border">
-                    No Image
-                  </div>)
-               }
-               <h3 className="font-semibold mt-2">B: {info.altName.b}</h3>
+                      className="rounded-lg group-hover:scale-125 transition-transform duration-300"
+                    />
+                  )}
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 mb-3
+                    w-64 px-3 py-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg
+                    opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                    whitespace-pre-line z-50 pointer-events-none"
+                  >
+                    <p>{info.altDescription.a}</p>
+                    {/* 吹き出しの三角形 */}
+                    <div
+                      className="absolute left-1/2 bottom-full -translate-x-1/2
+                        w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent
+                        border-b-8 border-b-gray-800"
+                    ></div>
+                  </div>
+                </div>
+                <h3 className="font-semibold mt-2">候補{row+1}: {info.altName.a}</h3>
               </>
               ) : (
-              <div className="w-32 h-24 rounded bg-muted-foreground/10
-                flex items-center justify-center text-3xl text-foreground border">
-                {info.criteriaName.b}
-              </div>
+                <div className="flex text-3xl font-bold p-12">
+                  {info.criteriaName.a}
+                </div>
+              )
+            }
+          </div>
+          <span className="text-3xl  px-4 text-muted-foreground">vs</span>
+          <div className="flex flex-col items-center flex-1">
+            {matrixNum > 0 ? (
+              <>
+                <div className="relative inline-block group">
+                  {info.altImage.b ? (
+                    <Image
+                      src={info.altImage.b}
+                      alt={info.altName.b}
+                      width={120}
+                      height={120}
+                      className="rounded-lg group-hover:scale-125 transition-transform duration-300"
+                    />) : (
+                    <Image
+                      src="/images/noimage_b.png"
+                      alt="No Image"
+                      width={120}
+                      height={120}
+                      className="rounded-lg group-hover:scale-125 transition-transform duration-300"
+                    />
+                  )}
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 mb-3
+                    w-64 px-3 py-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg
+                    opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                    whitespace-pre-line z-50 pointer-events-none"
+                  >
+                    <p>{info.altDescription.b}</p>
+                    {/* 吹き出しの三角形 */}
+                    <div
+                      className="absolute left-1/2 bottom-full -translate-x-1/2
+                        w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent
+                        border-b-8 border-b-gray-800"
+                    ></div>
+                  </div>
+                </div>
+                <h3 className="font-semibold mt-2">候補{column+1}: {info.altName.b}</h3>
+              </>
+              ) : (
+                <div className="flex text-3xl font-bold p-12">
+                  {info.criteriaName.b}
+                </div>
               )
             }
           </div>
@@ -354,10 +386,17 @@ export default function PairWiseComparison() {
               </motion.div>
             ))}
           </div>
-          <div className="flex justify-between text-xs text-muted-foreground mt-2">
-            <span>←Aの方が重要</span>
-            <span>Bの方が重要→</span>
-          </div>
+          {matrixNum > 0 ? (
+            <div className="flex justify-between text-xs text-muted-foreground mt-2">
+              <span>←候補{row+1}の方が重要</span>
+              <span>候補{column+1}の方が重要→</span>
+            </div>
+          ) : (
+            <div className="flex justify-between text-xs text-muted-foreground mt-2">
+              <span>←{info.criteriaName.a}の方が重要</span>
+              <span>{info.criteriaName.b}の方が重要→</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

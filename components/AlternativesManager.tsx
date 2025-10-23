@@ -5,6 +5,7 @@ import { useAHP } from "@/contexts/AHPContext"
 import { fetchRakutenItems } from "@/lib/rakutenApi"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { Card } from "@/components/ui/card"
 import { Plus, Search,  Trash2, Edit, AlertTriangle, ArrowRight, ArrowLeft } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -199,8 +200,9 @@ export function AlternativesManager() {
             value={newAlternativeName}
             onChange={(e) => setNewAlternativeName(e.target.value)}
           />
-          <Input
+          <Textarea
             className="flex-1"
+            rows={5}
             placeholder="例) 25,000円 ブラック 省電力 A社 ..."
             value={newAlternativeDescription}
             onChange={(e) => setNewAlternativeDescription(e.target.value)}
@@ -328,8 +330,9 @@ export function AlternativesManager() {
                       onChange={(e) => setEditingName(e.target.value)}
                       placeholder="候補名"
                     />
-                    <Input
+                    <Textarea
                       value={editingDescription}
+                      rows={5}
                       onChange={(e) => setEditingDescription(e.target.value)}
                       placeholder="説明"
                     />

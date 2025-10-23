@@ -133,11 +133,11 @@ export default function ProjectPage() {
             <div className="grid md:grid-cols-3 gap-6 mt-8">
               {project.alternatives.map((alt) => (
                 <Card key={alt.id} className="p-4 hover:scale-[1.01] transition-transform">
-                  <h3 className="text-lg font-semibold">{alt.name}</h3>
-                  <p className="text-muted-foreground text-sm mt-1">{alt.description}</p>
                   {alt.imageUrl && (
                     <img src={alt.imageUrl} alt={alt.name} className="rounded-lg object-cover w-full mt-3" />
                   )}
+                  <h3 className="text-lg font-semibold">{alt.name}</h3>
+                  <p className="text-muted-foreground text-sm mt-1 whitespace-pre-line">{alt.description}</p>
                 </Card>
               ))}
             </div>
