@@ -7,9 +7,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card } from "@/components/ui/card"
-import { Plus, Search,  Trash2, Edit, AlertTriangle, ArrowRight, ArrowLeft } from "lucide-react"
+import { Plus, Search,  Trash2, Edit, AlertTriangle, ArrowRight, ArrowLeft, Bot } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import LoadingSpinner from "@/components/LoadingSpinner"
 import ProductCard from "@/components/ProductCard"
+import CopyTextButton from "@/components/CopyTextButton"
 
 export function AlternativesManager() {
   // コンテキスト使用
@@ -36,6 +38,10 @@ export function AlternativesManager() {
   const [editingDescription, setEditingDescription] = useState("")
   const [editingImage, setEditingImage] = useState<string | null>(null)
 
+  // GeminiAPI
+  const [loading, setLoading] = useState(false)
+  const [summary, setSummary] = useState("")
+
   // 新規追加
   const handleAddAlternative = () => {
     if (newAlternativeName.trim()) {
@@ -51,11 +57,27 @@ export function AlternativesManager() {
     }
   }
 
+  // Gemini APIでの商品情報の要約
+  const handleSummarize = async () => {
+    setLoading(true)
+    const res = await fetch("/api/summary", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ productDescription: editingDescription }),
+    })
+
+    const data = await res.json()
+    setSummary(data.summary || "要約できませんでした。")
+    setLoading(false)
+  }
+
+
   // 楽天検索追加
-  const handleAddAlternative2 = (keyword: string, item: any) => {
+  const handleAddAlternativeRakuten = (keyword: string, item: any) => {
+      const desc = `${item.price.toLocaleString()}円 ` + item.name
       addAlternative (
         keyword,
-        `${item.price.toLocaleString()}円 ` + item.name,
+        desc,
         item.image || "",
       )
       // setKeyword("")
@@ -80,6 +102,7 @@ export function AlternativesManager() {
       setItemCount(0)
     }
   }
+
   async function handleArrowRight() {
     if (!keyword) return
     if (itemCount < 30) {
@@ -278,7 +301,7 @@ export function AlternativesManager() {
         </div>
         <div className="h-[300px] overflow-y-auto grid grid-cols-2 gap-4">
           {results.map((item, i) => (
-            <ProductCard key={i} item={item} onSave={() => handleAddAlternative2(keyword, item)} />
+            <ProductCard key={i} item={item} onSave={() => handleAddAlternativeRakuten(keyword, item)} />
           ))}
         </div>
         {isSearched  && (
@@ -336,6 +359,24 @@ export function AlternativesManager() {
                       onChange={(e) => setEditingDescription(e.target.value)}
                       placeholder="説明"
                     />
+                    <div className="flex justify-between gap-4">
+                      <p className="text-sm text-muted-foreground mt-2">{summary}</p>
+                      <div className="flex flex-col items-center gap-2">
+                        {summary && (
+                          <CopyTextButton text={summary} />
+                        )}
+                        <Button
+                          onClick={handleSummarize}
+                          disabled={loading}
+                          variant="ghost"
+                          size="sm"
+                          className="flex items-center"
+                        >
+                        {loading ? <LoadingSpinner /> : <Bot className="h-4 w-4 mr-1" /> }
+                        {loading ? "回答中..." : "Geminiに聞く" }
+                        </Button>
+                      </div>
+                    </div>
                     <label className="flex flex-col items-center justify-center w-full p-4 border border-dashed border-gray-30
                                       cursor-pointer bg-white hover:bg-muted">
                       <span className="text-sm text-muted-foreground">クリックして画像を選択</span>
@@ -360,10 +401,18 @@ export function AlternativesManager() {
                       />
                     )}
                     <div className="flex gap-2 items-center justify-end">
-                      <Button size="sm" variant="default" onClick={handleEditSave}>
+                      <Button size="sm" variant="default" onClick={() => {
+                        handleEditSave()
+                        setSummary("")
+                        }}
+                      >
                         変更
                       </Button>
-                      <Button size="sm" variant="ghost" onClick={handleEditCancel}>
+                      <Button size="sm" variant="ghost" onClick={() => {
+                          handleEditCancel()
+                          setSummary("")
+                        }}
+                      >
                         キャンセル
                       </Button>
                     </div>

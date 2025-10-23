@@ -30,18 +30,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Toaster richColors position="top-center" />
             </AHPProvider>
           </main>
-          <footer className="border-t border-border mt-10">
-            <div className="flex justify-center items-center gap-4 py-8 text-muted-foreground">
-              <p>&copy; 2025 AHP-GO. All rights reserved.</p>
-              <Link href="https://webservice.rakuten.co.jp/" target="_blank">
-                <Image
-                  src="/images/credit_31130.gif"
-                  alt="Supported by Rakuten Developers."
-                  width={100}
-                  height={100}
-                  className="w-auto h-auto rounded-sm"
-                />
-              </Link>
+          <footer className="mx-auto text-sm border-t border-border mt-64">
+            <p className="m-2 text-center text-muted-foreground">&copy; 2025 AHP-GO. All rights reserved.</p>
+            <div className="flex flex-col justify-center items-center gap-2 py-2 text-muted-foreground">
+              <p>このサイトの要約機能は Google Gemini API を利用しています。 Powered by Google Gemini</p>
+              <div className="flex">
+                <p>このサイトの商品検索は Rakuten API を利用しています。</p>
+                <Link href="https://webservice.rakuten.co.jp/" target="_blank">
+                  <Image
+                    src="/images/credit_31130.gif"
+                    alt="Supported by Rakuten Developers."
+                    width={50}
+                    height={50}
+                    className="w-auto h-6 rounded-sm"
+                  />
+                </Link>
+              </div>
             </div>
           </footer>
         </AuthProvider>
