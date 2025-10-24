@@ -10,6 +10,7 @@ import { useAHP } from "@/contexts/AHPContext"
 import { supabase } from "@/lib/supabaseClient"
 import Image from "next/image"
 import LoadingSpinner from "@/components/LoadingSpinner"
+import AhpCompaisonSlider from "@/components/AhpComparisonSlider"
 
 type ComparisonMatrix = {
   id: string
@@ -41,6 +42,8 @@ function importance(selected: number) {
     return '"1-3の中間"'
   } else if (num === 4) {
     return '"3-5の中間"'
+  } else if (num === 6) {
+    return '"5-7の中間"'
   } else {
     return ''
   }
@@ -84,8 +87,7 @@ export default function PairWiseComparison() {
     altDescription: {a: "", b: "" },
   })
   const projectId = params?.id as string
-  const marks = [-6, -4, -2, 0, 2, 4, 6]  // 奇数目盛り
-  const marks2 = [-3, -1, 1, 3]           // 偶数目盛り
+  const marks2 = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
 
   // 一対比較行列の更新用関数
   const updateMatrixValue = (id: string, row: number, col: number, value: number) => {
@@ -527,9 +529,8 @@ export default function PairWiseComparison() {
               }
             </div>
           </div>
-
-          <div className="flex flex-col gap-4 text-center text-xl text-muted-foreground">
-            <div className="flex justify-center text-xs text-muted-foreground gap-4">
+          <AhpCompaisonSlider value={selected} onValueChange={setSelected} />
+            <div className="flex justify-center text-xs text-muted-foreground">
               {marks2.map((mark2: number) => (
                 <motion.div
                   key={mark2}
@@ -544,8 +545,8 @@ export default function PairWiseComparison() {
                     className={
                       `rounded-full transition-all duration-200
                       ${mark2 === selected
-                        ? prevFlag ? "shadow-lg text-white bg-muted-foreground hover:bg-muted-foreground hover:text-white"
-                        : "shadow-lg text-white bg-green-500 hover:bg-green-500 hover:text-white"
+                        ? prevFlag ? "shadow-xl text-white bg-muted-foreground hover:bg-muted-foreground hover:text-white"
+                        : "shadow-lg text-white bg-blue-500 hover:bg-blue-500 hover:text-white"
                         : "bg-muted"}`
                     }
                     size="icon"
@@ -553,35 +554,6 @@ export default function PairWiseComparison() {
                     onClick={() => setSelected(mark2)}
                   >
                     {Math.abs(mark2) + 1}
-                  </Button>
-                </motion.div>
-              ))}
-            </div>
-            {/* 目盛りボタン */}
-            <div className="flex justify-center text-xs text-muted-foreground gap-4">
-              {marks.map((mark: number) => (
-                <motion.div
-                  key={mark}
-                  whileTap={{ scale: 0.9 }}
-                  animate={{
-                    scale: mark === selected ? 1.15 : 1,
-                    rotate: mark === selected ? 2 : 0
-                  }}
-                  transition={{ type: "spring", stiffness: 300, damping: 15}}
-                >
-                  <Button
-                    className={
-                      `rounded-full transition-all duration-200
-                      ${mark === selected
-                        ? prevFlag ? "shadow-lg text-white bg-muted-foreground hover:bg-muted-foreground hover:text-white"
-                        : "shadow-lg text-white bg-green-500 hover:bg-green-500 hover:text-white"
-                        : "bg-muted"}`
-                    }
-                    size="icon"
-                    variant="ghost"
-                    onClick={() => setSelected(mark)}
-                  >
-                    {Math.abs(mark) + 1}
                   </Button>
                 </motion.div>
               ))}
@@ -599,7 +571,6 @@ export default function PairWiseComparison() {
             )}
           </div>
         </div>
-      </div>
       <div className="max-w-lg mx-auto flex justify-between items-center">
         <Button
           size="default"
