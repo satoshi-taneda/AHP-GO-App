@@ -138,7 +138,28 @@ export default function ProjectPage() {
 
   return (
     <div className="max-w-5xl mx-auto space-y-4">
-      <Card className="relative overflow-hidden p-8 bg-gradient-to-r from-muted/50">
+      <Card className="relative overflow-hidden p-4 bg-gradient-to-r from-muted/50">
+        {user?.id === customerId && (
+          <div className="flex justify-end gap-2">
+            <Button
+              onClick={() => handleDelete(user.id, projectId)}
+              className="text-destructive hover:text-destructive"
+              disabled={loading}
+              size="sm"
+              variant="ghost"
+            >
+              {deletingId === projectId ? <LoadingSpinner /> : <Trash className="h-4 w-4 mr-1" /> }
+              {deletingId === projectId ? "削除中..." : "削除" }
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={ () => router.push(`/project/edit/${project.id}`) }
+            >
+              <Pencil className="w-4 h-4 mr-2" />編集する
+            </Button>
+          </div>
+        )}
         <div className="flex justify-between items-top">
           <div>
             <h1 className="text-3xl font-bold text-foreground mb-2">{project.goal}</h1>
@@ -149,27 +170,6 @@ export default function ProjectPage() {
             </p>
             <p className="text-sm text-muted-foreground mt-1">作成者: {owner || "匿名"}</p>
           </div>
-          {user?.id === customerId && (
-            <div className="flex gap-4">
-              <Button
-                onClick={() => handleDelete(user.id, projectId)}
-                className="text-destructive hover:text-destructive"
-                disabled={loading}
-                size="sm"
-                variant="ghost"
-              >
-                {deletingId === projectId ? <LoadingSpinner /> : <Trash className="h-4 w-4 mr-1" /> }
-                {deletingId === projectId ? "削除中..." : "削除" }
-              </Button>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={ () => router.push(`/project/edit/${project.id}`) }
-              >
-                <Pencil className="w-4 h-4 mr-2" />編集する
-              </Button>
-            </div>
-          )}
         </div>
         <div className="flex justify-end items-end gap-2 mt-2">
             {result ? (
