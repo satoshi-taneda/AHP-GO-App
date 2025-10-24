@@ -16,7 +16,7 @@ export default function FeaturesSection() {
       icon: <Zap className="w-6 h-6 text-primary" />,
       bg: "bg-primary/10",
       title: "直感的な操作が可能",
-      text: "スライダー操作で入力の手間を省きました。"
+      text: "ボタン操作、楽天検索、AI要約で入力の手間を最小限にしました。"
     },
     {
       icon: <Target className="w-6 h-6 text-primary" />,

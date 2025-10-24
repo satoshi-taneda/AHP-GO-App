@@ -152,13 +152,6 @@ export default function ProjectPage() {
           {user?.id === customerId && (
             <div className="flex gap-4">
               <Button
-                size="sm"
-                variant="ghost"
-                onClick={ () => router.push(`/project/edit/${project.id}`) }
-              >
-                <Pencil className="w-4 h-4 mr-2" />編集
-              </Button>
-              <Button
                 onClick={() => handleDelete(user.id, projectId)}
                 className="text-destructive hover:text-destructive"
                 disabled={loading}
@@ -167,6 +160,13 @@ export default function ProjectPage() {
               >
                 {deletingId === projectId ? <LoadingSpinner /> : <Trash className="h-4 w-4 mr-1" /> }
                 {deletingId === projectId ? "削除中..." : "削除" }
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={ () => router.push(`/project/edit/${project.id}`) }
+              >
+                <Pencil className="w-4 h-4 mr-2" />編集する
               </Button>
             </div>
           )}

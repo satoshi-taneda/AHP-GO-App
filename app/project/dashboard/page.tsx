@@ -34,13 +34,13 @@ export default function DashBoard() {
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl text-foreground font-semibold">履歴</h1>
+        <h1 className="text-2xl text-foreground font-semibold">プロジェクト</h1>
           <Button
             size="sm"
-            variant="outline"
+            variant="ghost"
             onClick={() => router.push("/project/new")}
           >
-          <Plus className="w-4 h-4 mr-1" /> 新しいプロジェクト
+          <Plus className="w-4 h-4 mr-1" />新しく作成する
           </Button>
       </div>
 
