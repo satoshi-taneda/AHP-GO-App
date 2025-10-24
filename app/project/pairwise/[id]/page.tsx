@@ -529,7 +529,7 @@ export default function PairWiseComparison() {
           </div>
 
           <div className="flex flex-col gap-4 text-center text-xl text-muted-foreground">
-            <div className="flex justify-center text-xs text-muted-foreground gap-32">
+            <div className="flex justify-center text-xs text-muted-foreground gap-4">
               {marks2.map((mark2: number) => (
                 <motion.div
                   key={mark2}
@@ -558,7 +558,7 @@ export default function PairWiseComparison() {
               ))}
             </div>
             {/* 目盛りボタン */}
-            <div className="flex justify-between text-xs text-muted-foreground px-4">
+            <div className="flex justify-center text-xs text-muted-foreground gap-4">
               {marks.map((mark: number) => (
                 <motion.div
                   key={mark}
