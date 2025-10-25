@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react"
 import { useRouter, useParams } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext"
-import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, ArrowLeft } from "lucide-react"
 import { toast } from "sonner"
@@ -29,36 +28,6 @@ type Pairwise = {
   altDescription: { a: string, b: string }
 }
 
-function importance(selected: number) {
-  // 重要度を言葉で表現
-  const num = Math.abs(selected) + 1
-  if (num === 3) {
-    return '"少し"'
-  } else if (num === 5) {
-    return '"かなり"'
-  } else if (num === 7) {
-    return '"うんと"'
-  } else if (num === 2) {
-    return '"1-3の中間"'
-  } else if (num === 4) {
-    return '"3-5の中間"'
-  } else if (num === 6) {
-    return '"5-7の中間"'
-  } else {
-    return ''
-  }
-}
-
-function handleSelected(a: string, b: string, selected: number) {
-  if (selected < 0) {
-    return `${a}の方が${importance(selected)}重要`
-  } else if (selected > 0) {
-    return `${b}の方が${importance(selected)}重要`
-  } else {
-    return "同じくらい重要"
-  }
-}
-
 export default function PairWiseComparison() {
   const router = useRouter()
   const params = useParams()
@@ -66,12 +35,11 @@ export default function PairWiseComparison() {
   const { project, setProject } = useAHP()
   const [loading, setLoading] = useState(true)
   const [ahpLoading, setAhpLoading] = useState(true)
-  const [prevFlag, setPrevFlag] = useState(false)
-  const [selected, setSelected] = useState<number>(9)
+  const [selected, setSelected] = useState<number>(0)
   const [numCriteria, setNumCriteria] = useState<number>(0)
   const [numAlternatives, setNumAlternatives] = useState<number>(0)
   const [total, setTotal] = useState<number>(0)
-  const [matrixNum, setMatrixNum] = useState<number>(0)
+  const [numMatrix, setNumMatrix] = useState<number>(0)
   const [counter, setCounter] = useState<number>(1)
   const [row, setRow] = useState<number>(0)
   const [column, setColumn] = useState<number>(1)
@@ -87,7 +55,6 @@ export default function PairWiseComparison() {
     altDescription: {a: "", b: "" },
   })
   const projectId = params?.id as string
-  const marks2 = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]
 
   // 一対比較行列の更新用関数
   const updateMatrixValue = (id: string, row: number, col: number, value: number) => {
@@ -114,21 +81,21 @@ export default function PairWiseComparison() {
           : item
   ))}
   const calcWeight = () => {
-    if (matrixNum === 0 || row !== 0 || column !== 1) return
-    const arr = matrices[matrixNum-1].matrix
+    if (numMatrix === 0) return
     let num = 0
-    let lambdaMax = 0
-    let diff = 0
-    let ci = 0
-    console.log(arr)
-    if (matrixNum - 1 === 0) {
+    if (numMatrix - 1 === 0) {
       num = numCriteria
     } else {
       num = numAlternatives
     }
+    let lambdaMax = 0
+    let diff = 0
+    let ci = 0
     const v = new Array(num).fill(0)
     const v2 = new Array(num).fill(0)
     const w = new Array(num).fill(0)
+    const arr = matrices[numMatrix-1].matrix
+    const weightArray = weight.weightAlternatives
     for (let i = 0; i < num; i++) {
       v[i] = (1 / num)
     }
@@ -160,26 +127,37 @@ export default function PairWiseComparison() {
       }
     }
     // 固有ベクトル(ウェイト)をセット
-    setWeight(prev => ({
-      ...prev,
-      weightCriteria: w
-    }))
+    if (numMatrix - 1 === 0) {
+      setWeight(prev => ({
+        ...prev,
+        weightCriteria: w
+      }))
+    } else {
+      for (let i = 0; i < numAlternatives; i++)
+        weightArray[i][numMatrix-2] = w[i]
+      setWeight(prev => ({
+        ...prev,
+        weightAlternatives: weightArray
+      }))
+    }
 
     if (ci) {
-      if (ci > 0.00001) updateCI(matrices[matrixNum-1].id, ci)
+      if (ci >= 0.00001) updateCI(matrices[numMatrix-1].id, ci)
       if (ci < 0.1) {
         toast.success("C.I.チェック正常!")
       } else {
         let message = ""
-        if (matrixNum - 1 === 0) {
-          message = matrices[matrixNum-1].id
+        if (numMatrix - 1 === 0) {
+          message = matrices[numMatrix-1].id
         } else {
-          message = `候補の${matrices[matrixNum-1].id}の観点`
+          message = `候補の${matrices[numMatrix-1].id}の観点`
         }
-        toast.error(`C.I.チェック異常(${message}の比較を見直してください)`)
+        toast.error(`C.I.チェック異常(${message}の比較に整合性があるか見直してください)`)
       }
     }
     if (ahpLoading) return
+    console.log(matrices)
+    console.log(weight)
     console.log("入力終了")
     setAhpLoading(true)
   }
@@ -187,7 +165,7 @@ export default function PairWiseComparison() {
   const handlePrev = (num: number) =>  {
     let prevRow = row
     let prevCol = column
-    let prevMatrixNum = matrixNum
+    let prevMatrixNum = numMatrix
     while (true) {
       if (prevCol > prevRow) {
         prevCol -= 1
@@ -203,7 +181,7 @@ export default function PairWiseComparison() {
         }
         if (prevMatrixNum > 0) {
           prevMatrixNum -= 1
-          setMatrixNum(prevMatrixNum)
+          setNumMatrix(prevMatrixNum)
         }
         break
       }
@@ -212,7 +190,6 @@ export default function PairWiseComparison() {
     setRow(prevRow)
     setColumn(prevCol)
     setCounter(prev => prev - 1)
-    setPrevFlag(true)
     const prevSelected = matrices[prevMatrixNum].matrix[prevRow][prevCol]
     const prevSelectedT = matrices[prevMatrixNum].matrix[prevCol][prevRow]
     if (prevSelected > 1) {
@@ -225,16 +202,16 @@ export default function PairWiseComparison() {
   const handleNext = (num: number) =>  {
     // 選択した値を一対比較行列の成分としてセット
     if (selected < 0) {
-      updateMatrixValue(matrices[matrixNum].id, row, column, Math.abs(selected) + 1)
-      updateMatrixValue(matrices[matrixNum].id, column, row, 1 / (Math.abs(selected) + 1))
+      updateMatrixValue(matrices[numMatrix].id, row, column, Math.abs(selected) + 1)
+      updateMatrixValue(matrices[numMatrix].id, column, row, 1 / (Math.abs(selected) + 1))
     } else {
-      updateMatrixValue(matrices[matrixNum].id, column, row, Math.abs(selected) + 1)
-      updateMatrixValue(matrices[matrixNum].id, row, column, 1 / (Math.abs(selected) + 1))
+      updateMatrixValue(matrices[numMatrix].id, column, row, Math.abs(selected) + 1)
+      updateMatrixValue(matrices[numMatrix].id, row, column, 1 / (Math.abs(selected) + 1))
     }
     // 次の一対比較行列の成分へ移動
     let nextRow = row
     let nextCol = column
-    let nextMatrixNum = matrixNum
+    let nextNumMatrix = numMatrix
     while (true) {
       if (nextCol < num - 1) {
         nextCol += 1
@@ -244,9 +221,9 @@ export default function PairWiseComparison() {
       } else {
         nextRow = 0
         nextCol = 1
-        if (matrixNum < num) {
-          nextMatrixNum += 1
-          setMatrixNum(nextMatrixNum)
+        if (numMatrix < numCriteria + 1) {
+          nextNumMatrix += 1
+          setNumMatrix(nextNumMatrix)
         }
         break
       }
@@ -259,8 +236,8 @@ export default function PairWiseComparison() {
     setCounter(prev => prev + 1)
 
     // 次の値が既にセットされている場合は、実施済みとして処理
-    const nextSelected = matrices[nextMatrixNum].matrix[nextRow][nextCol]
-    const nextSelectedT = matrices[nextMatrixNum].matrix[nextCol][nextRow]
+    const nextSelected = matrices[nextNumMatrix].matrix[nextRow][nextCol]
+    const nextSelectedT = matrices[nextNumMatrix].matrix[nextCol][nextRow]
     if (nextSelected > 0) {
       if (nextSelected > 1) {
         setSelected(nextSelected * -1 + 1)
@@ -268,23 +245,29 @@ export default function PairWiseComparison() {
         setSelected(nextSelectedT - 1)
       }
     } else {
-      setPrevFlag(false)
-      setSelected(9)
+      setSelected(0)
     }
   }
 
   const handleExec = () =>  {
     // 選択した値を一対比較行列の成分としてセット
     if (selected < 0) {
-      updateMatrixValue(matrices[matrixNum].id, row, column, Math.abs(selected) + 1)
-      updateMatrixValue(matrices[matrixNum].id, column, row, 1 / (Math.abs(selected) + 1))
+      updateMatrixValue(matrices[numMatrix].id, row, column, Math.abs(selected) + 1)
+      updateMatrixValue(matrices[numMatrix].id, column, row, 1 / (Math.abs(selected) + 1))
     } else {
-      updateMatrixValue(matrices[matrixNum].id, column, row, Math.abs(selected) + 1)
-      updateMatrixValue(matrices[matrixNum].id, row, column, 1 / (Math.abs(selected) + 1))
+      updateMatrixValue(matrices[numMatrix].id, column, row, Math.abs(selected) + 1)
+      updateMatrixValue(matrices[numMatrix].id, row, column, 1 / (Math.abs(selected) + 1))
     }
     // 一対比較行列確定
+    // 次の一対比較行列の成分へ移動
     setRow(0)
     setColumn(1)
+    setCounter(prev => prev + 1)
+    let nextNumMatrix = numMatrix
+    if (numMatrix < numCriteria + 1) {
+      nextNumMatrix += 1
+      setNumMatrix(nextNumMatrix)
+    }
     setAhpLoading(false)
   }
 
@@ -341,7 +324,7 @@ export default function PairWiseComparison() {
     fetchData()
   }, [authLoading, router])
 
-  // 一対比較行列の初期化
+  // 一対比較行列とウェイトの初期化
   useEffect(() => {
     if (!project) return
     const criteriaCount = project.criteria.length
@@ -350,7 +333,7 @@ export default function PairWiseComparison() {
     setNumCriteria(criteriaCount)
     setNumAlternatives(altCount)
     setTotal(num)
-    // 各評価基準を基にした一対比較行列を作成
+    // 各評価基準を基にした一対比較行列作成
     const newMatrices: ComparisonMatrix[] = project.criteria.map((c) => ({
       id: c.name,
       matrix: Array.from({ length: altCount }, (_, i) =>
@@ -369,19 +352,25 @@ export default function PairWiseComparison() {
       },
       ...prev
     ])
+    // ウェイト用の行列作成
+    const vector = new Array(criteriaCount).fill(0)
+    const array = Array.from({ length: altCount }, () => Array(criteriaCount).fill(0))
+    setWeight({
+      weightCriteria: vector,
+      weightAlternatives: array
+    })
+
   }, [project])
 
   useEffect(() => {
     if (loading) return
     // ウェイトと整合度の計算
     calcWeight()
-    console.log(matrices)
-    console.log(weight)
-  }, [row, column])
+  }, [numMatrix])
 
   // レンダリング用のペア配列作成
   useEffect(() => {
-    if (row < numCriteria && column < numCriteria && matrixNum === 0 && project) {
+    if (row < numCriteria && column < numCriteria && numMatrix === 0 && project) {
       const names = {
         a: project.criteria[row].name,
         b: project.criteria[column].name,
@@ -391,7 +380,7 @@ export default function PairWiseComparison() {
         criteriaName: {...names},
       }))
     }
-    if (row < numAlternatives && column < numAlternatives && matrixNum > 0 && project) {
+    if (row < numAlternatives && column < numAlternatives && numMatrix > 0 && project) {
       const altImages = {
         a: project.alternatives[row].imageUrl,
         b: project.alternatives[column].imageUrl,
@@ -419,186 +408,154 @@ export default function PairWiseComparison() {
 
   return (
     <>
-      <div className="h-[70vh] overflow-y-auto max-w-5xl mx-auto space-y-6">
-          {matrixNum > 0
-            ? (
-              <h3 className="flex text-3xl font-semibold">
-                候補の
-                <span className="text-blue-500 font-bold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-                  {matrices[matrixNum].id}
-                </span>
-                の観点の比較
-              </h3>
-              )
-            :<h3 className="flex text-3xl font-semibold">評価基準の比較</h3>
-          }
-        <div className="p-6 bg-muted/30 rounded-xl shadow">
-          <div className="text-xl text-center text-muted-foreground font-semibold">
-            {/* 重要度を言葉で表現 */}
-            {matrixNum > 0
-              ? handleSelected(pairwise.altName.a, pairwise.altName.b, selected)
-              : handleSelected(pairwise.criteriaName.a, pairwise.criteriaName.b, selected)
+      {counter <= total ? (
+        <div className="max-w-4xl mx-auto space-y-4">
+            {numMatrix > 0
+              ? (
+                <h3 className="text-3xl font-semibold">
+                  候補の
+                  <span className="text-blue-500 font-bold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                    {matrices[numMatrix].id}
+                  </span>
+                  の観点の比較
+                </h3>
+                )
+              :<h3 className="text-3xl font-semibold">評価基準の比較</h3>
             }
-          </div>
-          {/* 目盛りボタン */}
-          <div className="flex justify-between items-center">
-            <div className="flex flex-col items-center flex-1">
-              {matrixNum > 0 ? (
-                <>
-                  <div className="relative inline-block group">
-                    {pairwise.altImage.a ? (
-                      <Image
-                        src={pairwise.altImage.a}
-                        alt={pairwise.altName.a}
-                        width={120}
-                        height={120}
-                        className="rounded-lg group-hover:scale-125 transition-transform duration-300"
-                      />) : (
-                      <Image
-                        src="/images/noimage_w.png"
-                        alt="No Image"
-                        width={120}
-                        height={120}
-                        className="rounded-lg group-hover:scale-125 transition-transform duration-300"
-                      />
-                    )}
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 mb-3
-                      w-64 px-3 py-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg
-                      opacity-0 group-hover:opacity-100 transition-opacity duration-300
-                      whitespace-pre-line z-50 pointer-events-none"
-                    >
-                      <p>{pairwise.altDescription.a}</p>
-                      {/* 吹き出しの三角形 */}
-                      <div
-                        className="absolute left-1/2 bottom-full -translate-x-1/2
-                          w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent
-                          border-b-8 border-b-gray-800"
-                      ></div>
+          <div className="p-8 bg-muted/30 rounded-xl shadow-lg space-y-4">
+            {/* アイテム詳細 */}
+            <div className="flex justify-between items-center">
+              <div className="flex flex-col items-center flex-1">
+                {numMatrix > 0 ? (
+                  <>
+                    <div className="relative inline-block group">
+                      {pairwise.altImage.a ? (
+                        <Image
+                          src={pairwise.altImage.a}
+                          alt={pairwise.altName.a}
+                          width={120}
+                          height={120}
+                          className="rounded-lg group-hover:scale-125 transition-transform duration-300"
+                        />) : (
+                        <Image
+                          src="/images/noimage_w.png"
+                          alt="No Image"
+                          width={120}
+                          height={120}
+                          className="rounded-lg group-hover:scale-125 transition-transform duration-300"
+                        />
+                      )}
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 mb-3
+                        w-64 px-3 py-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg
+                        opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                        whitespace-pre-line z-50 pointer-events-none"
+                      >
+                        <p>{pairwise.altDescription.a}</p>
+                        {/* 吹き出しの三角形 */}
+                        <div
+                          className="absolute left-1/2 bottom-full -translate-x-1/2
+                            w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent
+                            border-b-8 border-b-gray-800"
+                        ></div>
+                      </div>
+                      {pairwise.altName.a}
                     </div>
-                  </div>
-                  <h3 className="font-semibold mt-2">{pairwise.altName.a}</h3>
-                </>
-                ) : (
-                  <div className="flex text-3xl font-bold">
-                    {pairwise.criteriaName.a}
-                  </div>
-                )
-              }
-            </div>
-            <span className="text-3xl  px-4 text-muted-foreground">vs</span>
-            <div className="flex flex-col items-center flex-1">
-              {matrixNum > 0 ? (
-                <>
-                  <div className="relative inline-block group">
-                    {pairwise.altImage.b ? (
-                      <Image
-                        src={pairwise.altImage.b}
-                        alt={pairwise.altName.b}
-                        width={120}
-                        height={120}
-                        className="rounded-lg group-hover:scale-125 transition-transform duration-300"
-                      />) : (
-                      <Image
-                        src="/images/noimage_b.png"
-                        alt="No Image"
-                        width={120}
-                        height={120}
-                      />
-                    )}
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 mb-3
-                      w-64 px-3 py-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg
-                      opacity-0 group-hover:opacity-100 transition-opacity duration-300
-                      whitespace-pre-line z-50 pointer-events-none"
-                    >
-                      <p>{pairwise.altDescription.b}</p>
-                      {/* 吹き出しの三角形 */}
-                      <div
-                        className="absolute left-1/2 bottom-full -translate-x-1/2
-                          w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent
-                          border-b-8 border-b-gray-800"
-                      ></div>
+                  </>
+                  ) : (
+                    <div className="flex text-2xl font-semibold">
+                      {pairwise.criteriaName.a}
                     </div>
-                  </div>
-                  <h3 className="font-semibold mt-2">{pairwise.altName.b}</h3>
-                </>
-                ) : (
-                  <div className="flex text-3xl font-bold p-12">
-                    {pairwise.criteriaName.b}
-                  </div>
-                )
-              }
-            </div>
-          </div>
-          <AhpCompaisonSlider value={selected} onValueChange={setSelected} />
-            <div className="flex justify-center text-xs text-muted-foreground">
-              {marks2.map((mark2: number) => (
-                <motion.div
-                  key={mark2}
-                  whileTap={{ scale: 0.9 }}
-                  animate={{
-                    scale: mark2 === selected ? 1.15 : 1,
-                    rotate: mark2 === selected ? 2 : 0
-                  }}
-                  transition={{ type: "spring", stiffness: 300, damping: 15}}
-                >
-                  <Button
-                    className={
-                      `rounded-full transition-all duration-200
-                      ${mark2 === selected
-                        ? prevFlag ? "shadow-xl text-white bg-muted-foreground hover:bg-muted-foreground hover:text-white"
-                        : "shadow-lg text-white bg-blue-500 hover:bg-blue-500 hover:text-white"
-                        : "bg-muted"}`
-                    }
-                    size="icon"
-                    variant="ghost"
-                    onClick={() => setSelected(mark2)}
-                  >
-                    {Math.abs(mark2) + 1}
-                  </Button>
-                </motion.div>
-              ))}
-            </div>
-            {matrixNum > 0 ? (
-              <div className="flex justify-between text-xs text-muted-foreground mt-2">
-                <span>←{pairwise.altName.a}寄り</span>
-                <span>{pairwise.altName.b}寄り→</span>
+                  )
+                }
               </div>
-            ) : (
-              <div className="flex justify-between text-xs text-muted-foreground mt-2">
-                <span>←{pairwise.criteriaName.a}寄り</span>
-                <span>{pairwise.criteriaName.b}寄り→</span>
+              <span>VS</span>
+              <div className="flex flex-col items-center flex-1">
+                {numMatrix > 0 ? (
+                  <>
+                    <div className="relative inline-block group">
+                      {pairwise.altImage.b ? (
+                        <Image
+                          src={pairwise.altImage.b}
+                          alt={pairwise.altName.b}
+                          width={120}
+                          height={120}
+                          className="rounded-lg group-hover:scale-125 transition-transform duration-300"
+                        />) : (
+                        <Image
+                          src="/images/noimage_b.png"
+                          alt="No Image"
+                          width={120}
+                          height={120}
+                          className="rounded-lg group-hover:scale-125 transition-transform duration-300"
+                        />
+                      )}
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 mb-3
+                        w-64 px-3 py-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg
+                        opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                        whitespace-pre-line z-50 pointer-events-none"
+                      >
+                        <p>{pairwise.altDescription.b}</p>
+                        {/* 吹き出しの三角形 */}
+                        <div
+                          className="absolute left-1/2 bottom-full -translate-x-1/2
+                            w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent
+                            border-b-8 border-b-gray-800"
+                        ></div>
+                      </div>
+                      {pairwise.altName.b}
+                    </div>
+                  </>
+                  ) : (
+                    <div className="flex text-2xl font-semibold">
+                      {pairwise.criteriaName.b}
+                    </div>
+                  )
+                }
               </div>
+            </div>
+            {numMatrix > 0 ? (
+              <AhpCompaisonSlider itemA={pairwise.altName.a} itemB={pairwise.altName.b} value={selected} onValueChange={setSelected} />
+            ) :  (
+              <AhpCompaisonSlider itemA={pairwise.criteriaName.a} itemB={pairwise.criteriaName.b} value={selected} onValueChange={setSelected} />
             )}
           </div>
         </div>
-      <div className="max-w-lg mx-auto flex justify-between items-center">
+      ) : (
+        <h1 className="text-center text-2xl text-muted-foreground font-semibold">
+          これでAHPは終わりです。お疲れ様でした!
+        </h1>
+      )}
+      <div className="max-w-xl mx-auto flex justify-between items-center mt-4">
         <Button
           size="default"
           variant="ghost"
           disabled={loading || counter === 1}
-          onClick={() => {matrixNum > 0 ? handlePrev(numAlternatives) : handlePrev(numCriteria)}}
+          onClick={() => {numMatrix > 0 ? handlePrev(numAlternatives) : handlePrev(numCriteria)}}
         >
           <ArrowLeft className="w-4 h-4 mr-2" />戻る
         </Button>
-        <p className="text-sm text-center text-muted-foreground">
+        {counter <= total && (
+          <p className="text-sm text-center text-muted-foreground">
           {counter} / {total}
-        </p>
+          </p>
+        )}
         <Button
           size="default"
           variant="ghost"
-          disabled={loading || selected === 9 || counter === total}
-          onClick={() => {matrixNum > 0 ? handleNext(numAlternatives) : handleNext(numCriteria)}}
+          disabled={loading || selected === -9 || counter >= total}
+          onClick={() => {numMatrix > 0 ? handleNext(numAlternatives) : handleNext(numCriteria)}}
         >
           次へ<ArrowRight className="w-4 h-4 ml-2" />
         </Button>
       </div>
-      <div className="max-w-3xl mx-auto flex justify-end mt-4">
+      <div className="max-w-4xl mx-auto flex justify-end">
         <Button
           size="lg"
           variant="secondary"
+          disabled={ counter !== total}
           onClick={handleExec}
         >
-          実行
+          保存
         </Button>
       </div>
     </>

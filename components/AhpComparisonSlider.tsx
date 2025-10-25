@@ -1,37 +1,54 @@
 "use client";
-import { useState } from "react";
-
 export default function AhpComparisonSlider({
+  itemA,
+  itemB,
   value,
-  onValueChange // 追加
+  onValueChange,
 }: {
-  value: number;
+  itemA: string,
+  itemB: string,
+  value: number,
   onValueChange?: (value: number) => void
 }) {
-  // const [value, setValue] = useState(0);
-  const handleChange= (val: number) => {
-    onValueChange?.(val) // 親に通知
+  const handleChange = (val: number) => {
+    onValueChange?.(val)
   }
 
+  const getLabel = (val: number) => {
+    if (val === -9) return "未選択"
+    if (val === 0) return "同じくらい重要";
+    const degree = Math.abs(val);
+    const labels = ["わずかに", "やや", "かなり", "非常に", "極めて", "圧倒的に"];
+    const intensity =
+      labels[Math.min(Math.floor((degree - 1) / 1.5), labels.length - 1)];
+    return val > 0
+      ? `『${itemB}』が${intensity}重要`
+      : `『${itemA}』が${intensity}重要`;
+  };
+
   return (
-    <div className="shadow-xs max-w-xl mx-auto my-4">
+    <div className="p-4 border rounded-xl bg-white shadow w-full max-w-2xl mx-auto space-y-1">
+      {/* テキスト表示 */}
+      <p className="text-lg text-center font-medium text-blue-700">
+        {getLabel(value)}
+      </p>
+
       <div className="relative w-full">
         <input
           type="range"
-          min={-6}
-          max={6}
+          min={-8}
+          max={8}
           step={1}
           value={value}
-          onChange={(e: any) => handleChange(parseInt(e.target.value))}
-          className="shadow-md w-full appearance-none bg-gradient-to-r from-pink-200 via-gray-300 to-blue-200 h-3 rounded-full accent-blue-600"
+          onChange={(e) => handleChange(parseInt(e.target.value))}
+          className="w-full appearance-none bg-gradient-to-r from-pink-200 via-gray-300 to-blue-200 h-4 rounded-full accent-blue-600"
         />
-
         <style jsx>{`
           input[type="range"]::-webkit-slider-thumb {
             appearance: none;
-            width: 18px;
-            height: 18px;
-            background: #fff8ff;
+            width: 25px;
+            height: 25px;
+            background: #2563eb;
             border-radius: 9999px;
             cursor: pointer;
             box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
@@ -42,7 +59,15 @@ export default function AhpComparisonSlider({
           }
         `}</style>
       </div>
+
+      {/* 現在値をスライダー中央に表示 */}
+      {value !== -9 && (
+        <span className="text-center text-muted-foreground font-semibold text-3xl">{Math.abs(value) + 1}</span>
+      )}
+      <div className="flex justify-between text-sm text-gray-600">
+        <span>←{itemA}重視</span>
+        <span>{itemB}重視→</span>
+      </div>
     </div>
   );
 }
-

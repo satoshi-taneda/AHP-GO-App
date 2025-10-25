@@ -167,8 +167,8 @@ export default function EditProjectPage() {
   if (!project) return <div>Loading...</div>
 
   return (
-    <div className="max-w-5xl mx-auto space-y-4">
-      <h1 className="text-2xl font-bold mb-6">プロジェクトを編集する</h1>
+    <div className="max-w-4xl mx-auto space-y-4">
+      <h1 className="text-2xl font-semibold mb-6">プロジェクトを編集する</h1>
       <div className="flex flex-col gap-4">
         <section>
           <GoalInput />

@@ -137,13 +137,21 @@ export default function ProjectPage() {
   if (loading || !project) return <LoadingSpinner />
 
   return (
-    <div className="max-w-5xl mx-auto space-y-4">
+    <div className="max-w-4xl mx-auto space-y-4">
       <Card className="relative overflow-hidden p-4 bg-gradient-to-r from-muted/50">
         {user?.id === customerId && (
           <div className="flex justify-end gap-2">
             <Button
+              className="text-green-800"
+              size="sm"
+              variant="ghost"
+              onClick={ () => router.push(`/project/edit/${project.id}`) }
+            >
+              <Pencil className="w-4 h-4 mr-2" />編集する
+            </Button>
+            <Button
               onClick={() => handleDelete(user.id, projectId)}
-              className="text-destructive hover:text-destructive"
+              className="text-destructive"
               disabled={loading}
               size="sm"
               variant="ghost"
@@ -151,18 +159,11 @@ export default function ProjectPage() {
               {deletingId === projectId ? <LoadingSpinner /> : <Trash className="h-4 w-4 mr-1" /> }
               {deletingId === projectId ? "削除中..." : "削除" }
             </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={ () => router.push(`/project/edit/${project.id}`) }
-            >
-              <Pencil className="w-4 h-4 mr-2" />編集する
-            </Button>
           </div>
         )}
         <div className="flex justify-between items-top">
           <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">{project.goal}</h1>
+            <h1 className="text-2xl font-semibold text-foreground mb-2">{project.goal}</h1>
             <p className="text-muted-foreground">
               更新日: {new Date(project.updatedAt).toLocaleDateString("ja-JP", {
               year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"

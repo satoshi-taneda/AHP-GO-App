@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" })
 
     const prompt = `
-      以下の商品情報を150文字以内でわかりやすく要約してください。
+      以下の商品情報を180文字以内でわかりやすく要約してください。
       ※専門用語は避けて一般の消費者向けに説明してください。
       <形式>
       商品名: 価格: 商品説明:
