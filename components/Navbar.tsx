@@ -19,7 +19,7 @@ function LoggedInMenu({ user, profile, onLogout }: {user: any, profile: any, onL
 
   return (
     <>
-      <Button size="lg" variant="ghost" onClick={onLogout}>
+      <Button size="default" variant="ghost" onClick={onLogout}>
         ログアウト
       </Button>
       <DropdownMenu>
@@ -54,12 +54,12 @@ function LoggedOutMenu({ isAuthPage }: { isAuthPage: boolean }) {
   return (
     <>
       <Link href="/auth/login">
-        <Button size="lg" variant="ghost">
+        <Button size="default" variant="ghost">
           ログイン
         </Button>
       </Link>
       <Link href="/auth/signup">
-        <Button size="lg" className="bg-foreground px-4 overflow-hidden">
+        <Button size="default" className="bg-foreground px-4 overflow-hidden">
           新規登録
         </Button>
       </Link>
@@ -81,13 +81,13 @@ export default function Navbar() {
   }
   // ヘッダの左右配置
   return (
-    <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+    <div className="container mx-auto p-4 flex justify-between items-center">
       <h1 className="flex items-center gap-2">
         <div className="inline-block relative group">
         {loading ? null : user ? (
           <Button
             className="text-xl font-semibold overflow-hidden relative"
-            size="sm"
+            size="lg"
             variant="ghost"
             onClick={() => router.replace("/project/dashboard")}
           >
@@ -100,7 +100,7 @@ export default function Navbar() {
         ) : (
           <Button
             className="text-xl font-semibold overflow-hidden relative"
-            size="sm"
+            size="lg"
             variant="ghost"
             onClick={() => router.replace("/")}
           >
@@ -109,7 +109,7 @@ export default function Navbar() {
         )}
         </div>
       </h1>
-      <nav className="flex items-center gap-2">
+      <nav className="flex items-center gap-1">
         {loading ? null : user ? (
           <LoggedInMenu user={user} profile={profile ?? null} onLogout={handleLogout} />
         ) : (
