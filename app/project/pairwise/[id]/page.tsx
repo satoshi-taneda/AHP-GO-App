@@ -89,7 +89,7 @@ export default function PairWiseComparison() {
 
   // ウェイト計算
   const calcWeight = () => {
-    if (numMatrix === 0) return
+    if (numMatrix === 0 || row !== 0 || column !== 1) return
     let num = 0
     if (numMatrix - 1 === 0) {
       num = numCriteria
