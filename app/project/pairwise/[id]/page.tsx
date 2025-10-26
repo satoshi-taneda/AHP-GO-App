@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, ArrowLeft } from "lucide-react"
 import { toast } from "sonner"
+import { motion } from "framer-motion"
 import { useAHP } from "@/contexts/AHPContext"
 import { supabase } from "@/lib/supabaseClient"
 import Image from "next/image"
@@ -421,9 +422,7 @@ export default function PairWiseComparison() {
 
   useEffect(() => {
     if (!complete || !project) return
-
     console.log(weight)
-
     const updateWeight = async () => {
       // Supabase-criteriaテーブルのweight更新
       for (let i = 0; i < numCriteria; i++) {
@@ -451,7 +450,7 @@ export default function PairWiseComparison() {
       }
     }
     setLoading(true)
-    updateWeight()
+    // updateWeight()
     setLoading(false)
   }, [complete])
 
@@ -594,24 +593,37 @@ export default function PairWiseComparison() {
               次の比較<ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </div>
-          <div className="max-w-4xl mx-auto flex justify-between">
-            <CancelButton />
-            <Button
-              size="lg"
-              variant="secondary"
-              disabled={counter !== total}
-              onClick={handleExec}
-            >
-              保存
-            </Button>
-          </div>
+          {counter === total  && (
+            <div className="max-w-4xl mx-auto flex justify-end">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600"
+                onClick={handleExec}
+              >
+                AHP計算
+              </motion.button>
+            </div>
+          )}
         </>
       ) : (
-        <div>
-          <h1 className="text-center text-2xl text-muted-foreground font-semibold">
-            これでAHPは終わりです。お疲れ様でした!
-          </h1>
-            <div className="max-w-xl mx-auto flex justify-between items-center mt-4">
+        <div className="flex flex-col items-center justify-center h-screen text-center bg-gradient-to-b from-blue-50 to-white">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="text-4xl font-bold text-blue-600"
+          >
+            🎉お疲れ様でした!
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            className="mt-4 text-gray-600"
+          >
+            これでAHPは終わりです。
+          </motion.p>
+            <div className="max-w-xl mx-auto flex justify-between items-center mt-8">
               <Button
                 size="lg"
                 variant="ghost"
@@ -623,12 +635,13 @@ export default function PairWiseComparison() {
               >
                 やり直す
               </Button>
-              <Button
-                size="lg"
-                variant="secondary"
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600"
+                onClick={() => router.push("/")}
               >
                 結果をみる
-              </Button>
+              </motion.button>
             </div>
           </div>
 
