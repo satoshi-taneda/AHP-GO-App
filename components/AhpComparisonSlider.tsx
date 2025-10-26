@@ -46,8 +46,8 @@ export default function AhpComparisonSlider({
         <style jsx>{`
           input[type="range"]::-webkit-slider-thumb {
             appearance: none;
-            width: 25px;
-            height: 25px;
+            width: 20px;
+            height: 20px;
             background: #2563eb;
             border-radius: 9999px;
             cursor: pointer;
@@ -55,7 +55,7 @@ export default function AhpComparisonSlider({
             transition: transform 0.1s ease;
           }
           input[type="range"]::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
+            transform: scale(1.5);
           }
         `}</style>
       </div>

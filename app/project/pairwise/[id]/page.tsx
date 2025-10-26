@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, ArrowLeft, Check, AlertTriangle } from "lucide-react"
 import { toast } from "sonner"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { useAHP } from "@/contexts/AHPContext"
 import { supabase } from "@/lib/supabaseClient"
 import Image from "next/image"
@@ -39,6 +39,7 @@ export default function PairWiseComparison() {
   const [loading, setLoading] = useState(true)
   const [ahpLoading, setAhpLoading] = useState(true)
   const [complete, setComplete] = useState(false)
+  const [ciCheck, setCiCheck] = useState(false)
   const [selected, setSelected] = useState<number>(0)
   const [numCriteria, setNumCriteria] = useState<number>(0)
   const [numAlternatives, setNumAlternatives] = useState<number>(0)
@@ -86,103 +87,6 @@ export default function PairWiseComparison() {
             }
           : item
   ))}
-
-  // ウェイト計算
-  const calcWeight = () => {
-    if (numMatrix === 0 || row !== 0 || column !== 1) return
-    let num = 0
-    if (numMatrix - 1 === 0) {
-      num = numCriteria
-    } else {
-      num = numAlternatives
-    }
-    let lambdaMax = 0
-    let diff = 0
-    let ci = 0
-    const v = new Array(num).fill(0)
-    const v2 = new Array(num).fill(0)
-    const w = new Array(num).fill(0)
-    const arr = matrices[numMatrix-1].matrix
-    const weightArray = weight.weightAlternatives
-    for (let i = 0; i < num; i++) {
-      v[i] = (1 / num)
-    }
-
-    // 固有ベクトル計算
-    for (let k = 0; k < 10000; k++) {
-      for (let i = 0; i < num; i++)
-        for (let j = 0; j < num; j++)
-          v2[i] += arr[i][j] * v[j]
-
-      lambdaMax = 0
-      for (let i = 0; i < num; i++)
-        lambdaMax += v2[i]
-
-      for (let i = 0; i < num; i++)
-        w[i] = v2[i] / lambdaMax
-
-      diff = 0
-      for (let i = 0; i < num; i++)
-        diff += Math.abs(w[i] - v[i])
-      if (diff < 0.00001) {
-        ci = (lambdaMax - num) / (num - 1)
-        break
-      }
-      // 次の計算準備
-      for (let i = 0; i < num; i++) {
-        v[i] = w[i]
-        v2[i] = 0
-      }
-    }
-    // 固有ベクトル(ウェイト)をセット
-    if (numMatrix - 1 === 0) {
-      setWeight(prev => ({
-        ...prev,
-        weightCriteria: w
-      }))
-    } else {
-      for (let i = 0; i < numAlternatives; i++)
-        weightArray[i][numMatrix-2] = w[i]
-      setWeight(prev => ({
-        ...prev,
-        weightAlternatives: weightArray
-      }))
-    }
-
-    if (ci) {
-      let message = ""
-      if (numMatrix - 1 === 0) {
-        message = matrices[numMatrix-1].id
-      } else {
-        message = `候補の${matrices[numMatrix-1].id}の観点`
-      }
-      if (ci >= 0.00001) updateCI(matrices[numMatrix-1].id, ci)
-
-      if (ci < 0.1) {
-        toast.success(`CIチェックOK - 「${message}」の比較に整合性があります!`)
-      } else {
-        toast.error(`CIチェックNG - 「${message}」の比較をご確認ください!`)
-      }
-    }
-
-    // 回答中であれば終了
-    if (ahpLoading) return
-
-    // 総合評価の計算
-    const score = new Array(numAlternatives).fill(0)
-    for (let i = 0; i < numAlternatives; i++)
-      for (let j = 0; j < numCriteria; j++)
-        score[i] += weight.weightAlternatives[i][j] * weight.weightCriteria[j]
-
-    // スコアをセット
-    setWeight(prev => ({
-      ...prev,
-      score: score
-    }))
-
-    // 完了フラグ
-    setComplete(true)
-  }
 
   const handlePrev = (num: number) =>  {
     let prevRow = row
@@ -290,6 +194,105 @@ export default function PairWiseComparison() {
       nextNumMatrix += 1
       setNumMatrix(nextNumMatrix)
     }
+  }
+
+  // ウェイトとC.I.計算
+  const calcWeight = () => {
+    if (numMatrix === 0 || row !== 0 || column !== 1) return
+    let num = 0
+    if (numMatrix - 1 === 0) {
+      num = numCriteria
+    } else {
+      num = numAlternatives
+    }
+    let lambdaMax = 0
+    let diff = 0
+    let ci = 0
+    const v = new Array(num).fill(0)
+    const v2 = new Array(num).fill(0)
+    const w = new Array(num).fill(0)
+    const arr = matrices[numMatrix-1].matrix
+    const weightArray = weight.weightAlternatives
+    for (let i = 0; i < num; i++) {
+      v[i] = (1 / num)
+    }
+
+    // 固有ベクトル計算
+    for (let k = 0; k < 10000; k++) {
+      for (let i = 0; i < num; i++)
+        for (let j = 0; j < num; j++)
+          v2[i] += arr[i][j] * v[j]
+
+      lambdaMax = 0
+      for (let i = 0; i < num; i++)
+        lambdaMax += v2[i]
+
+      for (let i = 0; i < num; i++)
+        w[i] = v2[i] / lambdaMax
+
+      diff = 0
+      for (let i = 0; i < num; i++)
+        diff += Math.abs(w[i] - v[i])
+      if (diff < 0.00001) {
+        ci = (lambdaMax - num) / (num - 1)
+        break
+      }
+      // 次の計算準備
+      for (let i = 0; i < num; i++) {
+        v[i] = w[i]
+        v2[i] = 0
+      }
+    }
+    // 固有ベクトル(ウェイト)をセット
+    if (numMatrix - 1 === 0) {
+      setWeight(prev => ({
+        ...prev,
+        weightCriteria: w
+      }))
+    } else {
+      for (let i = 0; i < numAlternatives; i++)
+        weightArray[i][numMatrix-2] = w[i]
+      setWeight(prev => ({
+        ...prev,
+        weightAlternatives: weightArray
+      }))
+    }
+
+    // 整合度チェック
+    if (ci) {
+      const checked = !ciCheck
+      setCiCheck(checked)
+      if (ci < 0.1) {
+        if (checked) {
+          toast.success(`C.I. チェック正常! - データに信頼性があります`)
+          handlePrev(num)
+        }
+      } else {
+        if (checked) {
+          toast.error(`C.I. チェック異常! - データに信頼性がない恐れがあります`)
+          handlePrev(num)
+        }
+      }
+      if (ci >= 0.00001) updateCI(matrices[numMatrix-1].id, ci)
+    }
+
+    // 回答中であれば終了
+    if (ahpLoading) return
+
+    // 総合評価の計算
+    const score = new Array(numAlternatives).fill(0)
+    for (let i = 0; i < numAlternatives; i++)
+      for (let j = 0; j < numCriteria; j++)
+        score[i] += weight.weightAlternatives[i][j] * weight.weightCriteria[j]
+
+    // スコアをセット
+    setWeight(prev => ({
+      ...prev,
+      score: score
+    }))
+
+    // 完了フラグ
+    setComplete(true)
   }
 
   // Supabaseからのデータ取得
@@ -476,19 +479,37 @@ export default function PairWiseComparison() {
                   )
                 : <h3 className="text-3xl font-semibold">評価基準の比較</h3>
               }
-              { matrices[numMatrix].ci ? matrices[numMatrix].ci < 0.1 ?  (
-                <div className="flex">
-                  <p className="text-muted-foreground italic">C.I.(整合度): {matrices[numMatrix].ci.toFixed(3)}</p>
-                  <Check className="ml-2 p-1 bg-green-500 rounded-full border font-bold text-white shadow-sm" />
-               </div>
-              ) : (
-                <div className="flex">
-                  <p className="text-muted-foreground italic">C.I.(整合度): {matrices[numMatrix].ci.toFixed(3)}</p>
-                  <AlertTriangle className="ml-2 p-1 rounded-full border font-bold text-foreground bg-yellow-400 shadow-sm" />
-               </div>
-              ) :
-                <></>
-              }
+              <div>
+                {matrices[numMatrix].ci ? matrices[numMatrix].ci < 0.1 ?  (
+                  <AnimatePresence>
+                    <motion.div
+                      key="warning-banner"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex px-2 items-center border-b-2 border-green-600/20 bg-green-600/10 rounded-sm shadow-md">
+                      <p className="text-green-600 italic">C.I.(整合度): {matrices[numMatrix].ci.toFixed(3)}</p>
+                      <Check className="ml-2 p-1 bg-green-500 rounded-full font-bold text-white shadow-sm" />
+                   </motion.div>
+                 </AnimatePresence>
+                ) : (
+                  <AnimatePresence>
+                    <motion.div
+                      key="warning-banner"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex px-2 items-center border-b-2 border-destructive/20 bg-destructive/10 rounded-sm shadow-md">
+                      <p className="text-destructive italic">C.I.(整合度): {matrices[numMatrix].ci.toFixed(3)}</p>
+                      <AlertTriangle className="w-6 h-6 ml-2 p-1 font-bold text-yellow-600" />
+                   </motion.div>
+                 </AnimatePresence>
+                ) :
+                  <></>
+                }
+              </div>
             </div>
             <div className="p-8 bg-muted/30 rounded-xl shadow-lg space-y-4">
               {/* アイテム詳細 */}
@@ -587,7 +608,7 @@ export default function PairWiseComparison() {
               )}
             </div>
           </div>
-          <div className="max-w-xl mx-auto flex justify-between items-center mt-4">
+          <div className="max-w-lg mx-auto flex justify-between items-center mt-4">
             <Button
               size="default"
               variant="ghost"
@@ -596,6 +617,7 @@ export default function PairWiseComparison() {
             >
               <ArrowLeft className="w-4 h-4 mr-2" />前の比較
             </Button>
+            {counter} / {total}
             <Button
               size="default"
               variant="ghost"
@@ -656,7 +678,6 @@ export default function PairWiseComparison() {
               </motion.button>
             </div>
           </div>
-
       )}
     </>
   )

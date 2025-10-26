@@ -3,8 +3,8 @@
 import { motion } from "framer-motion"
 
 export default function ProgressCircle({step, total}: {step: number, total: number}) {
-  // fixed top-20 
-  const progress = step/ total;
+  // fixed top-20
+  const progress = step / total;
   return (
     <div className="flex flex-col items-center">
       <motion.svg width="35" height="35" viewBox="0 0 36 36">
@@ -29,7 +29,8 @@ export default function ProgressCircle({step, total}: {step: number, total: numb
           transition={{ duration: 0.6 }}
         />
       </motion.svg>
-      <p className="text-sm text-gray-700 mt-1">{step}/{total}</p>
+      <p className="text-sm text-muted-foreground mt-1">進捗率: {Math.floor(step / total * 100)}%</p>
+      <p className="text-sm text-muted-foreground">残り回数: {total -step}回</p>
     </div>
   )
 }
