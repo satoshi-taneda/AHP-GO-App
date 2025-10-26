@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useRouter, useParams } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, ArrowLeft } from "lucide-react"
+import { ArrowRight, ArrowLeft, Check, AlertTriangle } from "lucide-react"
 import { toast } from "sonner"
 import { motion } from "framer-motion"
 import { useAHP } from "@/contexts/AHPContext"
@@ -11,7 +11,7 @@ import { supabase } from "@/lib/supabaseClient"
 import Image from "next/image"
 import LoadingSpinner from "@/components/LoadingSpinner"
 import AhpCompaisonSlider from "@/components/AhpComparisonSlider"
-import CancelButton from "@/components/CancelButton"
+import ProgressCircle from "@/components/ProgressCircle"
 
 type ComparisonMatrix = {
   id: string
@@ -160,7 +160,7 @@ export default function PairWiseComparison() {
         } else {
           message = `候補の${matrices[numMatrix-1].id}の観点`
         }
-        toast.error(`C.I.チェック異常(${message}の比較で整合度が低いです)`)
+        toast.error(`C.I.チェック異常、「${message}」をご確認ください`)
       }
     }
 
@@ -450,7 +450,7 @@ export default function PairWiseComparison() {
       }
     }
     setLoading(true)
-    // updateWeight()
+    updateWeight()
     setLoading(false)
   }, [complete])
 
@@ -462,6 +462,7 @@ export default function PairWiseComparison() {
       {counter <= total ? (
         <>
           <div className="max-w-4xl mx-auto space-y-4">
+            <div className="flex justify-between items-center">
               {numMatrix > 0
                 ? (
                   <h3 className="text-3xl font-semibold">
@@ -472,47 +473,62 @@ export default function PairWiseComparison() {
                     の観点の比較
                   </h3>
                   )
-                :<h3 className="text-3xl font-semibold">評価基準の比較</h3>
+                : <h3 className="text-3xl font-semibold">評価基準の比較</h3>
               }
+              { matrices[numMatrix].ci ? matrices[numMatrix].ci < 0.1 ?  (
+                <div className="flex">
+                  <p className="text-muted-foreground italic">CI: {matrices[numMatrix].ci.toFixed(3)}</p>
+                  <Check className="ml-2 p-1 bg-green-700 rounded-full border font-bold text-white shadow-sm" />
+               </div>
+              ) : (
+                <div className="flex">
+                  <p className="text-muted-foreground italic">CI: {matrices[numMatrix].ci.toFixed(3)}</p>
+                  <AlertTriangle className="ml-2 p-1 font-bold text-yellow-600" />
+               </div>
+              ) :
+                <></>
+              }
+            </div>
             <div className="p-8 bg-muted/30 rounded-xl shadow-lg space-y-4">
               {/* アイテム詳細 */}
+              <div className="flex justify-end">
+                <ProgressCircle step={counter} total={total} />
+              </div>
               <div className="flex justify-between items-center">
                 <div className="flex flex-col items-center flex-1 justify-center">
                   {numMatrix > 0 ? (
-                    <>
-                      <div className="relative inline-block group">
-                        {pairwise.altImage.a ? (
-                          <Image
-                            src={pairwise.altImage.a}
-                            alt={pairwise.altName.a}
-                            width={120}
-                            height={120}
-                            className="rounded-lg group-hover:scale-125 transition-transform duration-300"
-                          />) : (
-                          <Image
-                            src="/images/noimage_w.png"
-                            alt="No Image"
-                            width={120}
-                            height={120}
-                            className="rounded-lg group-hover:scale-125 transition-transform duration-300"
-                          />
-                        )}
-                        <div className="absolute top-full left-1/2 -translate-x-1/2 mb-3
-                          w-64 px-3 py-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg
-                          opacity-0 group-hover:opacity-100 transition-opacity duration-300
-                          whitespace-pre-line z-50 pointer-events-none"
-                        >
-                          <p>{pairwise.altDescription.a}</p>
-                          {/* 吹き出しの三角形 */}
-                          <div
-                            className="absolute left-1/2 bottom-full -translate-x-1/2
-                              w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent
-                              border-b-8 border-b-gray-800"
-                          ></div>
-                        </div>
-                        {pairwise.altName.a}
+                    <div className="relative inline-block group">
+                      {pairwise.altName.a}
+                      {pairwise.altImage.a ? (
+                        <Image
+                          src={pairwise.altImage.a}
+                          alt={pairwise.altName.a}
+                          width={120}
+                          height={120}
+                          className="rounded-lg group-hover:scale-125 transition-transform duration-300"
+                        />) : (
+                        <Image
+                          src="/images/noimage_w.png"
+                          alt="No Image"
+                          width={120}
+                          height={120}
+                          className="rounded-lg group-hover:scale-125 transition-transform duration-300"
+                        />
+                      )}
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 mb-3
+                        w-64 px-3 py-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg
+                        opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                        whitespace-pre-line z-50 pointer-events-none"
+                      >
+                        <p>{pairwise.altDescription.a}</p>
+                        {/* 吹き出しの三角形 */}
+                        <div
+                          className="absolute left-1/2 bottom-full -translate-x-1/2
+                            w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent
+                            border-b-8 border-b-gray-800"
+                        ></div>
                       </div>
-                    </>
+                    </div>
                     ) : (
                       <div className="flex text-2xl font-semibold">
                         {pairwise.criteriaName.a}
@@ -521,42 +537,40 @@ export default function PairWiseComparison() {
                   }
                 </div>
                 <span>VS</span>
-                <div className="flex flex-col items-center flex-1">
+                <div className="flex flex-col items-center flex-1 justify-center">
                   {numMatrix > 0 ? (
-                    <>
-                      <div className="relative inline-block group">
-                        {pairwise.altImage.b ? (
-                          <Image
-                            src={pairwise.altImage.b}
-                            alt={pairwise.altName.b}
-                            width={120}
-                            height={120}
-                            className="rounded-lg group-hover:scale-125 transition-transform duration-300"
-                          />) : (
-                          <Image
-                            src="/images/noimage_b.png"
-                            alt="No Image"
-                            width={120}
-                            height={120}
-                            className="rounded-lg group-hover:scale-125 transition-transform duration-300"
-                          />
-                        )}
-                        <div className="absolute top-full left-1/2 -translate-x-1/2 mb-3
-                          w-64 px-3 py-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg
-                          opacity-0 group-hover:opacity-100 transition-opacity duration-300
-                          whitespace-pre-line z-50 pointer-events-none"
-                        >
-                          <p>{pairwise.altDescription.b}</p>
-                          {/* 吹き出しの三角形 */}
-                          <div
-                            className="absolute left-1/2 bottom-full -translate-x-1/2
-                              w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent
-                              border-b-8 border-b-gray-800"
-                          ></div>
-                        </div>
-                        {pairwise.altName.b}
+                    <div className="relative inline-block group">
+                      {pairwise.altName.b}
+                      {pairwise.altImage.b ? (
+                        <Image
+                          src={pairwise.altImage.b}
+                          alt={pairwise.altName.b}
+                          width={120}
+                          height={120}
+                          className="rounded-lg group-hover:scale-125 transition-transform duration-300"
+                        />) : (
+                        <Image
+                          src="/images/noimage_b.png"
+                          alt="No Image"
+                          width={120}
+                          height={120}
+                          className="rounded-lg group-hover:scale-125 transition-transform duration-300"
+                        />
+                      )}
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 mb-3
+                        w-64 px-3 py-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg
+                        opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                        whitespace-pre-line z-50 pointer-events-none"
+                      >
+                        <p>{pairwise.altDescription.b}</p>
+                        {/* 吹き出しの三角形 */}
+                        <div
+                          className="absolute left-1/2 bottom-full -translate-x-1/2
+                            w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent
+                            border-b-8 border-b-gray-800"
+                        ></div>
                       </div>
-                    </>
+                    </div>
                     ) : (
                       <div className="flex text-2xl font-semibold">
                         {pairwise.criteriaName.b}
@@ -581,9 +595,6 @@ export default function PairWiseComparison() {
             >
               <ArrowLeft className="w-4 h-4 mr-2" />前の比較
             </Button>
-            <p className="text-sm text-center text-muted-foreground">
-              {counter} / {total}
-            </p>
             <Button
               size="default"
               variant="ghost"
