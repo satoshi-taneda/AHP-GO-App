@@ -19,6 +19,9 @@ function LoggedInMenu({ user, profile, onLogout }: {user: any, profile: any, onL
 
   return (
     <>
+      <Button size="lg" variant="ghost" onClick={onLogout}>
+        ログアウト
+      </Button>
       <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline">
@@ -41,7 +44,6 @@ function LoggedInMenu({ user, profile, onLogout }: {user: any, profile: any, onL
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => router.push("/")}>ホーム</DropdownMenuItem>
         <DropdownMenuItem onClick={() => router.push("/project/dashboard")}>ダッシュボード</DropdownMenuItem>
-        <DropdownMenuItem onClick={onLogout}>ログアウト</DropdownMenuItem>
       </DropdownMenuContent>
       </DropdownMenu>
     </>
