@@ -150,17 +150,18 @@ export default function PairWiseComparison() {
     }
 
     if (ci) {
-      if (ci >= 0.00001) updateCI(matrices[numMatrix-1].id, ci)
-      if (ci < 0.1) {
-        toast.success("C.I.チェック正常!")
+      let message = ""
+      if (numMatrix - 1 === 0) {
+        message = matrices[numMatrix-1].id
       } else {
-        let message = ""
-        if (numMatrix - 1 === 0) {
-          message = matrices[numMatrix-1].id
-        } else {
-          message = `候補の${matrices[numMatrix-1].id}の観点`
-        }
-        toast.error(`C.I.チェック異常、「${message}」をご確認ください`)
+        message = `候補の${matrices[numMatrix-1].id}の観点`
+      }
+      if (ci >= 0.00001) updateCI(matrices[numMatrix-1].id, ci)
+
+      if (ci < 0.1) {
+        toast.success(`CIチェックOK - 「${message}」の比較に整合性があります!`)
+      } else {
+        toast.error(`CIチェックNG - 「${message}」の比較をご確認ください!`)
       }
     }
 
@@ -477,13 +478,13 @@ export default function PairWiseComparison() {
               }
               { matrices[numMatrix].ci ? matrices[numMatrix].ci < 0.1 ?  (
                 <div className="flex">
-                  <p className="text-muted-foreground italic">CI: {matrices[numMatrix].ci.toFixed(3)}</p>
-                  <Check className="ml-2 p-1 bg-green-700 rounded-full border font-bold text-white shadow-sm" />
+                  <p className="text-muted-foreground italic">C.I.(整合度): {matrices[numMatrix].ci.toFixed(3)}</p>
+                  <Check className="ml-2 p-1 bg-green-500 rounded-full border font-bold text-white shadow-sm" />
                </div>
               ) : (
                 <div className="flex">
-                  <p className="text-muted-foreground italic">CI: {matrices[numMatrix].ci.toFixed(3)}</p>
-                  <AlertTriangle className="ml-2 p-1 font-bold text-yellow-600" />
+                  <p className="text-muted-foreground italic">C.I.(整合度): {matrices[numMatrix].ci.toFixed(3)}</p>
+                  <AlertTriangle className="ml-2 p-1 rounded-full border font-bold text-foreground bg-yellow-400 shadow-sm" />
                </div>
               ) :
                 <></>
