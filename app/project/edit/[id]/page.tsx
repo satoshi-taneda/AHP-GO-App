@@ -10,7 +10,7 @@ import { supabase } from "@/lib/supabaseClient"
 import { GoalInput } from "@/components/GoalInput"
 import { CriteriaManager } from "@/components/CriteriaManager"
 import { AlternativesManager } from "@/components/AlternativesManager"
-import ReturnButton from "@/components/ReturnButton"
+import CancelButton from "@/components/CancelButton"
 import LoadingSpinner from "@/components/LoadingSpinner"
 
 export default function EditProjectPage() {
@@ -181,28 +181,34 @@ export default function EditProjectPage() {
         </section>
       </div>
       <div className="flex justify-between">
-        <ReturnButton />
+        <CancelButton />
         {(project.goal !== "" && project.criteria.length > 2 && project.alternatives.length > 2) ? (
-        <Button
-          size="lg"
-          variant="secondary"
-          onClick={() => handleSaveAll(user, project)}
-          disabled={isSaving}
-          className="hover:bg-muted/50"
-        >
-          {isSaving ? (
-            <>
-              <div className="animate-spin mr-2 w-4 h-4 border-2 border-t-transparent rounded-full border-primary"></div>
-              保存中...
-            </>
-          ) : (
-            <>
-              保存
-            </>
-          )}
-        </Button>
+          <Button
+            size="lg"
+            variant="secondary"
+            onClick={() => handleSaveAll(user, project)}
+            disabled={isSaving}
+            className="hover:bg-muted/50"
+          >
+            {isSaving ? (
+              <>
+                <div className="animate-spin mr-2 w-4 h-4 border-2 border-t-transparent rounded-full border-primary"></div>
+                保存中...
+              </>
+            ) : (
+              <>
+                保存
+              </>
+            )}
+          </Button>
         ) : (
-          <Button variant="secondary" disabled>保存</Button>
+          <Button
+            size="lg"
+            variant="secondary"
+            disabled
+          >
+            保存
+          </Button>
         ) }
       </div>
     </div>

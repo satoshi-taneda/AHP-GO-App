@@ -176,7 +176,7 @@ export default function ProjectPage() {
             {result ? (
               <>
                 <Button variant="outline" size="sm" disabled>
-                  <Award className="w-4 h-4 mr-1" />結果を見る
+                  <Award className="w-4 h-4 mr-1" />総合評価
                 </Button>
                 <Button variant="outline" size="sm" onClick={() =>  setResult(false)}>
                   <BarChart3 className="w-4 h-4 mr-1" />グラフ
@@ -185,7 +185,7 @@ export default function ProjectPage() {
             ) : (
               <>
                 <Button variant="outline" size="sm" onClick={() => {setResult(true)}}>
-                  <Award className="w-4 h-4 mr-1" />結果を見る
+                  <Award className="w-4 h-4 mr-1" />総合評価
                 </Button>
                 <Button variant="outline" size="sm" disabled>
                   <BarChart3 className="w-4 h-4 mr-1" />グラフ
