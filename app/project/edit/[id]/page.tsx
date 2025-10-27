@@ -22,6 +22,33 @@ export default function EditProjectPage() {
   const [isSaving, setIsSaving] = useState(false)
   const projectId = params?.id as string
 
+  // 候補画像削除処理
+  async function deleteFolder(userId: string, projectId: string) {
+    const folderPath = `alternatives/${userId}/${projectId}`
+    // 1. フォルダ内のファイル一覧を取得
+    const { data: files, error: listError} = await supabase.storage
+      .from("images")
+      .list(folderPath, { limit: 100 })
+      console.log(files)
+    if (listError) {
+      console.error("List error:", listError)
+      return
+    }
+    if (!files || files.length === 0) {
+      return
+    }
+    // 2. ファイルパスを全て削除
+    const filePaths = files.map((file) => `${folderPath}/${file.name}`)
+    const { error: deleteError } = await supabase.storage
+      .from("images")
+      .remove(filePaths)
+    if (deleteError) {
+      console.error("Delete error:", deleteError)
+    } else {
+      console.log("画像フォルダ削除完了:", folderPath)
+    }
+  }
+
   useEffect(() => {
     // 認証チェック
     if (authLoading || !user) return
@@ -74,14 +101,25 @@ export default function EditProjectPage() {
     fetchData()
   }, [authLoading, projectId, setProject, router])
 
-  if (loading) return <LoadingSpinner />
-
   const handleSaveAll = async (user: any, project: AHPProject | null) => {
     if (!user) return
     if (!project) return
     setIsSaving(true)
 
     try {
+      // alternativesテーブルにあるプロジェクト削除
+      deleteFolder(user.id, project.id)
+      const { error: alternativesDeleteError } = await supabase.from("alternatives").delete().eq("project_id", project.id)
+      if (alternativesDeleteError) throw alternativesDeleteError
+
+      // criteriaテーブルにあるプロジェクト削除
+      const { error: criteriaDeleteError } = await supabase.from("criteria").delete().eq("project_id", project.id)
+      if (criteriaDeleteError) throw criteriaDeleteError
+
+      // projectテーブルにあるプロジェクト削除
+      const { error: deleteError } = await supabase.from("project").delete().eq("project_id", project.id)
+      if (deleteError) throw deleteError
+
       // 1. Supabase Storageへ画像アップロード
       const uploadedAlternatives = await Promise.all (
         project.alternatives.map(async (alt, i) => {
@@ -102,6 +140,12 @@ export default function EditProjectPage() {
       )
 
       // 2. project(goal)を保存
+      const { data, error: customerError } = await supabase
+        .from("customer")
+        .select("name")
+        .eq("customer_id", user?.id)
+        .single()
+      if (customerError) throw customerError
       const { error: error } = await supabase
         .from("project")
         .upsert([{
@@ -110,6 +154,7 @@ export default function EditProjectPage() {
             goal: project.goal,
             created_at: project.createdAt,
             updated_at: project.updatedAt,
+            owner: data.name
           }])
       if (error) throw error
 
@@ -151,13 +196,6 @@ export default function EditProjectPage() {
         // 5. プロジェクトごとの一対比較画面へ遷移
         router.replace(`/project/pairwise/${project.id}`)
 
-        /* 仮でプロジェクト一覧へ移動
-          router.replace(`/project/ahp/${projectId}`)
-          await new Promise(() => setTimeout(() => {
-            window.location.reload()
-          }, 500))
-        */
-
     } catch(err) {
       console.error(err)
       toast.error("保存に失敗しました")
@@ -165,6 +203,7 @@ export default function EditProjectPage() {
       setIsSaving(false)
   }}
   if (!project) return <div>Loading...</div>
+  if (loading) return <LoadingSpinner />
 
   return (
     <div className="max-w-4xl mx-auto space-y-4">

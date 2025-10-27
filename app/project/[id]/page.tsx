@@ -173,25 +173,22 @@ export default function ProjectPage() {
           </div>
         </div>
         <div className="flex justify-end items-end gap-2 mt-2">
-            {result ? (
-              <>
-                <Button variant="outline" size="sm" disabled>
-                  <Award className="w-4 h-4 mr-1" />総合評価
-                </Button>
-                <Button variant="outline" size="sm" onClick={() =>  setResult(false)}>
-                  <BarChart3 className="w-4 h-4 mr-1" />グラフ
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button variant="outline" size="sm" onClick={() => {setResult(true)}}>
-                  <Award className="w-4 h-4 mr-1" />総合評価
-                </Button>
-                <Button variant="outline" size="sm" disabled>
-                  <BarChart3 className="w-4 h-4 mr-1" />グラフ
-                </Button>
-              </>
-            )}
+          <Button
+            variant="ghost"
+            size="sm"
+            disabled={result}
+            onClick={() =>  setResult(true)}
+          >
+            <Award className="w-4 h-4 mr-1" />総合評価
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            disabled={!result}
+            onClick={() =>  setResult(false)}
+          >
+            <BarChart3 className="w-4 h-4 mr-1" />グラフ
+          </Button>
         </div>
         {result ? (
           <div>

@@ -207,7 +207,7 @@ export function AlternativesManager() {
                   setIsSearching(false)
                 }}
                 size="sm"
-                variant="outline"
+                variant="ghost"
               >
                 <Plus className="w-4 h-4 mr-1" />追加
               </Button>
@@ -278,13 +278,14 @@ export function AlternativesManager() {
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
           />
-          <Button onClick={() => handleSearch()}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-500"
             disabled={searchLoading && !isSearched}
-            variant="default"
-            className="whitespace-nowrap"
+            onClick={handleSearch}
           >
             {searchLoading && !isSearched ? "検索中..." : "検索"}
-          </Button>
+          </motion.button>
           <Button
             onClick={() => {
               setKeyword("")

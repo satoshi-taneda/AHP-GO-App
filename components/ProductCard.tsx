@@ -34,9 +34,9 @@ export default function ProductCard({ item, onSave }: Props) {
           詳細
         </a>
         <Button
-          className="bg-green-600 hover:bg-green-600/50 text-white px-3 py-1 rounded text-sm"
-          onClick={onSave}
           size="sm"
+          variant="ghost"
+          onClick={onSave}
         >
           <Plus className="h-4 w-4 mr-1" />追加
         </Button>

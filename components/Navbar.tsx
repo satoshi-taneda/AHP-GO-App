@@ -19,12 +19,9 @@ function LoggedInMenu({ user, profile, onLogout }: {user: any, profile: any, onL
 
   return (
     <>
-      <Button size="default" variant="ghost" onClick={onLogout}>
-        ログアウト
-      </Button>
       <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" className="p-2">
         {avatarUrl ? (
           <>
             <div className="rounded-full overflow-hidden">
@@ -38,12 +35,13 @@ function LoggedInMenu({ user, profile, onLogout }: {user: any, profile: any, onL
         ) : (
           <div className="w-6 h-6 rounded-full bg-gradient-to-r from-pink-300 via-purple-300 to-blue-300" />
         )}
-          <span className="text-sm font-midium">{displayName}さん</span>
+          <span className="text-sm font-midium">{displayName}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => router.push("/")}>ホーム</DropdownMenuItem>
         <DropdownMenuItem onClick={() => router.push("/project/dashboard")}>ダッシュボード</DropdownMenuItem>
+        <DropdownMenuItem onClick={onLogout}>ログアウト</DropdownMenuItem>
       </DropdownMenuContent>
       </DropdownMenu>
     </>
@@ -87,7 +85,7 @@ export default function Navbar() {
         {loading ? null : user ? (
           <Button
             className="text-xl font-semibold overflow-hidden relative"
-            size="lg"
+            size="default"
             variant="ghost"
             onClick={() => router.replace("/project/dashboard")}
           >
@@ -100,7 +98,7 @@ export default function Navbar() {
         ) : (
           <Button
             className="text-xl font-semibold overflow-hidden relative"
-            size="lg"
+            size="default"
             variant="ghost"
             onClick={() => router.replace("/")}
           >

@@ -46,6 +46,7 @@ export default function PairWiseComparison() {
   const [total, setTotal] = useState<number>(0)
   const [numMatrix, setNumMatrix] = useState<number>(0)
   const [counter, setCounter] = useState<number>(1)
+  const [counterLoop, setCounterLoop] = useState<number>(1)
   const [row, setRow] = useState<number>(0)
   const [column, setColumn] = useState<number>(1)
   const [matrices, setMatrices] = useState<ComparisonMatrix[]>([])
@@ -55,6 +56,13 @@ export default function PairWiseComparison() {
     score: []
   })
   const projectId = params?.id as string
+  let totalLoop = 0
+  if (numMatrix > 0) {
+    totalLoop = (numAlternatives - 1) * numAlternatives / 2
+  } else {
+    totalLoop = (numCriteria - 1) * numCriteria / 2
+  }
+
   const [pairwise, setPairwise] = useState<Pairwise>({
     criteriaName: {a: "", b: "" },
     altImage: {a: "", b: "" },
@@ -92,6 +100,8 @@ export default function PairWiseComparison() {
     let prevRow = row
     let prevCol = column
     let prevMatrixNum = numMatrix
+    setCounter(prev => prev - 1)
+    setCounterLoop(prev => prev - 1)
     while (true) {
       if (prevCol > prevRow) {
         prevCol -= 1
@@ -109,13 +119,18 @@ export default function PairWiseComparison() {
           prevMatrixNum -= 1
           setNumMatrix(prevMatrixNum)
         }
+        if (prevMatrixNum > 0) {
+          setCounterLoop(numAlternatives * (numAlternatives - 1) / 2)
+        } else {
+          setCounterLoop(numCriteria * (numCriteria - 1) / 2)
+        }
         break
       }
       if (prevRow !== prevCol) break
     }
     setRow(prevRow)
     setColumn(prevCol)
-    setCounter(prev => prev - 1)
+
     const prevSelected = matrices[prevMatrixNum].matrix[prevRow][prevCol]
     const prevSelectedT = matrices[prevMatrixNum].matrix[prevCol][prevRow]
     if (prevSelected > 1) {
@@ -127,7 +142,7 @@ export default function PairWiseComparison() {
 
   const handleNext = (num: number) =>  {
     // 選択した値を一対比較行列の成分としてセット
-    if (selected < 0) {
+    if (selected < 0 && !ciCheck) {
       updateMatrixValue(matrices[numMatrix].id, row, column, Math.abs(selected) + 1)
       updateMatrixValue(matrices[numMatrix].id, column, row, 1 / (Math.abs(selected) + 1))
     } else {
@@ -160,6 +175,10 @@ export default function PairWiseComparison() {
     setRow(nextRow)
     setColumn(nextCol)
     setCounter(prev => prev + 1)
+    setCounterLoop(prev => prev + 1)
+
+    // CIチェック中であれば終了
+    if (!ciCheck) return
 
     // 次の値が既にセットされている場合は、実施済みとして処理
     const nextSelected = matrices[nextNumMatrix].matrix[nextRow][nextCol]
@@ -189,6 +208,7 @@ export default function PairWiseComparison() {
     setColumn(1)
     setAhpLoading(false)
     setCounter(prev => prev + 1)
+    setCounterLoop(prev => prev + 1)
     let nextNumMatrix = numMatrix
     if (numMatrix < numCriteria + 1) {
       nextNumMatrix += 1
@@ -243,6 +263,30 @@ export default function PairWiseComparison() {
         v2[i] = 0
       }
     }
+
+    // 整合度チェック
+    if (ci) {
+      if (ci < 0.1) {
+        if (ciCheck) {
+          toast.success(`C.I. チェック正常! - データに信頼性があります`)
+        }
+      } else {
+        if (ciCheck) {
+          toast.error(`C.I. チェック異常! - データに信頼性がない恐れがあります`)
+        }
+      }
+      if (ci >= 0.00001) updateCI(matrices[numMatrix-1].id, ci)
+    } else {
+      // toast.error(`データを入力してください`)
+    }
+
+    // CIチェック中であれば一つ前に戻って終了
+    if (ciCheck) {
+      handlePrev(num)
+      return
+    }
+    console.log(weight)
+
     // 固有ベクトル(ウェイト)をセット
     if (numMatrix - 1 === 0) {
       setWeight(prev => ({
@@ -258,25 +302,10 @@ export default function PairWiseComparison() {
       }))
     }
 
-    // 整合度チェック
-    if (ci) {
-      const checked = !ciCheck
-      setCiCheck(checked)
-      if (ci < 0.1) {
-        if (checked) {
-          toast.success(`C.I. チェック正常! - データに信頼性があります`)
-          handlePrev(num)
-        }
-      } else {
-        if (checked) {
-          toast.error(`C.I. チェック異常! - データに信頼性がない恐れがあります`)
-          handlePrev(num)
-        }
-      }
-      if (ci >= 0.00001) updateCI(matrices[numMatrix-1].id, ci)
-    }
+    // 次の一対比較行列の入力のためカウンターを1にセット
+    setCounterLoop(1)
 
-    // 回答中であれば終了
+    // アンケート回答中であれば終了
     if (ahpLoading) return
 
     // 総合評価の計算
@@ -389,6 +418,11 @@ export default function PairWiseComparison() {
     if (loading) return
     calcWeight()
   }, [numMatrix])
+
+  // 評価値を変えた時はCIの再計算準備
+  useEffect(() => {
+    setCiCheck(false)
+  }, [row, column, selected])
 
   // レンダリング用のペア配列作成
   useEffect(() => {
@@ -552,7 +586,7 @@ export default function PairWiseComparison() {
                       </div>
                     </div>
                     ) : (
-                      <div className="flex text-2xl font-semibold">
+                      <div className="p-8 flex text-2xl font-semibold">
                         {pairwise.criteriaName.a}
                       </div>
                     )
@@ -594,7 +628,7 @@ export default function PairWiseComparison() {
                       </div>
                     </div>
                     ) : (
-                      <div className="flex text-2xl font-semibold">
+                      <div className="p-8 flex text-2xl font-semibold">
                         {pairwise.criteriaName.b}
                       </div>
                     )
@@ -617,7 +651,7 @@ export default function PairWiseComparison() {
             >
               <ArrowLeft className="w-4 h-4 mr-2" />前の比較
             </Button>
-            {counter} / {total}
+            <p>{counterLoop} / {totalLoop}</p>
             <Button
               size="default"
               variant="ghost"
@@ -627,20 +661,34 @@ export default function PairWiseComparison() {
               次の比較<ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </div>
-          {counter === total  && (
-            <div className="max-w-4xl mx-auto flex justify-end">
+          <div className="max-w-4xl mx-auto flex justify-end items-center gap-4">
+            {counterLoop === totalLoop && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={
+                  () => {
+                    setCiCheck(true)
+                    numMatrix > 0 ? handleNext(numAlternatives) : handleNext(numCriteria)
+                  }
+                }
+              >
+                <Check className="h-4 w-4 mr-1" /> CIチェック
+              </Button>
+            )}
+            {counter === total  && (
               <motion.button
                 whileHover={{ scale: 1.05 }}
-                className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600"
+                className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-500"
                 onClick={handleExec}
               >
                 AHP計算
               </motion.button>
-            </div>
-          )}
+            )}
+          </div>
         </>
       ) : (
-        <div className="flex flex-col items-center justify-center h-screen text-center bg-gradient-to-b from-blue-50 to-white">
+        <div className="flex flex-col tems-center justify-center h-screen text-center bg-gradient-to-b from-blue-50 to-white">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
