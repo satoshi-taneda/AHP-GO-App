@@ -32,8 +32,10 @@ type Pairwise = {
 }
 
 export default function PairWiseComparison() {
+  let totalLoop = 0
   const router = useRouter()
   const params = useParams()
+  const projectId = params?.id as string
   const { user, loading: authLoading } = useAuth()
   const { project, setProject } = useAHP()
   const [loading, setLoading] = useState(true)
@@ -55,8 +57,7 @@ export default function PairWiseComparison() {
     weightAlternatives: [],
     score: []
   })
-  const projectId = params?.id as string
-  let totalLoop = 0
+
   if (numMatrix > 0) {
     totalLoop = (numAlternatives - 1) * numAlternatives / 2
   } else {
@@ -177,8 +178,8 @@ export default function PairWiseComparison() {
     setCounter(prev => prev + 1)
     setCounterLoop(prev => prev + 1)
 
-    // CIチェック中であれば終了
-    if (!ciCheck) return
+    // 最終比較ページであればそのまま終了
+    if (total === counter) return
 
     // 次の値が既にセットされている場合は、実施済みとして処理
     const nextSelected = matrices[nextNumMatrix].matrix[nextRow][nextCol]
@@ -268,16 +269,16 @@ export default function PairWiseComparison() {
     if (ci) {
       if (ci < 0.1) {
         if (ciCheck) {
-          toast.success(`C.I. チェック正常! - データに信頼性があります`)
+          toast.success(`CIチェック OK!`)
         }
       } else {
         if (ciCheck) {
-          toast.error(`C.I. チェック異常! - データに信頼性がない恐れがあります`)
+          toast.error(`CIチェック 比較に整合性がない可能性があります`)
         }
       }
       if (ci >= 0.00001) updateCI(matrices[numMatrix-1].id, ci)
     } else {
-      // toast.error(`データを入力してください`)
+      toast.error(`データを入力してください`)
     }
 
     // CIチェック中であれば一つ前に戻って終了
@@ -285,7 +286,6 @@ export default function PairWiseComparison() {
       handlePrev(num)
       return
     }
-    console.log(weight)
 
     // 固有ベクトル(ウェイト)をセット
     if (numMatrix - 1 === 0) {
@@ -462,6 +462,16 @@ export default function PairWiseComparison() {
     if (!complete || !project) return
     console.log(weight)
     const updateWeight = async () => {
+
+      // Supabase-criteriaテーブルのcompleted更新
+      const { error } = await supabase
+        .from('project')
+        .update({completed: true})
+        .eq('project_id', projectId)
+      if (error) {
+        console.error(`完了フラグ更新失敗`)
+      }
+
       // Supabase-criteriaテーブルのweight更新
       for (let i = 0; i < numCriteria; i++) {
         const { error } = await supabase
@@ -720,7 +730,7 @@ export default function PairWiseComparison() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600"
-                onClick={() => router.push("/")}
+                onClick={() => router.push(`/project/${projectId}`)}
               >
                 結果をみる
               </motion.button>

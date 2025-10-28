@@ -8,14 +8,16 @@ import { useAuth } from "@/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { Card } from "@/components/ui/card"
-import { Award, BarChart3, Pencil, Trash } from "lucide-react"
+import { Award, BarChart3, Pencil, Trash, Crown } from "lucide-react"
 import ReturnButton from "@/components/ReturnButton"
 import LoadingSpinner from "@/components/LoadingSpinner"
+import AHPResultCharts from "@/components/AHPResultCharts"
 
 export default function ProjectPage() {
   const [project, setProject] = useState<AHPProject>()
   const [customerId, setCustomerId] = useState("")
   const [owner, setOwner] = useState("")
+  const [completed, setCompleted] = useState(false)
   const [loading, setLoading] = useState(true)
   const [result, setResult] = useState(true)
   const [deletingId, setDeletingId] = useState<string | null>(null)
@@ -23,6 +25,11 @@ export default function ProjectPage() {
   const params = useParams()
   const router = useRouter()
   const projectId = params?.id as string
+  const rankColors = [
+    "text-yellow-400",
+    "text-gray-400",
+    "text-amber-700"
+  ] as const
 
   useEffect(() => {
     // 認証チェック
@@ -40,12 +47,12 @@ export default function ProjectPage() {
         .from("criteria")
         .select("*")
         .eq("project_id", projectId)
-        .order("no")
+        .order("weight", { ascending: false })
       const { data: alternativesData } = await supabase
         .from("alternatives")
         .select("*")
         .eq("project_id", projectId)
-        .order("no")
+        .order("weight", { ascending: false })
       if (projectError || !projectData ) {
         toast.error("プロジェクトが見つかりませんでした")
         router.push("/project/dashboard")
@@ -53,6 +60,7 @@ export default function ProjectPage() {
       }
       setOwner(projectData.owner)
       setCustomerId(projectData.customer_id)
+      setCompleted(projectData.completed)
 
       setProject({
         id: projectData.project_id,
@@ -60,11 +68,13 @@ export default function ProjectPage() {
         criteria: criteriaData?.map(c => ({
           id: c.criteria_id,
           name: c.name,
+          weight: c.weight,
         })) || [],
         alternatives: alternativesData?.map(a => ({
           id: a.alternatives_id,
           name: a.name,
           description: a.description,
+          weight: a.weight,
           imageUrl: a.image_url,
         })) || [],
         createdAt: projectData.created_at,
@@ -101,9 +111,15 @@ export default function ProjectPage() {
       console.log("フォルダを削除しました:", folderPath)
     }
   }
+  const handleEdit = (projectId: string) => {
+    if (!confirm("注意: 更新するとスコアはリセットされます。")) {
+      return
+    }
+    router.push(`/project/edit/${projectId}`)
 
+  }
   const handleDelete = async (userId: string, id: string) => {
-    if (!confirm("本当にこのプロジェクトを削除しますか？\n※この操作は元に戻せません")) {
+    if (!confirm("本当にこのプロジェクトを削除しますか？\n※この操作は元に戻せません。")) {
       return
     }
     setDeletingId(id)
@@ -133,11 +149,10 @@ export default function ProjectPage() {
       setDeletingId(null)
     }
   }
-
   if (loading || !project) return <LoadingSpinner />
 
   return (
-    <div className="max-w-4xl mx-auto space-y-4">
+    <div className="max-w-5xl mx-auto space-y-4">
       <Card className="relative overflow-hidden p-4 bg-gradient-to-r from-muted/50">
         {user?.id === customerId && (
           <div className="flex justify-end gap-2">
@@ -145,7 +160,7 @@ export default function ProjectPage() {
               className="text-green-800"
               size="sm"
               variant="ghost"
-              onClick={ () => router.push(`/project/edit/${project.id}`) }
+              onClick={() => handleEdit(projectId)}
             >
               <Pencil className="w-4 h-4 mr-2" />編集する
             </Button>
@@ -162,14 +177,20 @@ export default function ProjectPage() {
           </div>
         )}
         <div className="flex justify-between items-top">
-          <div>
+          <div className="flex flex-col gap-1">
             <h1 className="text-2xl font-semibold text-foreground mb-2">{project.goal}</h1>
+            <p className="text-muted-foreground">ステータス: {completed ? "完了 ✅" : "実施中 !!"}</p>
             <p className="text-muted-foreground">
               更新日: {new Date(project.updatedAt).toLocaleDateString("ja-JP", {
-              year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"
+              timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"
               })}
             </p>
-            <p className="text-sm text-muted-foreground mt-1">作成者: {owner || "匿名"}</p>
+            <p className="text-muted-foreground">
+              作成日: {new Date(project.createdAt).toLocaleDateString("ja-JP", {
+              timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"
+              })}
+            </p>
+            <p className="text-muted-foreground">作成者: {owner || "匿名"}</p>
           </div>
         </div>
         <div className="flex justify-end items-end gap-2 mt-2">
@@ -196,22 +217,40 @@ export default function ProjectPage() {
               {project.criteria.map((c) => (
                 <Card key={c.id} className="p-4 hover:shadow-md transition-all">
                   <h3 className="font-semibold text-foreground">{c.name}</h3>
+                  {completed ? (
+                    <p className="text-blue-500">{c.weight.toFixed(3)}</p>
+                  ) : (
+                    <p className="text-blue-500"></p>
+                  )}
                 </Card>
               ))}
             </div>
             <div className="grid md:grid-cols-3 gap-6 mt-8">
-              {project.alternatives.map((alt) => (
+              {project.alternatives.map((alt, i) => (
                 <Card key={alt.id} className="p-4 hover:scale-[1.01] transition-transform">
+                  {completed && (
+                    <div className ="flex items-center gap-1">
+                      {i < 3 && (
+                        <Crown className={`${rankColors[i]} w-4 h-4 mr-2`} />
+                      )}
+                      <span className="font-semibold">{i + 1}位</span>
+                    </div>
+                  )}
+                  <h3 className="text-lg font-semibold">{alt.name}</h3>
+                  {completed && (
+                    <p className="text-green-500">{alt.weight.toFixed(3)}</p>
+                  )}
+                  <p className="text-muted-foreground text-sm mt-1 whitespace-pre-line">{alt.description}</p>
                   {alt.imageUrl && (
                     <img src={alt.imageUrl} alt={alt.name} className="rounded-lg object-cover w-full mt-3" />
                   )}
-                  <h3 className="text-lg font-semibold">{alt.name}</h3>
-                  <p className="text-muted-foreground text-sm mt-1 whitespace-pre-line">{alt.description}</p>
                 </Card>
               ))}
             </div>
           </div>
-        ) : null}
+        ) : (
+          <AHPResultCharts project={project} />
+        )}
       </Card>
       <ReturnButton />
     </div>

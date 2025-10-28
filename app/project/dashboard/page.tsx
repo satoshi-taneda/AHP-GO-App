@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext"
 import { supabase } from "@/lib/supabaseClient"
 import { Button } from "@/components/ui/button"
-import { Info, Plus } from "lucide-react"
+import { Info, CheckCircle2,  Plus } from "lucide-react"
 import Link from "next/link"
 import LoadingSpinner from "@/components/LoadingSpinner"
 
@@ -63,8 +63,12 @@ export default function DashBoard() {
                       <p>{p.customer.name || "ゲスト"}</p>
                     </div>
                     <div className="flex items-center gap-2">
-                    <Info />
-                    <h2 className="font-semibold text-lg mt-2">{p.goal}</h2>
+                      {p.completed ? (
+                        <CheckCircle2 className="text-green-500" size={20} />
+                      ): (
+                        <Info className="" size={20} />
+                      )}
+                      <h2 className="font-semibold text-lg mt-2">{p.goal}</h2>
                     </div>
                   </Link>
                 </div>

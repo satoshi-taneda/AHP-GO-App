@@ -86,11 +86,13 @@ export default function EditProjectPage() {
         criteria: criteriaData?.map(c => ({
           id: c.criteria_id,
           name: c.name,
+          weight: 0,
         })) || [],
         alternatives: alternativesData?.map(a => ({
           id: a.alternatives_id,
           name: a.name,
           description: a.description,
+          weight: 0,
           imageUrl: a.image_url,
         })) || [],
         createdAt: projectData.created_at,
@@ -139,7 +141,7 @@ export default function EditProjectPage() {
         })
       )
 
-      // 2. project(goal)を保存
+      // 2. project(goal)を更新
       const { data, error: customerError } = await supabase
         .from("customer")
         .select("name")
@@ -158,7 +160,7 @@ export default function EditProjectPage() {
           }])
       if (error) throw error
 
-      // 3. criteriaを保存
+      // 3. criteriaを更新
       const { error: criteriaError } = await supabase
         .from("criteria")
         .upsert(
@@ -167,13 +169,13 @@ export default function EditProjectPage() {
             customer_id: user?.id,
             project_id: project.id,
             name: c.name,
-            weight: 0.0,
+            weight: 0,
             no: i + 1,
           }))
         )
         if (criteriaError) throw criteriaError
 
-      // 4. alternativesを保存
+      // 4. alternativesを更新
       const { error: alternativesError } = await supabase
         .from("alternatives")
         .upsert(
@@ -184,21 +186,21 @@ export default function EditProjectPage() {
             name: a.name,
             description: a.description,
             image_url: a.imageUrl,
-            weight: 0.0,
+            weight: 0,
             no: i + 1,
           }))
         )
         if (alternativesError) throw alternativesError
 
         // 4.成功トースト
-        toast.success("保存しました!")
+        toast.success("更新しました!")
 
         // 5. プロジェクトごとの一対比較画面へ遷移
         router.replace(`/project/pairwise/${project.id}`)
 
     } catch(err) {
       console.error(err)
-      toast.error("保存に失敗しました")
+      toast.error("更新に失敗しました")
     } finally {
       setIsSaving(false)
   }}
@@ -232,11 +234,11 @@ export default function EditProjectPage() {
             {isSaving ? (
               <>
                 <div className="animate-spin mr-2 w-4 h-4 border-2 border-t-transparent rounded-full border-primary"></div>
-                保存中...
+                更新中...
               </>
             ) : (
               <>
-                保存
+                更新
               </>
             )}
           </Button>
@@ -246,7 +248,7 @@ export default function EditProjectPage() {
             variant="secondary"
             disabled
           >
-            保存
+            更新
           </Button>
         ) }
       </div>
