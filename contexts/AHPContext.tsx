@@ -36,17 +36,22 @@ const AHPContext = createContext<AHPContextType | undefined>(undefined)
 
 // 初期プロジェクト
 const defaultCriteria: Criterion[] = [
-  { id: generateId(), name: "価格", weight: 0 },
+  { id: generateId(), name: "手軽さ", weight: 0 },
   { id: generateId(), name: "デザイン", weight: 0 },
   { id: generateId(), name: "性能", weight: 0 },
 ]
-
+const defaultAlternative: Alternative[] = [
+  { id: generateId(), name: "商品A", description: "価格: XXXXX円 商品説明: ...", weight: 0, imageUrl: ""},
+  { id: generateId(), name: "商品B", description: "価格: XXXXX円 商品説明: ...", weight: 0, imageUrl: ""},
+  { id: generateId(), name: "商品C", description: "価格: XXXXX円 商品説明: ...", weight: 0, imageUrl: ""},
+]
+/*
 const defaultAlternative: Alternative[] = [
   { id: generateId(), name: "Macbook Air", description: "145,600円 13.6インチ M4 16GB SSD:256GB Apple ...", weight: 0, imageUrl: ""},
   { id: generateId(), name: "ThinkPad X1", description: "99,000円 14インチ Ryzen7 32GB SSD:1TB Lenovo ...", weight: 0, imageUrl: ""},
   { id: generateId(), name: "Dell 15", description: "64,775円 15.6インチ Ryzen5 16GB SSD:512GB DELL ...", weight: 0, imageUrl: ""}
 ]
-
+*/
 export const useAHP = () => {
   const context = useContext(AHPContext)
   if (context === undefined) {

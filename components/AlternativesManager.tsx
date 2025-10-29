@@ -219,7 +219,7 @@ export function AlternativesManager() {
         <div className="flex flex-col gap-3 p-4 bg-muted/50 rounded-lg">
           <Input
             className="flex-1"
-            placeholder="例) 商品1"
+            placeholder="例) PCの名前"
             value={newAlternativeName}
             onChange={(e) => setNewAlternativeName(e.target.value)}
           />
@@ -284,7 +284,7 @@ export function AlternativesManager() {
             disabled={searchLoading && !isSearched}
             onClick={handleSearch}
           >
-            {searchLoading && !isSearched ? "検索中..." : "検索"}
+            検索
           </motion.button>
           <Button
             onClick={() => {

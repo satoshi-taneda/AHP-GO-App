@@ -21,6 +21,7 @@ export default function DashBoard() {
     Promise.resolve (
     supabase.from("project")
       .select("*, customer(name)")
+      .eq("mode", 1)
       .order("updated_at", { ascending: false })
     )
     .then(({ data }) => {
@@ -34,14 +35,20 @@ export default function DashBoard() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl text-foreground font-semibold">プロジェクト</h1>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => router.push("/project/new")}
-          >
-          <Plus className="w-4 h-4 mr-1" />新しく作成する
-          </Button>
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={() => router.push("/project/new")}
+        >
+        <Plus className="w-4 h-4 mr-1" />新しく作成する
+        </Button>
+        <Button
+          size="sm"
+          variant="default"
+          onClick={() => router.push(`/project/pairwise/1760695697109-c9hc655zs`)}
+        >
+          チュートリアル開始
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-4">
@@ -60,7 +67,7 @@ export default function DashBoard() {
                         minute: "2-digit"
                       })}
                       </p>
-                      <p>{p.customer.name || "ゲスト"}</p>
+                      <p>{p.customer.name || "匿名"}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       {p.completed ? (

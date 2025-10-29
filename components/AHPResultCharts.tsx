@@ -46,20 +46,21 @@ export default function AHPResultCharts({
         <ResponsiveContainer width="100%" height={300}>
           <PieChart data={project.alternatives}>
             <Pie
+              className="text-sm"
               data={project.alternatives}
               dataKey="weight"
               nameKey="name"
               cx="50%"
               cy="50%"
               outerRadius={100}
-              label={(entry) => `${entry.name}: ${(entry.weight * 100).toFixed(1)}%`}
+              label={(entry) => `${(entry.weight * 100).toFixed(1)}%`}
             >
               {project.alternatives.map((_, i) => (
                 <Cell key={i} fill={COLORS[i % COLORS.length]} />
               ))}
             </Pie>
             <Tooltip formatter={(v: number) => `${(v * 100).toFixed(1)}%`} />
-            <Legend />
+            <Legend className="text-xs" />
           </PieChart>
         </ResponsiveContainer>
       </div>

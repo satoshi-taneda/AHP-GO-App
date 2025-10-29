@@ -42,7 +42,7 @@ export function GoalInput() {
         </Label>
         <Input
           id="goal"
-          placeholder="例) 一人暮らし用の冷蔵庫を選ぶ！"
+          placeholder="例) 最適なノートPCを選ぶ！"
           value={localGoal}
           onChange={(e) => setLocalGoal(e.target.value)}
           onBlur={handleBlur}

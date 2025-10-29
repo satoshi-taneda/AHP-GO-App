@@ -179,7 +179,7 @@ export default function ProjectPage() {
         <div className="flex justify-between items-top">
           <div className="flex flex-col gap-1">
             <h1 className="text-2xl font-semibold text-foreground mb-2">{project.goal}</h1>
-            <p className="text-muted-foreground">ステータス: {completed ? "完了 ✅" : "実施中 !!"}</p>
+            <p className="text-muted-foreground">ステータス: {completed ? "完了 ✅" : "実施中 ☑️"}</p>
             <p className="text-muted-foreground">
               更新日: {new Date(project.updatedAt).toLocaleDateString("ja-JP", {
               timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"
