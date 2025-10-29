@@ -219,14 +219,14 @@ export function AlternativesManager() {
         <div className="flex flex-col gap-3 p-4 bg-muted/50 rounded-lg">
           <Input
             className="flex-1"
-            placeholder="例) PCの名前"
+            placeholder="例) 商品名:"
             value={newAlternativeName}
             onChange={(e) => setNewAlternativeName(e.target.value)}
           />
           <Textarea
             className="flex-1"
             rows={5}
-            placeholder="例) 25,000円 ブラック 省電力 A社 ..."
+            placeholder="例) 価格: 25,000円 商品説明: ブラック 省電力 A社 ..."
             value={newAlternativeDescription}
             onChange={(e) => setNewAlternativeDescription(e.target.value)}
           />

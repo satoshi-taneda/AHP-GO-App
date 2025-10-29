@@ -1,3 +1,4 @@
+@import "katex/dist/katex.min.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -53,7 +54,6 @@
     @apply border-border;
   }
 }
-
 body {
   font-family: Arial, Helvetica, sans-serif;
   @apply bg-background text-foreground;

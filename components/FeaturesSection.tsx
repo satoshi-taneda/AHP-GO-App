@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import { Card } from "@/components/ui/card"
-import { BarChart2, Target, Zap } from "lucide-react"
+import { BarChart2, Star, Zap } from "lucide-react"
 
 export default function FeaturesSection() {
   const features = [
@@ -10,7 +10,7 @@ export default function FeaturesSection() {
       icon: <BarChart2 className="w-6 h-6 text-primary" />,
       bg: "bg-primary/10",
       title: "AHPによる分析",
-      text: "『AHP - 階層化意思決定法』を用いた分析を手軽に体験できます。"
+      text: "『AHP - 階層分析法』を用いた分析を手軽に体験できます。"
     },
     {
       icon: <Zap className="w-6 h-6 text-primary" />,
@@ -19,7 +19,7 @@ export default function FeaturesSection() {
       text: "スライダー操作で入力の手間を省きました。"
     },
     {
-      icon: <Target className="w-6 h-6 text-primary" />,
+      icon: <Star className="w-6 h-6 text-primary" />,
       bg: "bg-primary/10",
       title: "シンプルなUI",
       text: "広告なし、余白を活かしたデザイン、思考を邪魔しません。"

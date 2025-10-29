@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useRouter, useParams } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, ArrowLeft, Check, AlertTriangle, Target } from "lucide-react"
+import { ArrowRight, ArrowLeft, Check, AlertTriangle, Lightbulb } from "lucide-react"
 import { toast } from "sonner"
 import { motion, AnimatePresence } from "framer-motion"
 import { useAHP } from "@/contexts/AHPContext"
@@ -12,6 +12,7 @@ import Image from "next/image"
 import LoadingSpinner from "@/components/LoadingSpinner"
 import AhpCompaisonSlider from "@/components/AhpComparisonSlider"
 import ProgressCircle from "@/components/ProgressCircle"
+import ChatBox from "@/components/ChatBox"
 
 type ComparisonMatrix = {
   id: string
@@ -265,7 +266,7 @@ export default function PairWiseComparison() {
       }
     }
 
-    // 整合度チェック
+    // CIチェック
     if (ci) {
       if (ci < 0.1) {
         if (ciCheck) {
@@ -273,7 +274,7 @@ export default function PairWiseComparison() {
         }
       } else {
         if (ciCheck) {
-          toast.error(`CIチェック 比較に整合性がない可能性があります`)
+          toast.error(`CIチェック warning!`)
         }
       }
       if (ci >= 0.00001) updateCI(matrices[numMatrix-1].id, ci)
@@ -417,7 +418,7 @@ export default function PairWiseComparison() {
     ])
   }, [project])
 
-  // ウェイトと整合度の計算
+  // ウェイトとCIの計算
   useEffect(() => {
     if (loading) return
     calcWeight()
@@ -515,12 +516,13 @@ export default function PairWiseComparison() {
         <>
           <div className="max-w-4xl mx-auto space-y-4">
             <div className="flex items-center gap-2">
-              <Target />
+              <Lightbulb />
               <h3 className="text-foreground text-3xl font-semibold">{project?.goal}</h3>
             </div>
             <div className="flex flex-col gap-1">
               <p>・スライダー操作で一対比較を行い、[次の比較へ]ボタンを押してください。</p>
-              <p>・テーマごとの比較が完了すると、CI(整合度)を確認できます。一般的に0.1以下であれば整合性があると言われています。</p>
+              <p>・テーマごとの比較が完了すると、CI(首尾一貫性)を確認できます。</p>
+              <p>・AHP(階層分析法)の詳しい内容はAIに質問できます。</p>
             </div>
             <div className="p-8 bg-muted/30 rounded-xl shadow-lg space-y-4">
               {/* アイテム詳細 */}
@@ -704,7 +706,8 @@ export default function PairWiseComparison() {
                 AHP計算
               </motion.button>
             )}
-          </div>
+            </div>
+            <ChatBox />
         </>
       ) : (
         <div className="flex flex-col tems-center justify-center h-screen text-center bg-gradient-to-b from-blue-50 to-white">

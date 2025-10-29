@@ -9,7 +9,7 @@ interface AHPContextType {
   project: AHPProject | null
   setProject: (project: AHPProject) => void
   updateGoal: (goal: string) => void
-  addCriterion: (name: string, weight: number) => void
+  addCriterion: (name: string) => void
   updateCriterion: (id: string, updates: Partial<Criterion>) => void
   deleteCriterion: (id: string) => void
   addAlternative: (name: string, description: string, imageUrl: string) => void

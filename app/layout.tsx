@@ -31,9 +31,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </AHPProvider>
           </main>
           <footer className="mx-auto text-sm border-t border-border mt-64">
-            <p className="m-2 text-center text-muted-foreground">&copy; 2025 AHP-GO v3.3.0. All rights reserved.</p>
+            <p className="m-2 text-center text-muted-foreground">&copy; 2025 AHP-GO v4.0.0. All rights reserved.</p>
             <div className="flex flex-col justify-center items-center gap-2 py-2 text-muted-foreground">
-              <p>本サイトの要約機能は Google Gemini API を利用しています。 Powered by Google Gemini</p>
+              <p>本サイトは質問の回答に Google Gemini API を利用しています。 Powered by Google Gemini</p>
               <div className="flex">
                 <p>本サイトの検索機能は Rakuten API を利用しています。</p>
                 <Link href="https://webservice.rakuten.co.jp/" target="_blank">
