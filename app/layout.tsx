@@ -12,11 +12,13 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
   title: "AHP-GO - 意思決定サポートアプリ",
-  description: "AHP法に基づいた合理的な意思決定をサポート",
-  icons: {
-    icon: "/favicon.ico"
-  },
+  description: "AHP(階層分析法)に基づいた合理的な意思決定をサポート",
   generator: "v0.app",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico"
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
