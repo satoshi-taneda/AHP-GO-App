@@ -283,7 +283,7 @@ export default function PairWiseComparison() {
       }
       if (ci >= 0.00001) updateCI(matrices[numMatrix-1].id, ci)
     } else {
-      toast.error("未入力です")
+      toast.error("未回答です!")
     }
 
     // CIチェック中であれば一つ前に戻って終了
@@ -566,8 +566,8 @@ export default function PairWiseComparison() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.3 }}
-                        className="flex px-2 items-center border-b-2 border-destructive/20 bg-destructive/10 rounded-sm shadow-md">
-                        <p className="text-destructive italic">CI: {matrices[numMatrix].ci.toFixed(3)}</p>
+                        className="flex px-2 items-center border-b-2 border-yellow-300/20 bg-yellow-50 rounded-sm shadow-md">
+                        <p className="text-yellow-900 italic">CI: {matrices[numMatrix].ci.toFixed(3)}</p>
                         <AlertTriangle className="w-6 h-6 ml-2 p-1 font-bold text-yellow-600" />
                      </motion.div>
                     </AnimatePresence>
