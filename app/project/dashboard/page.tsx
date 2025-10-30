@@ -21,6 +21,7 @@ export default function DashBoard() {
     Promise.resolve (
     supabase.from("project")
       .select("*, customer(name)")
+      .eq("customer_id", user?.id)
       .eq("mode", 1)
       .order("updated_at", { ascending: false })
     )

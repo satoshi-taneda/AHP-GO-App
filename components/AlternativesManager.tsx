@@ -274,7 +274,7 @@ export function AlternativesManager() {
         <div className="flex flex-wrap items-center gap-2 p-4 bg-muted/50 rounded-lg">
           <input
             className="flex-1 mr-2 p-2"
-            placeholder="例) 冷蔵庫 一人暮らし"
+            placeholder="例) ノートパソコン おすすめ"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
           />

@@ -238,7 +238,7 @@ export default function ProjectPage() {
                   )}
                   <h3 className="text-lg font-semibold">{alt.name}</h3>
                   {completed && (
-                    <p className="text-green-500">{alt.weight.toFixed(3)}</p>
+                    <p className="text-blue-500">{alt.weight.toFixed(3)}</p>
                   )}
                   <p className="text-muted-foreground text-sm mt-1 whitespace-pre-line">{alt.description}</p>
                   {alt.imageUrl && (

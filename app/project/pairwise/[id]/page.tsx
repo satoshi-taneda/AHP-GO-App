@@ -270,16 +270,20 @@ export default function PairWiseComparison() {
     if (ci) {
       if (ci < 0.1) {
         if (ciCheck) {
-          toast.success(`CIチェック OK!`)
+          toast.success("CIチェック - OK!")
         }
       } else {
         if (ciCheck) {
-          toast.error(`CIチェック warning!`)
+          toast("CIチェック - WARNING!",
+                {description: "比較に首尾一貫性がない可能性があります。",
+                icon: <AlertTriangle className="text-yellow-500" />,
+                className: "border-yellow-300 bg-yellow-50 text-yellow-900 dark:bg-yellow-900 dark:text-yellow-100 dark:border-yellow-700",
+          })
         }
       }
       if (ci >= 0.00001) updateCI(matrices[numMatrix-1].id, ci)
     } else {
-      toast.error(`データを入力してください`)
+      toast.error("未入力です")
     }
 
     // CIチェック中であれば一つ前に戻って終了
@@ -522,7 +526,7 @@ export default function PairWiseComparison() {
             <div className="flex flex-col gap-1">
               <p>・スライダー操作で一対比較を行い、[次の比較へ]ボタンを押してください。</p>
               <p>・テーマごとの比較が完了すると、CI(首尾一貫性)を確認できます。</p>
-              <p>・AHP(階層分析法)の詳しい内容はAIに質問できます。</p>
+              <p>・AHPの詳しい内容はAIに質問できます。</p>
             </div>
             <div className="p-8 bg-muted/30 rounded-xl shadow-lg space-y-4">
               {/* アイテム詳細 */}
@@ -550,7 +554,7 @@ export default function PairWiseComparison() {
                          exit={{ opacity: 0, y: -10 }}
                          transition={{ duration: 0.3 }}
                          className="flex px-2 items-center border-b-2 border-green-600/20 bg-green-600/10 rounded-sm shadow-md">
-                         <p className="text-green-600 italic">CI(整合度): {matrices[numMatrix].ci.toFixed(3)}</p>
+                         <p className="text-green-600 italic">CI: {matrices[numMatrix].ci.toFixed(3)}</p>
                          <Check className="ml-2 p-1 bg-green-500 rounded-full font-bold text-white shadow-sm" />
                       </motion.div>
                     </AnimatePresence>
@@ -563,7 +567,7 @@ export default function PairWiseComparison() {
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.3 }}
                         className="flex px-2 items-center border-b-2 border-destructive/20 bg-destructive/10 rounded-sm shadow-md">
-                        <p className="text-destructive italic">CI(整合度): {matrices[numMatrix].ci.toFixed(3)}</p>
+                        <p className="text-destructive italic">CI: {matrices[numMatrix].ci.toFixed(3)}</p>
                         <AlertTriangle className="w-6 h-6 ml-2 p-1 font-bold text-yellow-600" />
                      </motion.div>
                     </AnimatePresence>
