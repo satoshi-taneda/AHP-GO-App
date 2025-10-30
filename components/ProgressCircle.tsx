@@ -7,7 +7,7 @@ export default function ProgressCircle({step, total}: {step: number, total: numb
   const progress = step / total;
   return (
     <div className="flex flex-col items-center">
-      <motion.svg width="35" height="35" viewBox="0 0 36 36">
+      <motion.svg width="28" height="28" viewBox="0 0 36 36">
         <path
           d="M18 2.0845
             a 15.9155 15.9155 0 0 1 0 31.831

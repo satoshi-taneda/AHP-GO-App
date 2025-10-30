@@ -520,7 +520,7 @@ export default function PairWiseComparison() {
         <>
           <div className="max-w-4xl mx-auto space-y-4">
             <div className="flex items-center gap-2">
-              <Lightbulb />
+              <Lightbulb className="text-yellow-400" />
               <h3 className="text-foreground text-3xl font-semibold">{project?.goal}</h3>
             </div>
             <div className="flex flex-col gap-1">
