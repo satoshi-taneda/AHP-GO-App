@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { usePathname } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
+import { LogIn, LogOut } from "lucide-react"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import Image from "next/image"
 
@@ -52,8 +53,9 @@ function LoggedOutMenu({ isAuthPage }: { isAuthPage: boolean }) {
   return (
     <>
       <Link href="/auth/login">
+
         <Button size="default" variant="ghost">
-          ログイン
+          <LogIn className="w-4 h-4 mr-1" />ログイン
         </Button>
       </Link>
       <Link href="/auth/signup">

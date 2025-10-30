@@ -37,14 +37,14 @@ export default function DashBoard() {
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex justify-between items-center">
         <Button
-          size="sm"
+          size="default"
           variant="ghost"
           onClick={() => router.push("/project/new")}
         >
         <Plus className="w-4 h-4 mr-1" />新しく作成する
         </Button>
         <Button
-          size="sm"
+          size="default"
           variant="default"
           onClick={() => router.push(`/project/pairwise/1760695697109-c9hc655zs`)}
         >
