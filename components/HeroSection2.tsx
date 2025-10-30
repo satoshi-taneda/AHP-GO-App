@@ -43,11 +43,11 @@ export default function HeroSection2() {
         transition={{ duration: 0.8, delay: 0.3}}
       >
         <Image
-          src="/images/shinsyakaijin_building.png"
+          src="/images/45019.png"
           alt="意思決定のイラスト"
-          width={200}
-          height={150}
-          className="w-48 h-auto rounded-2xl shadow-lg"
+          width={180}
+          height={180}
+          className="h-auto rounded-2xl shadow-lg"
         />
       </motion.div>
       </div>
