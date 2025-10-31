@@ -162,7 +162,7 @@ export default function ProjectPage() {
               variant="ghost"
               onClick={() => handleEdit(projectId)}
             >
-              <Pencil className="w-4 h-4 mr-2" />編集する
+              <Pencil className="w-4 h-4 mr-2" />更新する
             </Button>
             <Button
               onClick={() => handleDelete(user.id, projectId)}

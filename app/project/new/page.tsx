@@ -106,7 +106,7 @@ export default function NewProjectPage() {
         if (alternativesError) throw alternativesError
 
         // 4. 成功トースト
-        toast.success("保存しました!")
+        toast.success("作成しました!")
 
         // 5. プロジェクトごとの一対比較画面へ遷移
         router.replace(`/project/pairwise/${project.id}`)
@@ -146,11 +146,11 @@ export default function NewProjectPage() {
             {isSaving ? (
               <>
                 <div className="animate-spin mr-2 w-4 h-4 border-2 border-t-transparent rounded-full border-primary"></div>
-                保存中...
+                作成中...
               </>
             ) : (
               <>
-                保存
+                作成
               </>
             )}
           </Button>
@@ -160,7 +160,7 @@ export default function NewProjectPage() {
             variant="secondary"
             disabled
           >
-            保存
+            作成
           </Button>
         ) }
       </div>

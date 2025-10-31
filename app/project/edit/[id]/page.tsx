@@ -209,7 +209,7 @@ export default function EditProjectPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-4">
-      <h1 className="text-2xl font-semibold mb-6">プロジェクトを編集する</h1>
+      <h1 className="text-2xl font-semibold mb-6">プロジェクトを更新する</h1>
       <div className="flex flex-col gap-4">
         <section>
           <GoalInput />
