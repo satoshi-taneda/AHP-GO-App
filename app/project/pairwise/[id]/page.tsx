@@ -711,7 +711,7 @@ export default function PairWiseComparison() {
               </motion.button>
             )}
             </div>
-            <div className="relative my-6">
+            <div className="max-w-4xl mx-auto relative my-6">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t" />
               </div>
