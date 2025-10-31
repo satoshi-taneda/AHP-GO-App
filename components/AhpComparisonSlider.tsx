@@ -27,7 +27,7 @@ export default function AhpComparisonSlider({
   };
 
   return (
-    <div className="p-4 border rounded-xl bg-white shadow w-full max-w-2xl mx-auto space-y-1">
+    <div className="p-4 border rounded-xl bg-muted/30 shadow w-full max-w-2xl mx-auto space-y-1">
       {/* テキスト表示 */}
       <p className="text-lg text-center font-medium text-blue-700">
         {getLabel(value)}
