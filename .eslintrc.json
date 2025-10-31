@@ -1,7 +1,7 @@
 {
   "extends": ["next/core-web-vitals"],
   "rules": {
-    "no-unused-vars": "Warn",
+    "no-unused-vars": "warn",
     "quotes": ["warn", "double"],
     "prefer-const": "warn"
   }
