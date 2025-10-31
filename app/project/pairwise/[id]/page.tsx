@@ -472,13 +472,13 @@ export default function PairWiseComparison() {
     console.log(weight)
     const updateWeight = async () => {
 
-      // Supabase-criteriaテーブルのcompleted更新
+      // Supabase-criteriaテーブルの更新日と完了フラグの更新
       const { error } = await supabase
         .from('project')
-        .update({completed: true})
+        .update({updated_at: new Date(), completed: true})
         .eq('project_id', projectId)
       if (error) {
-        console.error(`完了フラグ更新失敗`)
+        console.error(`プロジェクト更新失敗`)
       }
 
       // Supabase-criteriaテーブルのweight更新
