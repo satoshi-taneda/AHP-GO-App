@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext"
 import { supabase } from "@/lib/supabaseClient"
 import { Button } from "@/components/ui/button"
+import { motion } from "framer-motion"
 import { Info, CheckCircle2,  Plus } from "lucide-react"
 import Link from "next/link"
 import LoadingSpinner from "@/components/LoadingSpinner"
@@ -43,13 +44,13 @@ export default function DashBoard() {
         >
         <Plus className="w-4 h-4 mr-1" />新しく作成する
         </Button>
-        <Button
-          size="default"
-          variant="default"
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          className="bg-blue-500 text-white px-3 py-2 rounded-lg shadow hover:bg-blue-600"
           onClick={() => router.push(`/project/pairwise/1760695697109-c9hc655zs`)}
         >
           チュートリアル開始
-        </Button>
+        </motion.button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-4">

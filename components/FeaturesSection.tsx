@@ -10,7 +10,7 @@ export default function FeaturesSection() {
       icon: <BarChart2 className="w-6 h-6 text-primary" />,
       bg: "bg-primary/10",
       title: "AHPによる分析",
-      text: "『AHP - 階層分析法』を用いた分析をAIに相談しながら手軽に体験できます。"
+      text: "AHP(階層分析法)をAIに相談しながら手軽に体験できます。"
     },
     {
       icon: <Zap className="w-6 h-6 text-primary" />,

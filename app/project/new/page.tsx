@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
+import { motion } from "framer-motion"
 import { toast } from "sonner"
 import { useAHP, createDefaultProject } from "@/contexts/AHPContext"
 import { supabase } from "@/lib/supabaseClient"
@@ -135,34 +136,26 @@ export default function NewProjectPage() {
       </div>
       <div className="flex justify-between">
         <CancelButton />
-        {(project.goal !== "" && project.criteria.length > 2 && project.alternatives.length > 2) ? (
-          <Button
-            size="lg"
-            variant="secondary"
-            onClick={() => handleSaveAll(user, project)}
+        {(project.goal !== "" && project.criteria.length > 2 && project.alternatives.length > 2) && (
+          <motion.button
+            whileHover={{ scale: 1.05 }}
             disabled={isSaving}
-            className="hover:bg-muted/50"
+            className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600"
+            onClick={() => handleSaveAll(user, project)}
           >
             {isSaving ? (
-              <>
-                <div className="animate-spin mr-2 w-4 h-4 border-2 border-t-transparent rounded-full border-primary"></div>
-                作成中...
-              </>
+              <div className="flex justify-center items-center gap-2">
+                <div className="animate-spin mr-2 w-4 h-4 border-2 border-t-transparent rounded-full border-primary">
+                </div>
+                  作成中...
+              </div>
             ) : (
               <>
                 作成
               </>
             )}
-          </Button>
-        ) : (
-          <Button
-            size="lg"
-            variant="secondary"
-            disabled
-          >
-            作成
-          </Button>
-        ) }
+          </motion.button>
+        )}
       </div>
     </div>
   )

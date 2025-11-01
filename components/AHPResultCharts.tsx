@@ -40,9 +40,9 @@ export default function AHPResultCharts({
           </BarChart>
         </ResponsiveContainer>
       </div>
-      {/* 代替案スコア */}
+      {/* 候補スコア */}
       <div className="bg-white p-4 rounded-lg shadow">
-        <h3 className="text-lg font-semibold mb-4">代替案のスコア</h3>
+        <h3 className="text-lg font-semibold mb-4">候補のスコア</h3>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart data={project.alternatives}>
             <Pie

@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation"
 import { usePathname } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
-import { LogIn, LogOut } from "lucide-react"
+import { motion } from "framer-motion"
+import { LogIn } from "lucide-react"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import Image from "next/image"
 
@@ -50,19 +51,23 @@ function LoggedInMenu({ user, profile, onLogout }: {user: any, profile: any, onL
 }
 function LoggedOutMenu({ isAuthPage }: { isAuthPage: boolean }) {
   if (isAuthPage) return null
+  const router = useRouter()
   return (
     <>
-      <Link href="/auth/login">
-
-        <Button size="default" variant="ghost">
-          <LogIn className="w-4 h-4 mr-1" />ログイン
-        </Button>
-      </Link>
-      <Link href="/auth/signup">
-        <Button size="default" className="bg-foreground px-4 overflow-hidden">
-          新規登録
-        </Button>
-      </Link>
+      <Button
+        size="default"
+        variant="ghost"
+        onClick={() => router.push("/auth/login")}
+      >
+        <LogIn className="w-4 h-4 mr-1" />ログイン
+      </Button>
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        className="text-sm bg-blue-500 text-white px-3 py-2 rounded-lg shadow hover:bg-blue-600"
+        onClick={() => router.push("/auth/signup")}
+      >
+        新規登録
+      </motion.button>
     </>
   )
 }
