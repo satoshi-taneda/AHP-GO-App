@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { usePathname } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext"
@@ -10,14 +9,13 @@ import { LogIn } from "lucide-react"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import Image from "next/image"
 
-function LoggedInMenu({ user, profile, onLogout }: {user: any, profile: any, onLogout: () => void; }) {
+function LoggedInMenu({ user, profile, router, onLogout }: {user: any, profile: any, router: any,  onLogout: () => void; }) {
   const displayName =
     profile?.name ||
     user?.user_metadata?.full_name ||
     user?.email ||
     "ゲスト"
   const avatarUrl = user?.user_metadata?.avatar_url
-  const router = useRouter()
 
   return (
     <>
@@ -49,9 +47,8 @@ function LoggedInMenu({ user, profile, onLogout }: {user: any, profile: any, onL
     </>
   )
 }
-function LoggedOutMenu({ isAuthPage }: { isAuthPage: boolean }) {
+function LoggedOutMenu({ isAuthPage, router }: { isAuthPage: boolean, router: any }) {
   if (isAuthPage) return null
-  const router = useRouter()
   return (
     <>
       <Button
@@ -128,9 +125,9 @@ export default function Navbar() {
       </h1>
       <nav className="flex items-center gap-1">
         {loading ? null : user ? (
-          <LoggedInMenu user={user} profile={profile ?? null} onLogout={handleLogout} />
+          <LoggedInMenu user={user} profile={profile ?? null} router={router} onLogout={handleLogout} />
         ) : (
-          <LoggedOutMenu isAuthPage={isAuthPage} />
+          <LoggedOutMenu isAuthPage={isAuthPage} router={router} />
         )}
       </nav>
     </div>
