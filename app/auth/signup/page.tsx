@@ -1,6 +1,5 @@
 "use client"
 import type React from "react"
-import Link from "next/link"
 import LoadingSpinner from "@/components/LoadingSpinner"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -118,14 +117,16 @@ export default function SignupPage() {
         </Button>
       </form>
 
-      <p className="mt-4 text-center">
-        すでにアカウントをお持ちの方は
-        <Link href="/auth/login">
-          <span className="ml-2 text-blue-500 hover:underline">
+      <div className="mt-8 flex justify-center items-center">
+        <p>すでにアカウントをお持ちの方は</p>
+        <Button
+          className="text-md"
+          size="sm"
+          variant="link"
+          onClick={() => router.push("/auth/login")}>
             ログイン
-          </span>
-        </Link>
-      </p>
+        </Button>
+      </div>
     </div>
   )
 }

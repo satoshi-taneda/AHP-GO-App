@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabaseClient"
@@ -48,6 +47,38 @@ export default function LoginPage() {
       setLoading(false)
     }
   }
+
+  const handleGuestLogin = async () => {
+    setError(null)
+    const guest = {
+      email: "q1dj1e527m@sute.jp",
+      password: "Test0804"
+    }
+    try {
+      const { error } = await supabase.auth.signInWithPassword( guest )
+      if (error) throw error
+
+      // 成功したらフェードアウト
+      await controls.start({
+        opacity: 0,
+        y: -20,
+        transition: {duration: 0.6, ease: "easeOut" },
+      })
+
+      toast.success("ゲストでログインしました!")
+      router.replace("/project/dashboard")
+      await new Promise(() => setTimeout(() => {
+        window.location.reload()
+      }, 500))
+
+    } catch (error: any) {
+      if (error instanceof Error) setError(error.message)
+      else setError("不明なエラーが発生しました。")
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleGoogleLogin = async () => {
     const redirectURL = process.env.NEXT_PUBLIC_SITE_URL || `${window.location.origin}/auth/callback`
     const { error } = await supabase.auth.signInWithOAuth({
@@ -133,14 +164,26 @@ export default function LoginPage() {
           </div>
         </div>
         <GoogleLoginButton onClick={handleGoogleLogin} />
-        <p className="mt-8 text-center">
-          アカウントをお持ちでない方は
-          <Link href="/auth/signup">
-            <span className="text-blue-500 hover:underline ml-2">
+        <div className="mt-8 flex justify-center items-center">
+          <p>アカウントをお持ちでない方は</p>
+          <Button
+            className="text-md"
+            size="sm"
+            variant="link"
+            onClick={() => router.push("/auth/signup")}>
               新規登録
-            </span>
-          </Link>
-        </p>
+          </Button>
+        </div>
+        <div className="flex justify-center items-center">
+          <p>ゲストログインは</p>
+          <Button
+            className="text-md"
+            size="sm"
+            variant="link"
+            onClick={handleGuestLogin}>
+              こちら
+          </Button>
+        </div>
       </div>
     </motion.div>
   )

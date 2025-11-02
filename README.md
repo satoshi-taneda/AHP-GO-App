@@ -7,7 +7,7 @@ AHP-GOは、ユーザーが複数の候補（商品やサービス）を合理�
 ### 対応する課題とソリューション概要
 - 広告なし・シンプルUI・スライダー直感操作
 - 通常のECとは異なり「意思決定支援」に特化
-- AHPについて理解を深められるAHPアシスタント(AI)付き
+- AHPについて理解を深められるAHPアシスタントあり
 - PC・スマホ両対応
   
 ## サイトイメージ
@@ -16,9 +16,7 @@ AHPの一対比較画面のイメージです。
 
 ## サイトURL
 [https://ahp-go-app.vercel.app](https://ahp-go-app.vercel.app)
-### 以下のユーザでログインして、すぐにチュートリアルを開始できます。
-- ユーザID: q1dj1e527m@sute.jp
-- PassWord: Test0804
+### ログインページよりゲストログインして、すぐにチュートリアルを開始できます。
 
 ## 使用技術
 - フロントエンド：Next.js、React(React HooksまたはContext API)、Tailwind CSS
@@ -50,8 +48,8 @@ AHPの一対比較画面のイメージです。
   - 最終目標・評価基準・候補の編集
   - 最終目標・評価基準・候補の削除
 - 商品検索(楽天検索)
-- 商品情報要約
-- AHPアシスタント(AI質問)
+- 商品情報の要約
+- AHPアシスタント
 
 ## テスト修正の設計及び実施書
 [テスト修正の設計及び実施書_Googleスプレットシート](https://docs.google.com/spreadsheets/d/1l6FGZCC654AA0JGc9Yi5ejwNrD9lYrjsGLORNtGYA0Y/edit?usp=sharing)

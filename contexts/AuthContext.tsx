@@ -4,6 +4,7 @@ import type React from "react"
 import { createContext, useContext, useEffect, useState } from "react"
 import { supabase } from "@/lib/supabaseClient"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 type User = any
 type AuthContextType = {
@@ -22,7 +23,7 @@ const AuthContext = createContext<AuthContextType>({
 
 export const useAuth = () => useContext(AuthContext)
 
-//認証情報（ログイン状態やプロフィール）をアプリ全体に提供する
+// 認証情報（ログイン状態やプロフィール）をアプリ全体に提供する
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [profile, setProfile] = useState<any | null>(null)
@@ -55,10 +56,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   // --サインアウトを共通化--
+  const router = useRouter()
   const signOut = async () => {
     await supabase.auth.signOut()
     setUser(null)
     setProfile(null)
+    router.replace("/auth/login")
     toast.success("ログアウトしました!")
   }
 
