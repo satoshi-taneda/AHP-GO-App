@@ -30,23 +30,23 @@ export function GoalInput() {
         <Label htmlFor="goal" className="text-xl font-semibold">
           最終目標
         </Label>
-          <div className="flex justify-end items-center">
-            <Input
-              id="goal"
-              placeholder="例) 最適なノートPCを選ぶ！"
-              value={localGoal}
-              onChange={(e) => setLocalGoal(e.target.value)}
-              onBlur={handleBlur}
-              className="flex-1 mr-2 font-medium"
-            >
-            </Input>
-            {project?.goal === "" && (
-                  <div className="flex text-sm gap-2 p-1 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
-                    <AlertTriangle className="w-5 h-5 text-yellow-600" />
-                     <span>必須入力項目です</span>
-                  </div>
-            )}
-          </div>
+        <div className="flex justify-start">
+          {project?.goal === "" && (
+            <div className="flex text-sm gap-2 p-1 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
+              <AlertTriangle className="w-5 h-5 text-yellow-600" />
+               <span>必須入力項目です</span>
+            </div>
+          )}
+        </div>
+        <Input
+          id="goal"
+          placeholder="例) 最適なノートPCを選ぶ！"
+          value={localGoal}
+          onChange={(e) => setLocalGoal(e.target.value)}
+          onBlur={handleBlur}
+          className="flex-1 mr-2 font-medium"
+        >
+        </Input>
       </div>
     </Card>
   )
