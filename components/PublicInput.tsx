@@ -32,7 +32,7 @@ export function PublicInput() {
           {project?.published && (
             <div className="flex text-sm gap-2 p-1 border border-blue-500/30 bg-blue-500/5 text-blue-500 rounded-lg">
               <Globe className="w-5 h-5 text-blue-700" />
-               <span>すべてのユーザに公開されます</span>
+               <span>全ユーザに公開されます</span>
             </div>
           )}
         </div>

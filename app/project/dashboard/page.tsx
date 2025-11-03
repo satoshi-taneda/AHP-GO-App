@@ -92,13 +92,12 @@ export default function DashBoard() {
                       </div>
                     </div>
                     <h2 className="font-semibold text-lg mt-2">{p.goal}</h2>
-                    <p className="text-foreground text-xs text-end">{p.customer.name || "匿名"}</p>
                   </Link>
                 </div>
             </div>
           ))
         ) : (
-          <p className="text-muted-foreground">現在、プロジェクトがありません。</p>
+          <p className="text-muted-foreground">現在プロジェクトがありません。</p>
         )}
       </div>
       <div className="max-w-4xl mx-auto relative py-4">
@@ -139,7 +138,7 @@ export default function DashBoard() {
             </div>
           ))
         ) : (
-          <p className="text-muted-foreground">現在、他のユーザーの公開中のプロジェクトがありません。</p>
+          <p className="text-muted-foreground">現在プロジェクトがありません。</p>
         )}
       </div>
     </div>

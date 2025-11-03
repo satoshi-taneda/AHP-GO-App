@@ -69,7 +69,7 @@ export default function SignupPage() {
       <form onSubmit={handleSignup} className="space-y-4">
         <div>
           <label htmlFor="name" className="block mb-1">
-            名前（任意）
+            表示名:
           </label>
           <input
             id="name"
@@ -82,7 +82,7 @@ export default function SignupPage() {
 
         <div>
           <label htmlFor="email" className="block mb-1">
-            メールアドレス
+            メールアドレス:
           </label>
           <input
             id="email"
@@ -96,7 +96,7 @@ export default function SignupPage() {
 
         <div>
           <label htmlFor="password" className="block mb-1">
-            パスワード
+            パスワード:
           </label>
           <input
             id="password"

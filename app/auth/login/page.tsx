@@ -118,7 +118,7 @@ export default function LoginPage() {
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label htmlFor="email" className="block mb-1">
-              メールアドレス
+              メールアドレス:
             </label>
             <input
               id="email"
@@ -129,7 +129,7 @@ export default function LoginPage() {
               required
             />
             <label htmlFor="password" className="block mb-1">
-              パスワード
+              パスワード:
             </label>
             <input
               id="password"
@@ -181,7 +181,7 @@ export default function LoginPage() {
             size="sm"
             variant="link"
             onClick={handleGuestLogin}>
-              こちら
+              こちらをクリック
           </Button>
         </div>
       </div>

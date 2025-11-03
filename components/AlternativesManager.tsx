@@ -177,14 +177,14 @@ export function AlternativesManager() {
           ? (
               <div className="flex items-center text-sm gap-2 p-1 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
                 <AlertTriangle className="w-5 h-5 text-yellow-600" />
-                 <span>重要: 3つ以上追加してください</span>
+                 <span>3つ以上追加してください</span>
               </div>
             )
           : project?.alternatives ?  project.alternatives.length > 5
           ? (
               <div className="flex items-center text-sm gap-2 p-2 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
                 <AlertTriangle className="w-5 h-5 text-yellow-600" />
-                 <span>重要: 5より大きいと比較回数が膨大になります</span>
+                 <span>5より大きいと比較回数が膨大になります</span>
               </div>
             ) : null : null : null}
       </div>
