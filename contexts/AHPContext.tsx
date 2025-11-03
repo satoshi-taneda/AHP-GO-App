@@ -3,7 +3,6 @@
 import type React from "react"
 import type { AHPProject, Criterion, Alternative } from "@/lib/types"
 import { createContext, useContext, useState, useCallback } from "react"
-import { supabase } from "@/lib/supabaseClient"
 
 interface AHPContextType {
   project: AHPProject | null
@@ -15,7 +14,8 @@ interface AHPContextType {
   addAlternative: (name: string, description: string, imageUrl: string) => void
   updateAlternative: (id: string, updates: Partial<Alternative>) => void
   deleteAlternative: (id: string) => void
-  fetchAlternatives: (projectId: string) => void
+  updateCompleted: (completed: boolean) => void
+  updatePublished: (published: boolean) => void
 }
 
 function generateId(): string {
@@ -29,6 +29,8 @@ export function createDefaultProject(): AHPProject { return {
     alternatives: defaultAlternative,
     createdAt: new Date(),
     updatedAt: new Date(),
+    completed: false,
+    published: false,
   }
 }
 
@@ -36,22 +38,17 @@ const AHPContext = createContext<AHPContextType | undefined>(undefined)
 
 // 初期プロジェクト
 const defaultCriteria: Criterion[] = [
-  { id: generateId(), name: "手軽さ", weight: 0 },
+  { id: generateId(), name: "価格", weight: 0 },
   { id: generateId(), name: "デザイン", weight: 0 },
   { id: generateId(), name: "性能", weight: 0 },
 ]
+
 const defaultAlternative: Alternative[] = [
-  { id: generateId(), name: "商品A", description: "価格: XXXXX円 商品説明: ...", weight: 0, imageUrl: ""},
-  { id: generateId(), name: "商品B", description: "価格: XXXXX円 商品説明: ...", weight: 0, imageUrl: ""},
-  { id: generateId(), name: "商品C", description: "価格: XXXXX円 商品説明: ...", weight: 0, imageUrl: ""},
+  { id: generateId(), name: "Macbook Air", description: "価格: 145,600円 詳細: 13.6インチ M4 16GB SSD 256GB Apple", weight: 0, imageUrl: ""},
+  { id: generateId(), name: "ThinkPad X1", description: "価格: 99,000円 詳細: 14インチ Ryzen7 32GB SSD 1TB Lenovo", weight: 0, imageUrl: ""},
+  { id: generateId(), name: "Dell 15", description: "価格: 64,775円 詳細: 15.6インチ Ryzen5 16GB SSD 512GB DELL", weight: 0, imageUrl: ""}
 ]
-/*
-const defaultAlternative: Alternative[] = [
-  { id: generateId(), name: "Macbook Air", description: "145,600円 13.6インチ M4 16GB SSD:256GB Apple ...", weight: 0, imageUrl: ""},
-  { id: generateId(), name: "ThinkPad X1", description: "99,000円 14インチ Ryzen7 32GB SSD:1TB Lenovo ...", weight: 0, imageUrl: ""},
-  { id: generateId(), name: "Dell 15", description: "64,775円 15.6インチ Ryzen5 16GB SSD:512GB DELL ...", weight: 0, imageUrl: ""}
-]
-*/
+
 export const useAHP = () => {
   const context = useContext(AHPContext)
   if (context === undefined) {
@@ -139,17 +136,18 @@ export const AHPProvider = ({ children }: { children: React.ReactNode }) => {
     )
   }, [])
 
-  // -- 候補一覧をSupabaseから取得 --
-  const fetchAlternatives = useCallback(async (projectId: string) => {
-    const { data, error } = await supabase
-      .from("alternatives")
-      .select("*")
-      .eq("project_id", projectId)
-      .order("alternatives_id", { ascending: true })
-    if (!error) {
+  const updateCompleted = useCallback((completed: boolean) => {
     setProjectState((prev: AHPProject | null) =>
-      prev ? {...prev, alternatives: data } : prev
-    )}
+      prev
+        ? { ...prev, completed, updatedAt: new Date() }
+        : createDefaultProject())
+  }, [])
+
+  const updatePublished = useCallback((published: boolean) => {
+    setProjectState((prev: AHPProject | null) =>
+      prev
+        ? { ...prev, published, updatedAt: new Date() }
+        : createDefaultProject())
   }, [])
 
   return (
@@ -163,7 +161,8 @@ export const AHPProvider = ({ children }: { children: React.ReactNode }) => {
         addAlternative,
         updateAlternative,
         deleteAlternative,
-        fetchAlternatives,
+        updateCompleted,
+        updatePublished,
     }}
     >
       {children}

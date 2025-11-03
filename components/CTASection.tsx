@@ -18,7 +18,7 @@ export default function CTASection() {
         <Card className="max-3xl mx-auto p-12 text-center space-y-6 border-foreground/20
                          relative overflow-hidden bg-gradient-to-r from-muted/50">
           <h3 className="text-3xl font-bold text-foreground text-balance">
-            高額商品、カートに入れる前に！
+            大事な商品、カートに入れる前に！
           </h3>
           <p className="text-lg text-muted-foreground">
           </p>

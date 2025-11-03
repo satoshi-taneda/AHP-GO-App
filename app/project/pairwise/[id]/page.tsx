@@ -344,9 +344,9 @@ export default function PairWiseComparison() {
 
       // ユーザチェック
       const customerId = projectData.customer_id
-      if (projectId !== "1760695697109-c9hc655zs")
+      if (projectId !== "1762139916553-bblcw9fd3")
         if (user?.id !== customerId)
-          router.push(`/project/${projectId}`)
+          router.push("/project/dashboard")
 
       const { data: criteriaData } = await supabase
         .from("criteria")
@@ -380,6 +380,8 @@ export default function PairWiseComparison() {
         })) || [],
         createdAt: projectData.created_at,
         updatedAt: projectData.updated_at,
+        completed: projectData.completed,
+        published: projectData.published,
       })
       setLoading(false)
     }
@@ -586,29 +588,45 @@ export default function PairWiseComparison() {
                           alt={pairwise.altName.a}
                           width={120}
                           height={120}
-                          className="rounded-lg group-hover:scale-125 transition-transform duration-300"
+                          className="rounded-lg group-hover:scale-105 transition-transform duration-300"
                         />) : (
                         <Image
                           src="/images/noimage_w.png"
                           alt="No Image"
                           width={120}
                           height={120}
-                          className="rounded-lg group-hover:scale-125 transition-transform duration-300"
+                          className="rounded-lg group-hover:scale-105 transition-transform duration-300"
                         />
                       )}
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 mb-3
-                        w-64 px-3 py-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg
-                        opacity-0 group-hover:opacity-100 transition-opacity duration-300
-                        whitespace-pre-line z-50 pointer-events-none"
-                      >
-                        <p>{pairwise.altDescription.a}</p>
-                        {/* 吹き出しの三角形 */}
-                        <div
-                          className="absolute left-1/2 bottom-full -translate-x-1/2
-                            w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent
-                            border-b-8 border-b-gray-800"
-                        ></div>
-                      </div>
+                      {pairwise.altDescription.a ? (
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 mb-3
+                          w-64 px-3 py-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg
+                          opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                          whitespace-pre-line z-50 pointer-events-none"
+                        >
+                          <p>{pairwise.altDescription.a}</p>
+                          {/* 吹き出しの三角形 */}
+                          <div
+                            className="absolute left-1/2 bottom-full -translate-x-1/2
+                              w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent
+                              border-b-8 border-b-gray-800"
+                          ></div>
+                        </div>
+                      ) : (
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 mb-3
+                          w-64 px-3 py-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg
+                          opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                          whitespace-pre-line z-50 pointer-events-none"
+                        >
+                          <p>{pairwise.altName.a}の説明がありません</p>
+                          {/* 吹き出しの三角形 */}
+                          <div
+                            className="absolute left-1/2 bottom-full -translate-x-1/2
+                              w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent
+                              border-b-8 border-b-gray-800"
+                          ></div>
+                        </div>
+                      )}
                     </div>
                     ) : (
                       <div className="p-8 flex text-2xl font-semibold">
@@ -628,29 +646,45 @@ export default function PairWiseComparison() {
                           alt={pairwise.altName.b}
                           width={120}
                           height={120}
-                          className="rounded-lg group-hover:scale-125 transition-transform duration-300"
+                          className="rounded-lg group-hover:scale-105 transition-transform duration-300"
                         />) : (
                         <Image
                           src="/images/noimage_b.png"
                           alt="No Image"
                           width={120}
                           height={120}
-                          className="rounded-lg group-hover:scale-125 transition-transform duration-300"
+                          className="rounded-lg group-hover:scale-105 transition-transform duration-300"
                         />
                       )}
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 mb-3
-                        w-64 px-3 py-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg
-                        opacity-0 group-hover:opacity-100 transition-opacity duration-300
-                        whitespace-pre-line z-50 pointer-events-none"
-                      >
-                        <p>{pairwise.altDescription.b}</p>
-                        {/* 吹き出しの三角形 */}
-                        <div
-                          className="absolute left-1/2 bottom-full -translate-x-1/2
-                            w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent
-                            border-b-8 border-b-gray-800"
-                        ></div>
-                      </div>
+                      {pairwise.altDescription.b ? (
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 mb-3
+                          w-64 px-3 py-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg
+                          opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                          whitespace-pre-line z-50 pointer-events-none"
+                        >
+                          <p>{pairwise.altDescription.b}</p>
+                          {/* 吹き出しの三角形 */}
+                          <div
+                            className="absolute left-1/2 bottom-full -translate-x-1/2
+                              w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent
+                              border-b-8 border-b-gray-800"
+                          ></div>
+                        </div>
+                      ) : (
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 mb-3
+                          w-64 px-3 py-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg
+                          opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                          whitespace-pre-line z-50 pointer-events-none"
+                        >
+                          <p>{pairwise.altName.b}の説明がありません</p>
+                          {/* 吹き出しの三角形 */}
+                          <div
+                            className="absolute left-1/2 bottom-full -translate-x-1/2
+                              w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent
+                              border-b-8 border-b-gray-800"
+                          ></div>
+                        </div>
+                      )}
                     </div>
                     ) : (
                       <div className="p-8 flex text-2xl font-semibold">

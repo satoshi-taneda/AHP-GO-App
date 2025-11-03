@@ -10,6 +10,7 @@ import { supabase } from "@/lib/supabaseClient"
 import { GoalInput } from "@/components/GoalInput"
 import { CriteriaManager } from "@/components/CriteriaManager"
 import { AlternativesManager } from "@/components/AlternativesManager"
+import { PublicInput } from "@/components/PublicInput"
 import CancelButton from "@/components/CancelButton"
 import LoadingSpinner from "@/components/LoadingSpinner"
 
@@ -97,6 +98,8 @@ export default function EditProjectPage() {
         })) || [],
         createdAt: projectData.created_at,
         updatedAt: projectData.updated_at,
+        completed: projectData.completed,
+        published: projectData.published,
       })
       setLoading(false)
     }
@@ -141,7 +144,7 @@ export default function EditProjectPage() {
         })
       )
 
-      // 2. project(goal)を更新
+      // 2. projectを更新
       const { data, error: customerError } = await supabase
         .from("customer")
         .select("name")
@@ -156,7 +159,9 @@ export default function EditProjectPage() {
             goal: project.goal,
             created_at: project.createdAt,
             updated_at: project.updatedAt,
-            owner: data.name
+            owner: data.name,
+            completed: project.completed,
+            published: project.published,
           }])
       if (error) throw error
 
@@ -220,6 +225,9 @@ export default function EditProjectPage() {
         <section>
           <AlternativesManager />
         </section>
+        <section>
+          <PublicInput />
+        </section>
       </div>
       <div className="flex justify-between">
         <CancelButton />
@@ -230,17 +238,7 @@ export default function EditProjectPage() {
             className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600"
             onClick={() => handleSaveAll(user, project)}
           >
-            {isSaving ? (
-              <div className="flex justify-center items-center gap-2">
-                <div className="animate-spin mr-2 w-4 h-4 border-2 border-t-transparent rounded-full border-primary">
-                </div>
-                  更新中...
-              </div>
-            ) : (
-              <>
-                更新
-              </>
-            )}
+            更新
           </motion.button>
         )}
       </div>

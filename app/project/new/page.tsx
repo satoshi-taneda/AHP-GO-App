@@ -3,7 +3,6 @@ import type { AHPProject } from "@/lib/types"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext"
-import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
 import { useAHP, createDefaultProject } from "@/contexts/AHPContext"
@@ -11,6 +10,7 @@ import { supabase } from "@/lib/supabaseClient"
 import { GoalInput } from "@/components/GoalInput"
 import { CriteriaManager } from "@/components/CriteriaManager"
 import { AlternativesManager } from "@/components/AlternativesManager"
+import { PublicInput } from "@/components/PublicInput"
 import CancelButton from "@/components/CancelButton"
 
 export default function NewProjectPage() {
@@ -54,7 +54,7 @@ export default function NewProjectPage() {
         })
       )
 
-      // 2. project(goal)を保存
+      // 2. projectを保存
       const { data, error: customerError } = await supabase
         .from("customer")
         .select("name")
@@ -70,7 +70,9 @@ export default function NewProjectPage() {
             goal: project.goal,
             created_at: project.createdAt,
             updated_at: project.updatedAt,
-            owner: data.name
+            owner: data.name,
+            completed: false,
+            published: project.published
           }])
       if (projectError) throw projectError
 
@@ -133,6 +135,9 @@ export default function NewProjectPage() {
         <section>
           <AlternativesManager />
         </section>
+        <section>
+          <PublicInput />
+        </section>
       </div>
       <div className="flex justify-between">
         <CancelButton />
@@ -143,17 +148,7 @@ export default function NewProjectPage() {
             className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600"
             onClick={() => handleSaveAll(user, project)}
           >
-            {isSaving ? (
-              <div className="flex justify-center items-center gap-2">
-                <div className="animate-spin mr-2 w-4 h-4 border-2 border-t-transparent rounded-full border-primary">
-                </div>
-                  作成中...
-              </div>
-            ) : (
-              <>
-                作成
-              </>
-            )}
+            作成
           </motion.button>
         )}
       </div>

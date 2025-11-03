@@ -173,7 +173,7 @@ export function AlternativesManager() {
     <Card className="p-6 space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex flex-col">
-          <h3 className="mb-2 text-xl font-semibold">候補(Alternatives)</h3>
+          <h3 className="mb-2 text-xl font-semibold">候補</h3>
           {project?.alternatives ? project.alternatives.length < 3
             ? (
                 <div className="flex items-center text-sm gap-2 p-1 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
@@ -199,7 +199,7 @@ export function AlternativesManager() {
                 size="sm"
                 variant="ghost"
               >
-                <Search className="w-4 h-4 mr-1" />楽天検索
+                <Search className="w-4 h-4 mr-1" />楽天から探す
               </Button>
               <Button
                 onClick={() => {
@@ -217,16 +217,18 @@ export function AlternativesManager() {
       {/* 新規追加フォーム */}
       {isAdding && (
         <div className="flex flex-col gap-3 p-4 bg-muted/50 rounded-lg">
+          <label>名前:</label>
           <Input
             className="flex-1"
-            placeholder="例) 商品名:"
+            placeholder="例) dynabook XZ/HY"
             value={newAlternativeName}
             onChange={(e) => setNewAlternativeName(e.target.value)}
           />
+          <label>説明:</label>
           <Textarea
             className="flex-1"
             rows={5}
-            placeholder="例) 価格: 25,000円 商品説明: ブラック 省電力 A社 ..."
+            placeholder="例) 価格: 132,600円 詳細: 13.3インチ Core i5 16GB SSD 512GB TOSHIBA"
             value={newAlternativeDescription}
             onChange={(e) => setNewAlternativeDescription(e.target.value)}
           />
@@ -349,11 +351,13 @@ export function AlternativesManager() {
               >
                 {editingId === alt.id ? (
                   <div className="flex flex-col w-full p-4 gap-2 bg-muted/50">
+                   <label>名前:</label>
                     <Input
                       value={editingName}
                       onChange={(e) => setEditingName(e.target.value)}
                       placeholder="候補名"
                     />
+                   <label>説明:</label>
                     <Textarea
                       value={editingDescription}
                       rows={5}
@@ -374,7 +378,7 @@ export function AlternativesManager() {
                           className="flex items-center"
                         >
                         {loading ? <LoadingSpinner /> : <Bot className="h-4 w-4 mr-1" /> }
-                        {loading ? "回答中..." : "Geminiに聞く" }
+                        {loading ? "回答中..." : "説明を要約する" }
                         </Button>
                       </div>
                     </div>

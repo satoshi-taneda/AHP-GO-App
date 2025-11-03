@@ -17,7 +17,6 @@ export default function ProjectPage() {
   const [project, setProject] = useState<AHPProject>()
   const [customerId, setCustomerId] = useState("")
   const [owner, setOwner] = useState("")
-  const [completed, setCompleted] = useState(false)
   const [loading, setLoading] = useState(true)
   const [result, setResult] = useState(true)
   const [deletingId, setDeletingId] = useState<string | null>(null)
@@ -58,9 +57,9 @@ export default function ProjectPage() {
         router.push("/project/dashboard")
         return
       }
+
       setOwner(projectData.owner)
       setCustomerId(projectData.customer_id)
-      setCompleted(projectData.completed)
 
       setProject({
         id: projectData.project_id,
@@ -79,6 +78,8 @@ export default function ProjectPage() {
         })) || [],
         createdAt: projectData.created_at,
         updatedAt: projectData.updated_at,
+        completed: projectData.completed,
+        published: projectData.published,
       })
       setLoading(false)
     }
@@ -154,10 +155,11 @@ export default function ProjectPage() {
   return (
     <div className="max-w-5xl mx-auto space-y-4">
       <Card className="relative overflow-hidden p-4 bg-gradient-to-r from-muted/50">
-        {user?.id === customerId && (
+        {user?.id === customerId && projectId !== "1762139916553-bblcw9fd3" && (
           <div className="flex justify-end gap-2">
             <Button
               className="text-green-800"
+              disabled={loading}
               size="sm"
               variant="ghost"
               onClick={() => handleEdit(projectId)}
@@ -179,7 +181,8 @@ export default function ProjectPage() {
         <div className="flex justify-between items-top">
           <div className="flex flex-col gap-1">
             <h1 className="text-2xl font-semibold text-foreground mb-2">{project.goal}</h1>
-            <p className="text-muted-foreground">ステータス: {completed ? "完了 ✅" : "実施中 ☑️"}</p>
+            <p className="text-muted-foreground">ステータス: {project.completed ? "完了" : "実施中"}</p>
+            <p className="text-muted-foreground">公開設定: {project.published ? "公開" : "非公開"}</p>
             <p className="text-muted-foreground">
               更新日: {new Date(project.updatedAt).toLocaleDateString("ja-JP", {
               timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"
@@ -217,7 +220,7 @@ export default function ProjectPage() {
               {project.criteria.map((c) => (
                 <Card key={c.id} className="p-4 hover:shadow-md transition-all">
                   <h3 className="font-semibold text-foreground">{c.name}</h3>
-                  {completed ? (
+                  {project.completed ? (
                     <p className="text-blue-500">{c.weight.toFixed(3)}</p>
                   ) : (
                     <p className="text-blue-500"></p>
@@ -228,7 +231,7 @@ export default function ProjectPage() {
             <div className="grid md:grid-cols-3 gap-6 mt-8">
               {project.alternatives.map((alt, i) => (
                 <Card key={alt.id} className="p-4 hover:scale-[1.01] transition-transform">
-                  {completed && (
+                  {project.completed && (
                     <div className ="flex items-center gap-1">
                       {i < 3 && (
                         <Crown className={`${rankColors[i]} w-4 h-4 mr-2`} />
@@ -237,7 +240,7 @@ export default function ProjectPage() {
                     </div>
                   )}
                   <h3 className="text-lg font-semibold">{alt.name}</h3>
-                  {completed && (
+                  {project.completed && (
                     <p className="text-blue-500">{alt.weight.toFixed(3)}</p>
                   )}
                   <p className="text-muted-foreground text-sm mt-1 whitespace-pre-line">{alt.description}</p>

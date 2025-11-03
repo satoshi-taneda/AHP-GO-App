@@ -19,5 +19,7 @@ export type AHPProject = {
   alternatives: Alternative[]
   createdAt: Date
   updatedAt: Date
+  completed: boolean
+  published: boolean
 }
 

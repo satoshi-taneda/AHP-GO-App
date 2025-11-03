@@ -44,7 +44,7 @@ export function CriteriaManager() {
     <Card className="p-6 space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex flex-col">
-          <h3 className="mb-2 text-xl font-semibold">評価基準(Criteria)</h3>
+          <h3 className="mb-2 text-xl font-semibold">評価基準</h3>
           {project?.criteria ? project.criteria.length < 3
             ? (
                 <div className="flex items-center text-sm gap-2 p-1 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
@@ -70,10 +70,11 @@ export function CriteriaManager() {
           )}
       </div>
       {isAdding && (
-        <div className="flex gap-2 p-4 bg-muted/50 rounded-lg">
+        <div className="flex items-center gap-2 p-4 bg-muted/50 rounded-lg">
+          <label className="mr-2">名前:</label>
           <Input
-            className="flex-1 mr-2"
-            placeholder="例) 価格、デザイン、性能など"
+            className="flex-1"
+            placeholder="例) 性能"
             value={newCriterionName}
             onChange={(e) => setNewCriterionName(e.target.value)}
             onKeyDown={(e) => {
@@ -119,6 +120,7 @@ export function CriteriaManager() {
                 >
                   {editingId === criterion.id ? (
                     <>
+                      <label className="mr-2">名前:</label>
                       <Input
                         value={editingName}
                         onChange={(e) => setEditingName(e.target.value)}
