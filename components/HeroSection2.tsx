@@ -17,14 +17,14 @@ export default function HeroSection2() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut"}}
       >
-        <div className="max-w-3xl mx-auto space-y-6">
-        <h2 className="text-5xl font-bold text-foreground">
-        {"『AHP』で最適な選択を"}
-        </h2>
-        <span className="text-5xl font-bold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">シンプルに</span>
-        <p className="text-xl text-muted-foreground text-pretty leading-relaxed">
-          AHP-GOは、より良い意思決定のためのサポートアプリです。
-        </p>
+        <div className="max-w-4xl mx-auto space-y-6">
+          <h2 className="text-5xl font-bold text-foreground">
+          AHPで最適な選択を
+          </h2>
+          <span className="text-5xl font-bold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">シンプルに</span>
+          <p className="text-xl text-muted-foreground text-pretty leading-relaxed">
+            AHP-GOは、より良い意思決定のためのサポートアプリです。
+          </p>
         </div>
         <Button
         size="lg"
@@ -43,11 +43,11 @@ export default function HeroSection2() {
         transition={{ duration: 0.8, delay: 0.3}}
       >
         <Image
-          src="/images/45019.png"
+          src="/images/pcm.png"
           alt="意思決定のイラスト"
-          width={180}
-          height={180}
-          className="h-auto rounded-2xl shadow-lg"
+          width={320}
+          height={320}
+          className="h-auto w-auto rounded-2xl shadow-lg"
         />
       </motion.div>
       </div>

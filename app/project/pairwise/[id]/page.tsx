@@ -521,61 +521,61 @@ export default function PairWiseComparison() {
       {counter <= total ? (
         <>
           <div className="max-w-4xl mx-auto space-y-4">
-            <div className="flex items-center gap-2">
-              <Lightbulb className="text-yellow-400" />
-              <h3 className="text-foreground text-3xl font-semibold">{project?.goal}</h3>
+            <div className="flex justify-between">
+              <div className="flex items-center gap-2">
+                <Lightbulb className="text-yellow-400" />
+                <h3 className="text-foreground text-3xl font-semibold">{project?.goal}</h3>
+              </div>
+            <ProgressCircle step={counter} total={total} />
             </div>
             <div className="flex flex-col gap-1">
-              <p>・スライダー操作で一対比較を行い、[次の比較へ]ボタンを押してください。</p>
-              <p>・テーマごとの比較が完了すると、CI(首尾一貫性)を確認できます。</p>
-              <p>・AHPの詳しい内容はAIに質問できます。</p>
+              <p>スライダー操作で一対比較を行い、[次の比較へ]ボタンを押してください。</p>
+              <p>テーマごとの比較が完了すると、CI(首尾一貫性)を確認できます。</p>
+              <p>一般的にCIが0.1以下で、比較に一貫性があると言われています。</p>
             </div>
             <div className="p-8 bg-muted/30 rounded-xl shadow-lg space-y-4">
               {/* アイテム詳細 */}
               <div className="flex justify-between items-center">
-                <div className="flex items-center gap-4">
-                  {numMatrix > 0
-                    ? (
-                      <h3 className="text-2xl font-semibold">
-                        ・候補の
-                        <span className="text-blue-500 font-bold bg-gradient-to-r from-indigo-500
-                                        via-purple-500 to-pink-500 bg-clip-text text-transparent">
-                          {matrices[numMatrix].id}
-                        </span>
-                        の観点の比較
-                      </h3>
-                      )
-                    : <h3 className="text-2xl font-semibold">・評価基準の比較</h3>
-                  }
-                  {matrices[numMatrix].ci ? matrices[numMatrix].ci < 0.1 ?  (
-                    <AnimatePresence>
-                       <motion.div
-                         key="ok-banner"
-                         initial={{ opacity: 0, y: -10 }}
-                         animate={{ opacity: 1, y: 0 }}
-                         exit={{ opacity: 0, y: -10 }}
-                         transition={{ duration: 0.3 }}
-                         className="flex px-2 items-center border-b-2 border-green-600/20 bg-green-600/10 rounded-sm shadow-md">
-                         <p className="text-green-600 italic">CI: {matrices[numMatrix].ci.toFixed(3)}</p>
-                         <Check className="ml-2 p-1 bg-green-500 rounded-full font-bold text-white shadow-sm" />
-                      </motion.div>
-                    </AnimatePresence>
-                  ) : (
-                    <AnimatePresence>
-                      <motion.div
-                        key="warning-banner"
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3 }}
-                        className="flex px-2 items-center border-b-2 border-yellow-300/20 bg-yellow-50 rounded-sm shadow-md">
-                        <p className="text-yellow-900 italic">CI: {matrices[numMatrix].ci.toFixed(3)}</p>
-                        <AlertTriangle className="w-6 h-6 ml-2 p-1 font-bold text-yellow-600" />
-                     </motion.div>
-                    </AnimatePresence>
-                  ) : null }
-                </div>
-                <ProgressCircle step={counter} total={total} />
+                {numMatrix > 0
+                  ? (
+                    <h3 className="text-2xl font-semibold">
+                      候補の
+                      <span className="text-blue-500 font-bold bg-gradient-to-r from-indigo-500
+                                      via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                        {matrices[numMatrix].id}
+                      </span>
+                      の観点の比較
+                    </h3>
+                    )
+                  : <h3 className="text-2xl font-semibold">評価基準の比較</h3>
+                }
+                {matrices[numMatrix].ci ? matrices[numMatrix].ci < 0.1 ?  (
+                  <AnimatePresence>
+                     <motion.div
+                       key="ok-banner"
+                       initial={{ opacity: 0, y: -10 }}
+                       animate={{ opacity: 1, y: 0 }}
+                       exit={{ opacity: 0, y: -10 }}
+                       transition={{ duration: 0.3 }}
+                       className="flex px-2 items-center border-b-2 border-green-600/20 bg-green-600/10 rounded-sm shadow-md">
+                       <Check className="mr-2 p-1 bg-green-500 rounded-full font-bold text-white shadow-sm" size={20} />
+                       <p className="text-green-600 italic">CI: {matrices[numMatrix].ci.toFixed(3)}</p>
+                    </motion.div>
+                  </AnimatePresence>
+                ) : (
+                  <AnimatePresence>
+                    <motion.div
+                      key="warning-banner"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex px-2 items-center border-b-2 border-yellow-300/20 bg-yellow-50 rounded-sm shadow-md">
+                      <AlertTriangle className="p-1 font-bold text-yellow-600" size={25} />
+                      <p className="text-yellow-900 italic">CI: {matrices[numMatrix].ci.toFixed(3)}</p>
+                   </motion.div>
+                  </AnimatePresence>
+                ) : null }
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex flex-col items-center flex-1 justify-center">

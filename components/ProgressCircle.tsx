@@ -29,8 +29,8 @@ export default function ProgressCircle({step, total}: {step: number, total: numb
           transition={{ duration: 0.6 }}
         />
       </motion.svg>
-      <p className="text-xs text-muted-foreground mt-1">進捗率: {Math.floor(step / total * 100)}%</p>
-      <p className="text-xs text-muted-foreground">残り: {total -step}回</p>
+      <p className="text-sm text-muted-foreground mt-1">進捗率: {Math.floor(step / total * 100)}%</p>
+      <p className="text-sm text-muted-foreground">残り: {total -step}回</p>
     </div>
   )
 }

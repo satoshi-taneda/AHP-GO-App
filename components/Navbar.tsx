@@ -93,12 +93,6 @@ export default function Navbar() {
             variant="ghost"
             onClick={() => router.replace("/project/dashboard")}
           >
-          <Image
-            src="/images/logo.png"
-            alt=""
-            width={32}
-            height={32}
-          />
             AHP-GO
             {/* 光のエフェクト */}
             <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/90 to-transparent
@@ -112,12 +106,6 @@ export default function Navbar() {
             variant="ghost"
             onClick={() => router.replace("/")}
           >
-          <Image
-            src="/images/logo.png"
-            alt=""
-            width={32}
-            height={32}
-          />
           AHP-GO
           </Button>
         )}
