@@ -71,33 +71,37 @@ export function CriteriaManager() {
       </div>
       {isAdding && (
         <div className="flex items-center gap-2 p-4 bg-muted/50 rounded-lg">
-          <label className="mr-2">名前:</label>
-          <Input
-            className="flex-1"
-            placeholder="例) 性能"
-            value={newCriterionName}
-            onChange={(e) => setNewCriterionName(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleAddCriterion()
-              if (e.key === "Escape") {
-                setIsAdding(false)
-                setNewCriterionName("")
-              }
-            }}
-          />
-          <Button onClick={handleAddCriterion} size="sm">
-            追加
-          </Button>
-          <Button
-            onClick={() => {
-              setIsAdding(false)
-              setNewCriterionName("")
-            }}
-            size="sm"
-            variant="ghost"
-          >
-            キャンセル
-          </Button>
+          <div className="flex flex-col gap-2">
+            <label className="mr-2">名前:</label>
+            <Input
+              className="flex-1"
+              placeholder="例) 性能"
+              value={newCriterionName}
+              onChange={(e) => setNewCriterionName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleAddCriterion()
+                if (e.key === "Escape") {
+                  setIsAdding(false)
+                  setNewCriterionName("")
+                }
+              }}
+            />
+            <div className="flex gap-2">
+              <Button onClick={handleAddCriterion} size="sm">
+                追加
+              </Button>
+              <Button
+                onClick={() => {
+                  setIsAdding(false)
+                  setNewCriterionName("")
+                }}
+                size="sm"
+                variant="ghost"
+              >
+                キャンセル
+              </Button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -119,7 +123,7 @@ export function CriteriaManager() {
                   className="flex items-center justify-between p-1 bg-card border border-border rounded-lg"
                 >
                   {editingId === criterion.id ? (
-                    <>
+                    <div className="flex flex-col gap-2">
                       <label className="mr-2">名前:</label>
                       <Input
                         value={editingName}
@@ -135,7 +139,7 @@ export function CriteriaManager() {
                           キャンセル
                         </Button>
                       </div>
-                    </>
+                    </div>
                   ) : (
                     <>
                       <span className="font-medium">{criterion.name}</span>

@@ -29,6 +29,17 @@ export function PublicInput() {
           公開設定
         </Label>
         <div className="flex justify-start">
+          <select
+            id="publishStatus"
+            value={ status ? "public" : "private" }
+            onChange={handleChange}
+            className="border rounded-lg px-3 py-2"
+          >
+            <option value="private">非公開</option>
+            <option value="public">公開</option>
+          </select>
+        </div>
+        <div className="flex justify-start">
           {project?.published && (
             <div className="flex text-sm gap-2 p-1 border border-blue-500/30 bg-blue-500/5 text-blue-500 rounded-lg">
               <Globe className="w-5 h-5 text-blue-700" />
@@ -36,15 +47,6 @@ export function PublicInput() {
             </div>
           )}
         </div>
-        <select
-          id="publishStatus"
-          value={ status ? "public" : "private" }
-          onChange={handleChange}
-          className="border rounded-lg px-3 py-2"
-        >
-          <option value="private">非公開</option>
-          <option value="public">公開</option>
-        </select>
       </div>
     </Card>
   )
