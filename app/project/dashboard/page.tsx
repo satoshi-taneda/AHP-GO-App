@@ -84,10 +84,10 @@ export default function DashBoard() {
                       </p>
                       <div className="flex justify-end items-center gap-2">
                         {p.published && (
-                          <Globe size={15} className="text-blue-500" />
+                          <Globe size={20} />
                         )}
                         {p.completed && (
-                          <CheckCircle2 size={15} className="text-green-700" />
+                          <CheckCircle2 size={20} />
                         )}
                       </div>
                     </div>
@@ -125,10 +125,10 @@ export default function DashBoard() {
                       </p>
                       <div className="flex justify-end items-center gap-2">
                         {p.published && (
-                          <Globe size={15} className="text-blue-500" />
+                          <Globe size={20} />
                         )}
                         {p.completed && (
-                          <CheckCircle2 size={15} className="text-green-700" />
+                          <CheckCircle2 size={20} />
                         )}
                       </div>
                     </div>

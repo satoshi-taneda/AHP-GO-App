@@ -24,10 +24,18 @@ export function PublicInput() {
 
   return (
     <Card className="p-6">
-      <div className="space-y-3">
-        <Label htmlFor="goal" className="text-xl font-semibold">
-          公開設定
-        </Label>
+      <div className="space-y-4">
+        <div className="flex justify-between items-center">
+          <Label htmlFor="goal" className="text-xl font-semibold">
+            公開設定
+          </Label>
+          {project?.published && (
+            <div className="flex text-sm gap-2 p-1 border border-blue-500/30 bg-blue-500/5 text-blue-500 rounded-lg">
+              <Globe className="w-5 h-5 text-blue-700" />
+               <span>すべてのユーザに公開されます</span>
+            </div>
+          )}
+        </div>
         <div className="flex justify-start">
           <select
             id="publishStatus"
@@ -38,14 +46,6 @@ export function PublicInput() {
             <option value="private">非公開</option>
             <option value="public">公開</option>
           </select>
-        </div>
-        <div className="flex justify-start">
-          {project?.published && (
-            <div className="flex text-sm gap-2 p-1 border border-blue-500/30 bg-blue-500/5 text-blue-500 rounded-lg">
-              <Globe className="w-5 h-5 text-blue-700" />
-               <span>すべてのユーザに公開されます</span>
-            </div>
-          )}
         </div>
       </div>
     </Card>

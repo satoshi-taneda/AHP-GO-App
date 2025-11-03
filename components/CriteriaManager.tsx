@@ -42,33 +42,31 @@ export function CriteriaManager() {
 
   return (
     <Card className="p-6 space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col">
-          <h3 className="mb-2 text-xl font-semibold">評価基準</h3>
-          {project?.criteria ? project.criteria.length < 3
-            ? (
-                <div className="flex items-center text-sm gap-2 p-1 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
-                  <AlertTriangle className="w-5 h-5 text-yellow-600" />
-                   <span>重要: 3つ以上追加してください</span>
-                </div>
-              )
-            : project?.criteria ? project.criteria.length > 5
-            ? (
-                <div className="flex items-center text-sm gap-2 p-2 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
-                  <AlertTriangle className="w-5 h-5 text-yellow-600" />
-                   <span>重要: 5より大きいと比較回数が膨大になります</span>
-                </div>
-              )
-            : null : null : null}
-        </div>
-          {!isAdding && (
-            <div className="flex items-center gap-4">
-              <Button onClick={() => setIsAdding(true)} size="sm" variant="ghost">
-                <Plus className="w-4 h-4 mr-1" />追加
-              </Button>
-            </div>
-          )}
+      <div className="flex justify-between">
+        <h3 className="text-xl font-semibold">評価基準</h3>
+        {project?.criteria ? project.criteria.length < 3
+          ? (
+              <div className="flex items-center text-sm gap-2 p-1 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
+                <AlertTriangle className="w-5 h-5 text-yellow-600" />
+                 <span>重要: 3つ以上追加してください</span>
+              </div>
+            )
+          : project?.criteria ? project.criteria.length > 5
+          ? (
+              <div className="flex items-center text-sm gap-2 p-2 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
+                <AlertTriangle className="w-5 h-5 text-yellow-600" />
+                 <span>重要: 5より大きいと比較回数が膨大になります</span>
+              </div>
+            )
+          : null : null : null}
       </div>
+      {!isAdding && (
+        <div className="flex justify-end items-center gap-4">
+          <Button onClick={() => setIsAdding(true)} size="sm" variant="ghost">
+            <Plus className="w-4 h-4 mr-1" />追加
+          </Button>
+        </div>
+      )}
       {isAdding && (
         <div className="flex items-center gap-2 p-4 bg-muted/50 rounded-lg">
           <div className="flex flex-col gap-2">
