@@ -44,7 +44,7 @@ export function GoalInput() {
           value={localGoal}
           onChange={(e) => setLocalGoal(e.target.value)}
           onBlur={handleBlur}
-          className="flex-1 mr-2 font-medium"
+          className="font-medium"
         >
         </Input>
       </div>

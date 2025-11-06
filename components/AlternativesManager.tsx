@@ -4,14 +4,19 @@ import { useState } from "react"
 import { useAHP } from "@/contexts/AHPContext"
 import { fetchRakutenItems } from "@/lib/rakutenApi"
 import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card } from "@/components/ui/card"
-import { Plus, Search,  Trash2, Edit, AlertTriangle, ArrowRight, ArrowLeft, Bot } from "lucide-react"
+import { Plus, Search,  Trash2, Edit, AlertTriangle, ArrowRight, ArrowLeft, Bot, Copy } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import LoadingSpinner from "@/components/LoadingSpinner"
 import ProductCard from "@/components/ProductCard"
-import CopyTextButton from "@/components/CopyTextButton"
+
+type Summary = {
+  name: string
+  description: string
+}
 
 export function AlternativesManager() {
   // コンテキスト使用
@@ -23,7 +28,6 @@ export function AlternativesManager() {
   const [newAlternativeImage, setNewAlternativeImage] = useState<string | null>(null)
   const [isAdding, setIsAdding] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
-
 
   // 検索フォーム
   const [keyword, setKeyword] = useState("")
@@ -40,7 +44,7 @@ export function AlternativesManager() {
 
   // GeminiAPI
   const [loading, setLoading] = useState(false)
-  const [summary, setSummary] = useState("")
+  const [summary, setSummary] = useState<Summary[]>([])
 
   // 新規追加
   const handleAddAlternative = () => {
@@ -59,18 +63,26 @@ export function AlternativesManager() {
 
   // Gemini APIでの商品情報の要約
   const handleSummarize = async () => {
+    if (!editingDescription) {
+      toast("未入力検知",
+            {description: "候補の要約には名前と説明が必要です。",
+            icon: <AlertTriangle className="text-yellow-500" />,
+            className: "border-yellow-300 bg-yellow-50 text-yellow-900 dark:bg-yellow-900 dark:text-yellow-100 dark:border-yellow-700",
+      })
+      return
+    }
     setLoading(true)
+    const description = "名前: " + editingName  + " 説明:  " + editingDescription 
     const res = await fetch("/api/summary", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ productDescription: editingDescription }),
+      body: JSON.stringify({ description }),
     })
 
     const data = await res.json()
-    setSummary(data.summary || "要約できませんでした。")
+    setSummary(data.summary || [])
     setLoading(false)
   }
-
 
   // 楽天検索追加
   const handleAddAlternativeRakuten = (keyword: string, item: any) => {
@@ -198,7 +210,7 @@ export function AlternativesManager() {
             size="sm"
             variant="ghost"
           >
-            <Search className="w-4 h-4 mr-1" />楽天から探す
+            <Search className="w-4 h-4 mr-1" />楽天で探す
           </Button>
           <Button
             onClick={() => {
@@ -274,7 +286,7 @@ export function AlternativesManager() {
         <div className="flex flex-wrap items-center gap-2 p-4 bg-muted/50 rounded-lg">
           <input
             className="flex-1 mr-2 p-2"
-            placeholder="例) ノートパソコン おすすめ"
+            placeholder="例) ノートPC おすすめ"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
           />
@@ -362,23 +374,42 @@ export function AlternativesManager() {
                       onChange={(e) => setEditingDescription(e.target.value)}
                       placeholder="説明"
                     />
-                    <div className="flex justify-between gap-4">
-                      <p className="text-sm text-muted-foreground mt-2">{summary}</p>
-                      <div className="flex flex-col items-center gap-2">
-                        {summary && (
-                          <CopyTextButton text={summary} />
-                        )}
-                        <Button
-                          onClick={handleSummarize}
-                          disabled={loading}
-                          variant="ghost"
-                          size="sm"
-                          className="flex items-center"
-                        >
-                        {loading ? <LoadingSpinner /> : <Bot className="h-4 w-4 mr-1" /> }
-                        {loading ? "回答中..." : "説明を要約する" }
-                        </Button>
-                      </div>
+                    {summary.map((s: Summary, i: number) => (
+                      <label
+                        key={i}
+                        className="flex items-start space-x-2 border rounded-lg p-3 bg-muted"
+                      >
+                        <div>
+                          <div className="flex justify-between items-center">
+                            <p className="font-medium">{s.name}</p>
+                            <Button
+                              onClick={() => {
+                                setEditingName(s.name)
+                                setEditingDescription(s.description)
+                                toast.success("候補へ適用しました！")
+                              }}
+                              variant="ghost"
+                              size="sm"
+                              className="flex items-center"
+                            >
+                            <Copy className="h-4 w-4 mr-1" />適用
+                            </Button>
+                          </div>
+                          <p className="text-sm text-gray-600">{s.description}</p>
+                        </div>
+                      </label>
+                    ))}
+                    <div className="flex justify-end items-center gap-2">
+                      <Button
+                        onClick={handleSummarize}
+                        disabled={loading}
+                        variant="ghost"
+                        size="sm"
+                        className="flex items-center"
+                      >
+                      {loading ? <LoadingSpinner /> : <Bot className="h-4 w-4 mr-1" /> }
+                      {loading ? "回答中" : "候補の要約" }
+                      </Button>
                     </div>
                     <label className="flex flex-col items-center justify-center w-full p-4 border border-dashed border-gray-30
                                       cursor-pointer bg-white hover:bg-muted">
@@ -406,14 +437,14 @@ export function AlternativesManager() {
                     <div className="flex gap-2 items-center justify-end">
                       <Button size="sm" variant="default" onClick={() => {
                         handleEditSave()
-                        setSummary("")
+                        setSummary([])
                         }}
                       >
                         変更
                       </Button>
                       <Button size="sm" variant="ghost" onClick={() => {
                           handleEditCancel()
-                          setSummary("")
+                          setSummary([])
                         }}
                       >
                         キャンセル
