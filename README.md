@@ -11,9 +11,9 @@ AHP-GOは、ユーザーが複数の候補（商品やサービス）を合理�
 
 ## サイトイメージ
 ホーム画面のイメージです。
-![アプリ画面](/docs/imgHomePage.png)
+![アプリ画面](/docs/homePage.png)
 AHPの一対比較画面のイメージです。
-![一対比較画面](/docs/imgPairwise.png)
+![一対比較画面](/docs/pairwise.png)
 
 ## サイトURL
 [https://ahp-go-app.vercel.app](https://ahp-go-app.vercel.app)
@@ -39,9 +39,9 @@ AHPの一対比較画面のイメージです。
   - メールアドレス認証
   - Google認証
 - AHP実施
-  - スコア計算(ウェイトの計算など)
+  - スコア計算(ウェイトの算出など)
   - CI(首尾一貫性)チェック
-  - AHPアシスタント
+  - 質問(Gemini API)
 - グラフ表示
   - 評価基準の棒グラフ表示
   - 候補の円グラフ表示
@@ -50,9 +50,9 @@ AHPの一対比較画面のイメージです。
   - 最終目標・評価基準・候補の編集
   - 最終目標・評価基準・候補の削除
   - すべてのユーザへの公開／非公開の設定
-  - 評価基準の提案
-  - 候補の要約
-  - 商品検索(楽天検索)
+  - 評価基準の提案(Gemini API)
+  - 候補の要約(Gemini API)
+  - 商品検索(楽天API)
 
 ## テスト修正の設計及び実施書
 [テスト修正の設計及び実施書_Googleスプレットシート](https://docs.google.com/spreadsheets/d/1l6FGZCC654AA0JGc9Yi5ejwNrD9lYrjsGLORNtGYA0Y/edit?usp=sharing)
