@@ -1,4 +1,5 @@
 # AHP-GO - 意思決定サポートアプリ
+2025/11/09 v5.5.1
 
 ## アプリ概要
 AHP-GOは、ユーザーが複数の候補（商品やサービス）を合理的に比較し、最適な選択を支援する意思決定サポートアプリです。
@@ -11,13 +12,13 @@ AHP-GOは、ユーザーが複数の候補（商品やサービス）を合理�
 
 ## サイトイメージ
 ホーム画面のイメージです。
-![アプリ画面](/docs/homePage.png)
+![アプリ画面](/docs/home_20251109.png)
 AHPの一対比較画面のイメージです。
-![一対比較画面](/docs/pairwise.png)
+![一対比較画面](/docs/pairwise_20251109.png)
 
 ## サイトURL
 [https://ahp-go-app.vercel.app](https://ahp-go-app.vercel.app)
-ログインページよりゲストログインして、すぐにチュートリアルを開始できます。
+- ログインページよりゲストログインして、すぐにチュートリアルを開始できます。
 
 ## 使用技術
 - フロントエンド：Next.js、React(React HooksまたはContext API)、Tailwind CSS
