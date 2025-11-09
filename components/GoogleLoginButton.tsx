@@ -27,16 +27,17 @@ export default function GoogleLoginButton({ onClick }: GoogleLoginProps) {
  return (
    <div className="relative">
     <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 1.05 } }
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 1.02 } }
       onClick={handleClick}
       disabled={loading}
-      className="w-full py-2 flex items-center justify-center gap-2 border bg-white text-gray-700 hover:bg-gray-50 transition-all duration-300"
+      className="w-full rounded py-2 text-lg flex items-center justify-center gap-2 border bg-white text-gray-700 hover:bg-gray-50
+        transition-all duration-300"
     >
       {loading ? (
         <>
           <Loader2 className="w-5 h-5 animate-spin" />
-          <span>Googleでログイン中...</span>
+          <span>Googleでログイン中</span>
         </>
       ) : (
         <>

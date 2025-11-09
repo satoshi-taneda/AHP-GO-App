@@ -116,8 +116,8 @@ export default function LoginPage() {
           )}
         </AnimatePresence>
         <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block mb-1">
+          <div className="flex flex-col gap-2">
+            <label htmlFor="email" className="block">
               メールアドレス:
             </label>
             <input
@@ -128,7 +128,7 @@ export default function LoginPage() {
               className="w-full px-3 py-2 border rounded"
               required
             />
-            <label htmlFor="password" className="block mb-1">
+            <label htmlFor="password" className="block">
               パスワード:
             </label>
             <input
@@ -140,20 +140,20 @@ export default function LoginPage() {
               required
             />
           </div>
-          <Button
+          <motion.button
             type="submit"
-            className="w-full py-4 text-lg font-medium bg-foreground"
-            disabled={loading}
+            whileHover={{ scale: 1.02 }}
+            className="w-full text-lg bg-blue-500 text-white p-2 rounded shadow hover:bg-blue-600"
           >
-          {loading ? (
-            <div className="flex items-center justify-center gap-2">
-              <Loader2 className="w-5 h-5 animate-spin" />
-              ログイン中...
-            </div>
+            {loading ? (
+              <div className="flex justify-center items-center gap-2">
+                <Loader2 className="w-5 h-5 animate-spin" />
+                <span>ログイン中</span>
+              </div>
             ) : (
-              "ログイン"
-          )}
-        </Button>
+                <span>ログインする</span>
+            )}
+          </motion.button>
         </form>
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">

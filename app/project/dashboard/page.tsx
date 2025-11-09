@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext"
 import { supabase } from "@/lib/supabaseClient"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
-import { CheckCircle2, Globe, Plus } from "lucide-react"
+import { CheckCircle2, Globe, Plus, Loader2 } from "lucide-react"
 import { helpTexts } from "@/data/helpTexts"
 import { Help } from "@/components/Help"
 import Link from "next/link"
@@ -148,7 +148,14 @@ export default function DashBoard() {
           className="bg-blue-500 text-white p-2 rounded-lg shadow hover:bg-blue-600"
           onClick={() => router.push(`/project/pairwise/1762139916553-bblcw9fd3`)}
         >
-          チュートリアル開始
+          {loading ? (
+            <div className="flex justify-center items-center gap-2">
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span>開始中</span>
+            </div>
+          ) : (
+              <span>チュートリアル開始</span>
+          )}
         </motion.button>
       </div>
     </div>

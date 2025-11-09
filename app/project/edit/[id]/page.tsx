@@ -11,6 +11,7 @@ import { GoalInput } from "@/components/GoalInput"
 import { CriteriaManager } from "@/components/CriteriaManager"
 import { AlternativesManager } from "@/components/AlternativesManager"
 import { PublicInput } from "@/components/PublicInput"
+import { Loader2 } from "lucide-react"
 import CancelButton from "@/components/CancelButton"
 import LoadingSpinner from "@/components/LoadingSpinner"
 
@@ -238,7 +239,14 @@ export default function EditProjectPage() {
             className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600"
             onClick={() => handleSaveAll(user, project)}
           >
-            更新
+            {isSaving ? (
+              <div className="flex justify-center items-center gap-2">
+                <Loader2 className="w-5 h-5 animate-spin" />
+                <span>更新中</span>
+              </div>
+            ) : (
+                <span>更新</span>
+            )}
           </motion.button>
         )}
       </div>

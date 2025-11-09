@@ -5,6 +5,8 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabaseClient"
 import { Button } from "@/components/ui/button"
+import { motion } from "framer-motion"
+import { Loader2 } from "lucide-react"
 
 export default function SignupPage() {
   const [email, setEmail] = useState("")
@@ -58,8 +60,6 @@ export default function SignupPage() {
     }
   }
 
-  if (loading) return <LoadingSpinner />
-
   return (
     <div className="max-w-md mx-auto">
       <h1 className="text-3xl font-bold mb-6">新規登録</h1>
@@ -67,8 +67,8 @@ export default function SignupPage() {
       {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
 
       <form onSubmit={handleSignup} className="space-y-4">
-        <div>
-          <label htmlFor="name" className="block mb-1">
+        <div className="flex flex-col gap-2">
+          <label htmlFor="name" className="block">
             表示名:
           </label>
           <input
@@ -78,10 +78,7 @@ export default function SignupPage() {
             onChange={(e) => setName(e.target.value)}
             className="w-full px-3 py-2 border rounded"
           />
-        </div>
-
-        <div>
-          <label htmlFor="email" className="block mb-1">
+          <label htmlFor="email" className="block">
             メールアドレス:
           </label>
           <input
@@ -92,9 +89,6 @@ export default function SignupPage() {
             required
             className="w-full px-3 py-2 border rounded"
           />
-        </div>
-
-        <div>
           <label htmlFor="password" className="block mb-1">
             パスワード:
           </label>
@@ -107,14 +101,20 @@ export default function SignupPage() {
             className="w-full px-3 py-2 border rounded"
           />
         </div>
-
-        <Button
+        <motion.button
           type="submit"
-          disabled={loading}
-          className="w-full bg-foreground py-2 rounded"
+          whileHover={{ scale: 1.02 }}
+          className="w-full text-lg bg-blue-500 text-white p-2 rounded shadow hover:bg-blue-600"
         >
-          {loading ? "登録中..." : "登録する"}
-        </Button>
+          {loading ? (
+            <div className="flex justify-center items-center gap-2">
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span>登録中</span>
+            </div>
+          ) : (
+              <span>登録する</span>
+          )}
+        </motion.button>
       </form>
 
       <div className="mt-8 flex justify-center items-center">

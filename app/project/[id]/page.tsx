@@ -122,7 +122,7 @@ export default function ProjectPage() {
 
   }
   const handleDelete = async (userId: string, id: string) => {
-    if (!confirm("本当にこのプロジェクトを削除しますか？\n※この操作は元に戻せません。")) {
+    if (!confirm("本当にこのプロジェクトを削除しますか？\n注意: この操作は元に戻せません。")) {
       return
     }
     setDeletingId(id)
