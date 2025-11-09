@@ -51,22 +51,13 @@ function LoggedInMenu({ user, profile, router, onLogout }: {user: any, profile: 
 function LoggedOutMenu({ isAuthPage, router }: { isAuthPage: boolean, router: any }) {
   if (isAuthPage) return null
   return (
-    <>
-      <Button
-        size="default"
-        variant="ghost"
-        onClick={() => router.push("/auth/login")}
-      >
-        <LogIn className="w-4 h-4 mr-1" />ログイン
-      </Button>
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        className="text-sm bg-blue-500 text-white px-3 py-2 rounded-lg shadow hover:bg-blue-600"
-        onClick={() => router.push("/auth/signup")}
-      >
-        新規登録
-      </motion.button>
-    </>
+    <Button
+      size="default"
+      variant="ghost"
+      onClick={() => router.push("/auth/login")}
+    >
+      <LogIn className="w-4 h-4 mr-1" />ログイン
+    </Button>
   )
 }
 
