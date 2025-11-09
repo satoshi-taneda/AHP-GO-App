@@ -21,7 +21,7 @@ function LoggedInMenu({ user, profile, router, onLogout }: {user: any, profile: 
     <div className="flex justify-end gap-4">
       <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="p-2">
+        <Button variant="ghost" className="p-2">
         {avatarUrl ? (
           <>
             <div className="rounded-full overflow-hidden">
@@ -33,7 +33,7 @@ function LoggedInMenu({ user, profile, router, onLogout }: {user: any, profile: 
             </div>
           </>
         ) : (
-          <div className="w-6 h-6 rounded-full bg-gradient-to-r from-pink-300 via-purple-300 to-blue-300" />
+          <div className="w-5 h-5 rounded-full bg-gradient-to-r from-pink-300 via-purple-300 to-blue-300" />
         )}
           <span className="text-sm font-midium">{displayName}</span>
         </Button>
@@ -41,6 +41,7 @@ function LoggedInMenu({ user, profile, router, onLogout }: {user: any, profile: 
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => router.push("/")}>ホーム</DropdownMenuItem>
         <DropdownMenuItem onClick={() => router.push("/project/dashboard")}>ダッシュボード</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push("/project/dashboard")}>操作方法(準備中...)</DropdownMenuItem>
         <DropdownMenuItem onClick={onLogout}>ログアウト</DropdownMenuItem>
       </DropdownMenuContent>
       </DropdownMenu>
@@ -83,7 +84,7 @@ export default function Navbar() {
   }
   // ヘッダの左右配置
   return (
-    <div className="container mx-auto p-4 flex justify-between items-center">
+    <div className="container mx-auto p-4 flex justify-between items-center shadow-sm rounded-lg">
       <h1 className="flex items-center gap-2">
         <div className="inline-block relative group">
         {loading ? null : user ? (

@@ -53,7 +53,8 @@ export function CriteriaManager() {
   }
   const handleEditSave = () => {
     if (!editingId || !editingName?.trim()) return
-    updateCriterion(editingId, { name: editingName.trim() })
+    if (!project?.criteria.map(c => c.name).includes(editingName))
+      updateCriterion(editingId, { name: editingName.trim() })
     setEditingId(null)
     setEditingName("")
   }
@@ -97,9 +98,9 @@ export function CriteriaManager() {
   }
 
   return (
-    <Card className="p-6 space-y-4">
+    <Card className="p-6 space-y-4 bg-gradient-to-r from-muted/50">
       <div className="flex justify-between">
-        <h3 className="text-xl font-semibold">評価基準</h3>
+        <h3 className="text-xl font-semibold">2. 評価基準</h3>
         {project?.criteria ? project.criteria.length < 3
           ? (
               <div className="flex items-center text-sm gap-2 p-1 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
@@ -131,7 +132,7 @@ export function CriteriaManager() {
             className="flex items-center"
           >
           {loading ? <LoadingSpinner /> : <Bot className="h-4 w-4 mr-1" /> }
-          {loading ? "回答中" : "相談する" }
+          {loading ? "回答中" : "相談" }
           </Button>
           <Button onClick={() => setIsAdding(true)} size="sm" variant="ghost">
             <Plus className="w-4 h-4 mr-1" />追加
@@ -236,22 +237,19 @@ export function CriteriaManager() {
                   className="flex items-center justify-between p-1 bg-card border border-border rounded-lg"
                 >
                   {editingId === criterion.id ? (
-                    <div className="flex flex-col gap-2">
-                      <label className="mr-2">名前:</label>
+                    <div className="flex items-center gap-4">
                       <Input
                         value={editingName}
                         onChange={(e) => setEditingName(e.target.value)}
                         className="flex-1 mr-2"
                         autoFocus
                       />
-                      <div className="flex gap-2 items-center justify-end">
                         <Button size="sm" variant="default" onClick={handleEditSave}>
                           変更
                         </Button>
                         <Button size="sm" variant="ghost" onClick={handleEditCancel}>
                           キャンセル
                         </Button>
-                      </div>
                     </div>
                   ) : (
                     <>
@@ -262,7 +260,7 @@ export function CriteriaManager() {
                           variant="ghost"
                           onClick={() => handleEditStart(criterion)}
                         >
-                          <Edit className="w-4 h-4 text-green-700" />
+                          <Edit className="w-4 h-4 text-green-800" />
                         </Button>
                         <Button
                           size="icon"

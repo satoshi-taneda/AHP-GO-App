@@ -65,7 +65,7 @@ export function AlternativesManager() {
   const handleSummarize = async () => {
     if (!editingDescription) {
       toast("未入力検知",
-            {description: "候補の要約には名前と説明が必要です。",
+            {description: "要約には名前と説明が必要です。",
             icon: <AlertTriangle className="text-yellow-500" />,
             className: "border-yellow-300 bg-yellow-50 text-yellow-900 dark:bg-yellow-900 dark:text-yellow-100 dark:border-yellow-700",
       })
@@ -182,9 +182,9 @@ export function AlternativesManager() {
   }
 
   return (
-    <Card className="p-6 space-y-4">
+    <Card className="p-6 space-y-4 bg-gradient-to-r from-muted/50">
       <div className="flex justify-between items-center">
-        <h3 className="text-xl font-semibold">候補</h3>
+        <h3 className="text-xl font-semibold">3. 候補</h3>
         {project?.alternatives ? project.alternatives.length < 3
           ? (
               <div className="flex items-center text-sm gap-2 p-1 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">
@@ -360,7 +360,7 @@ export function AlternativesManager() {
                 className="flex items-center justify-between p-2 bg-card border border-border rounded-lg"
               >
                 {editingId === alt.id ? (
-                  <div className="flex flex-col w-full p-4 gap-2 bg-muted/50">
+                  <div className="flex flex-col w-full p-4 gap-2 bg-card">
                    <label>名前:</label>
                     <Input
                       value={editingName}
@@ -408,7 +408,7 @@ export function AlternativesManager() {
                         className="flex items-center"
                       >
                       {loading ? <LoadingSpinner /> : <Bot className="h-4 w-4 mr-1" /> }
-                      {loading ? "回答中" : "候補の要約" }
+                      {loading ? "回答中" : "要約" }
                       </Button>
                     </div>
                     <label className="flex flex-col items-center justify-center w-full p-4 border border-dashed border-gray-30
@@ -481,7 +481,7 @@ export function AlternativesManager() {
                       variant="ghost"
                       onClick={() => handleEditStart(alt)}
                     >
-                      <Edit className="w-4 h-4 text-green-700" />
+                      <Edit className="w-4 h-4 text-green-800" />
                     </Button>
                     <Button
                       size="icon"

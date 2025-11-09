@@ -25,11 +25,11 @@ export function GoalInput() {
   }
 
   return (
-    <Card className="p-6">
+    <Card className="p-6 bg-gradient-to-r from-muted/50">
       <div className="space-y-3">
         <div className="flex justify-between">
           <Label htmlFor="goal" className="text-xl font-semibold">
-            最終目標
+            1. 最終目標
           </Label>
           {project?.goal === "" && (
             <div className="flex text-sm gap-2 p-1 border border-destructive/30 bg-destructive/5 text-destructive rounded-lg">

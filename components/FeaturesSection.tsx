@@ -10,19 +10,19 @@ export default function FeaturesSection() {
       icon: <BarChart2 className="w-6 h-6 text-primary" />,
       bg: "bg-primary/10",
       title: "AHPによる分析",
-      text: "AHP(階層分析法)をAIに相談しながら手軽に体験できます。"
+      text: "AHP(階層分析法)を用いた分析を手軽に体験できます！"
     },
     {
       icon: <Zap className="w-6 h-6 text-primary" />,
       bg: "bg-primary/10",
       title: "直感的な操作が可能",
-      text: "スライダー操作で入力の手間を省きました。"
+      text: "スライダー操作で入力の手間を省きました！"
     },
     {
       icon: <Star className="w-6 h-6 text-primary" />,
       bg: "bg-primary/10",
       title: "シンプルなUI",
-      text: "広告なし、余白を活かしたデザイン、思考を邪魔しません。"
+      text: "広告なし、余白を活かしたデザイン、思考を邪魔しません！"
     }
   ]
 

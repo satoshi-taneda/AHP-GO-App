@@ -21,14 +21,15 @@ export default function CTASection() {
              高額商品、重大な決断に！
           </h3>
           <p className="text-lg text-muted-foreground">
+            チュートリアルからお試しいただけます。
           </p>
-            <Button
-              size="lg"
-              className="bg-foreground text-lg px-8"
-              onClick={() => router.push("/project/dashboard")}
-            >
-              無料で始める
-            </Button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            className="bg-green-500 text-white px-6 py-2 rounded-lg shadow hover:bg-green-600"
+            onClick={() => router.push("/project/dashboard")}
+          >
+            無料で始める
+          </motion.button>
         </Card>
       </motion.div>
     </section>

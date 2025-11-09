@@ -745,7 +745,7 @@ export default function PairWiseComparison() {
             {counter === total  && (
               <motion.button
                 whileHover={{ scale: 1.05 }}
-                className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-500"
+                className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600"
                 onClick={handleExec}
               >
                 AHP計算

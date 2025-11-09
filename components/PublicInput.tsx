@@ -23,7 +23,7 @@ export function PublicInput() {
   }
 
   return (
-    <Card className="p-6">
+    <Card className="p-6 bg-gradient-to-r from-muted/50">
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <Label htmlFor="goal" className="text-xl font-semibold">

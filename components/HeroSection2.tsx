@@ -23,16 +23,16 @@ export default function HeroSection2() {
           </h2>
           <span className="text-5xl font-bold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">シンプルに</span>
           <p className="text-xl text-muted-foreground text-pretty leading-relaxed">
-            AHP-GOは、より良い意思決定のためのサポートアプリです。
+            AHP-GOはより良い意思決定のサポートアプリです！
           </p>
         </div>
-        <Button
-        size="lg"
-        className="mt-8 bg-foreground text-lg px-8"
-        onClick={() => router.push("/project/dashboard")}
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          className="bg-green-500 text-white px-6 py-2 rounded-lg shadow hover:bg-green-600"
+          onClick={() => router.push("/project/dashboard")}
         >
           無料で始める
-        </Button>
+        </motion.button>
       </motion.div>
 
       {/* 左側: イメージ */}
