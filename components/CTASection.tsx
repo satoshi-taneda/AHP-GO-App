@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 
 export default function CTASection() {
   const router = useRouter()
@@ -18,14 +17,14 @@ export default function CTASection() {
         <Card className="max-3xl mx-auto p-12 text-center space-y-6 border-foreground/20
                          relative overflow-hidden bg-gradient-to-r from-muted/50">
           <h3 className="text-3xl font-bold text-foreground text-balance">
-             高額商品、重大な決断に！
+             高額商品の購入・重大な決断に！
           </h3>
           <p className="text-lg text-muted-foreground">
-            まずはチュートリアルからいかがでしょうか？
+            まずは主観的な判断を数値化してみませんか？
           </p>
           <motion.button
             whileHover={{ scale: 1.05 }}
-            className="bg-green-500 text-white px-6 py-2 rounded-lg shadow hover:bg-green-600"
+            className="bg-green-600 text-white px-6 py-2 rounded-lg shadow hover:bg-green-700"
             onClick={() => router.push("/project/dashboard")}
           >
             無料で始める

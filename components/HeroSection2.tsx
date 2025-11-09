@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
 import Image from "next/image"
 
 export default function HeroSection2() {
@@ -28,7 +27,7 @@ export default function HeroSection2() {
         </div>
         <motion.button
           whileHover={{ scale: 1.05 }}
-          className="bg-green-500 text-white px-6 py-2 rounded-lg shadow hover:bg-green-600"
+          className="bg-green-600 text-white px-6 py-2 rounded-lg shadow hover:bg-green-700"
           onClick={() => router.push("/project/dashboard")}
         >
           無料で始める

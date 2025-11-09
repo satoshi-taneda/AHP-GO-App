@@ -272,11 +272,11 @@ export default function PairWiseComparison() {
     if (ci) {
       if (ci < 0.1) {
         if (ciCheck) {
-          toast.success("CIチェック - OK!")
+          toast.success("CIは正常です！")
         }
       } else {
         if (ciCheck) {
-          toast("CIチェック - WARNING!",
+          toast("警告",
                 {description: "判断が不一致の可能性があります。",
                 icon: <AlertTriangle className="text-yellow-500" />,
                 className: "border-yellow-300 bg-yellow-50 text-yellow-900 dark:bg-yellow-900 dark:text-yellow-100 dark:border-yellow-700",
@@ -285,7 +285,12 @@ export default function PairWiseComparison() {
       }
       if (ci >= 0.00001) updateCI(matrices[numMatrix-1].id, ci)
     } else {
-      toast.error("未回答です!")
+      toast("警告",
+            {description: "判断が完全に首尾一貫しており特徴がありません。",
+            icon: <AlertTriangle className="text-yellow-500" />,
+            className: "border-yellow-300 bg-yellow-50 text-yellow-900 dark:bg-yellow-900 dark:text-yellow-100 dark:border-yellow-700",
+      })
+      updateCI(matrices[numMatrix-1].id, 0.00)
     }
 
     // CIチェック中であれば一つ前に戻って終了
