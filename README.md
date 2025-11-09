@@ -5,11 +5,6 @@
 AHP-GOは、ユーザーが複数の候補（商品やサービス）を合理的に比較し、最適な選択を支援する意思決定サポートアプリです。
 自分の重視する基準（価格・デザイン・ブランドなど）を元に、手軽にAHP(階層分析法)を実施できます。
 
-### 対応する課題とソリューション概要
-- 広告なし・シンプルUI・スライダー直感操作
-- 通常のECとは異なり「意思決定支援」に特化
-- PC・スマホ両対応
-
 ## サイトイメージ
 ホーム画面のイメージです。
 ![アプリ画面](/docs/home_20251109-4.png)
@@ -19,13 +14,14 @@ AHPの一対比較画面のイメージです。
 ## サイトURL
 [https://ahp-go-app.vercel.app](https://ahp-go-app.vercel.app)
 - ログインページよりゲストログインして、すぐにチュートリアルを開始できます。
+- PC・スマホ両対応です。
 
 ## 使用技術
 - フロントエンド：Next.js、React(React HooksまたはContext API)、Tailwind CSS
 - バックエンド：Next.js
 - データベース：Supabase
 - デプロイ：Vercel
-- バージョン管理：Git、GitHub
+- バージョン管理：Git／GitHub
 - テスト・デバッグ：DevTools（Safari）
 - CI/CD：GitHub Actions（ESLint）
 - API: Google Gemini API、Google OAuth、Supabase Auth、Rakuten Developers
@@ -47,12 +43,10 @@ AHPの一対比較画面のイメージです。
   - 評価基準の棒グラフ表示
   - 候補の円グラフ表示
 - プロジェクト管理
-  - 最終目標・評価基準・候補の作成
-  - 最終目標・評価基準・候補の編集
-  - 最終目標・評価基準・候補の削除
-  - すべてのユーザへの公開／非公開の設定
-  - 評価基準の提案(Gemini API)
-  - 候補の要約(Gemini API)
+  - 最終目標・評価基準・候補の作成・編集・削除
+  - 他ユーザへの公開／非公開の設定
+  - 評価基準の相談(Gemini API)
+  - 候補の説明要約(Gemini API)
   - 商品検索(楽天API)
 
 ## テスト修正の設計及び実施書
