@@ -21,7 +21,7 @@ export default function CTASection() {
              高額商品、重大な決断に！
           </h3>
           <p className="text-lg text-muted-foreground">
-            チュートリアルからお試しいただけます。
+            まずはチュートリアルからいかがでしょうか？
           </p>
           <motion.button
             whileHover={{ scale: 1.05 }}
