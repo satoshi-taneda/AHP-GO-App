@@ -143,7 +143,7 @@ export default function LoginPage() {
           <motion.button
             type="submit"
             whileHover={{ scale: 1.02 }}
-            className="w-full text-lg bg-blue-500 text-white p-2 rounded shadow hover:bg-blue-600"
+            className="w-full text-lg bg-foreground/90 text-white p-2 rounded shadow hover:bg-foreground"
           >
             {loading ? (
               <div className="flex justify-center items-center gap-2">

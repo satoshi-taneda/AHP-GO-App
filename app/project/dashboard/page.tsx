@@ -148,14 +148,7 @@ export default function DashBoard() {
           className="bg-blue-500 text-white p-2 rounded-lg shadow hover:bg-blue-600"
           onClick={() => router.push(`/project/pairwise/1762139916553-bblcw9fd3`)}
         >
-          {loading ? (
-            <div className="flex justify-center items-center gap-2">
-              <Loader2 className="w-5 h-5 animate-spin" />
-              <span>開始中</span>
-            </div>
-          ) : (
-              <span>チュートリアル開始</span>
-          )}
+          <span>チュートリアル開始</span>
         </motion.button>
       </div>
     </div>
