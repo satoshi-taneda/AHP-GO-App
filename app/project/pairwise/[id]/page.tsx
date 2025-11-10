@@ -775,7 +775,7 @@ export default function PairWiseComparison() {
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="text-4xl font-bold text-blue-600"
           >
-            🎉お疲れ様でした!
+            🎉お疲れ様でした!!
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -783,7 +783,7 @@ export default function PairWiseComparison() {
             transition={{ delay: 0.3, duration: 0.6 }}
             className="mt-4 text-gray-600"
           >
-            これでAHPの実施が完了しました。
+            これでAHPは終了です!
           </motion.p>
             <div className="max-w-xl mx-auto flex justify-between items-center mt-8">
               <Button
