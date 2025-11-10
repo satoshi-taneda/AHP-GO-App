@@ -9,7 +9,7 @@ AHP-GOは、ユーザーが複数の候補（商品やサービス）を合理�
 ホーム画面のイメージです。
 ![アプリ画面](/docs/home_20251110.png)
 AHPの一対比較画面のイメージです。
-![一対比較画面](/docs/pairwise_20251109.png)
+![一対比較画面](/docs/pairwise_20251110.png)
 
 ## サイトURL
 [https://ahp-go-app.vercel.app](https://ahp-go-app.vercel.app)
