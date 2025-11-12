@@ -452,9 +452,7 @@ export function AlternativesManager() {
                     </div>
                   </div>
                 ) : (
-                  <>
-                    {/* 画像プレビュー(存在する場合) */}
-                    <div className="flex items-center gap-3 w-full">
+                  <div className="flex items-center gap-2 w-full">
                     {alt.imageUrl ? (
                       <img
                         src={alt.imageUrl}
@@ -467,32 +465,33 @@ export function AlternativesManager() {
                       </div>
                     )}
                     <div className="min-w-0 flex-1">
-                      <div className="font-medium truncate">{alt.name}</div>
-                        {alt.description && (
-                          <div className="text-sm text-muted-foreground">
-                            {alt.description}
-                          </div>
-                        )}
+                      <div className="font-medium truncate">
+                        {alt.name}
+                      </div>
+                      {alt.description && (
+                        <div className="text-sm text-muted-foreground">
+                          {alt.description}
+                        </div>
+                      )}
+                      <div className="flex justify-end items-center gap-1">
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          onClick={() => handleEditStart(alt)}
+                        >
+                          <Edit className="w-4 h-4 text-green-800" />
+                        </Button>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          onClick={() => deleteAlternative(alt.id)}
+                          className="text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
                       </div>
                     </div>
-                  <div className="flex gap-2 items-center">
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      onClick={() => handleEditStart(alt)}
-                    >
-                      <Edit className="w-4 h-4 text-green-800" />
-                    </Button>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      onClick={() => deleteAlternative(alt.id)}
-                      className="text-destructive hover:text-destructive"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
                   </div>
-                  </>
                 )}
               </motion.div>
           ))}
