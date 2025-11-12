@@ -24,7 +24,7 @@ function generateId(): string {
 
 export function createDefaultProject(): AHPProject { return {
     id: generateId(),
-    goal: "最適なノートPCを買う！",
+    goal: "最適なノートPCを選ぶ！",
     criteria: defaultCriteria,
     alternatives: defaultAlternative,
     createdAt: new Date(),

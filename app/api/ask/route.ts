@@ -4,7 +4,7 @@ export async function POST(req: Request) {
   try {
     const { question } = await req.json()
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" })
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" })
 
     const prompt = `
       あなたはAHP(階層分析法)の専門家です。以下の質問に日本語で丁寧に答えてください。

@@ -24,7 +24,7 @@ export function CriteriaManager() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editingName, setEditingName] = useState("")
 
-  // Geminiでの追加
+  // Gemini相談
   const [loading, setLoading] = useState(false)
   const [isGenerating, setIsGenerating] = useState(false)
   const [criteria, setCriteria] = useState<Criteria[]>([])
@@ -82,7 +82,13 @@ export function CriteriaManager() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ goal }),
     })
-
+    if (!res.ok) {
+      const text = await res.text()
+      console.error("API error", text)
+      toast("APIエラー", { description: "サーバ側でエラーが発生しました。" })
+      setLoading(false)
+      return
+    }
     const data = await res.json()
     setCriteria(data.criteria || [])
     setLoading(false)
