@@ -377,7 +377,7 @@ export function AlternativesManager() {
                     {summary.map((s: Summary, i: number) => (
                       <label
                         key={i}
-                        className="flex items-start space-x-2 border rounded-lg p-3 bg-muted"
+                        className="flex items-start space-x-2 border rounded-lg p-3 bg-muted cursor-pointer"
                       >
                         <div>
                           <div className="flex justify-between items-center">
@@ -392,7 +392,7 @@ export function AlternativesManager() {
                               size="sm"
                               className="flex items-center"
                             >
-                            <Copy className="h-4 w-4 mr-1" />適用
+                              <Copy className="h-4 w-4 mr-1" />
                             </Button>
                           </div>
                           <p className="text-sm text-gray-600">{s.description}</p>
