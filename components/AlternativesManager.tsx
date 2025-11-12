@@ -453,26 +453,33 @@ export function AlternativesManager() {
                   </div>
                 ) : (
                   <div className="flex items-center gap-2 w-full">
-                    {alt.imageUrl ? (
-                      <img
-                        src={alt.imageUrl}
-                        alt={alt.name}
-                        className="w-12 h-12 rounded object-cover border"
-                      />
-                    ) : (
-                      <div className="w-12 h-12 rounded bg-muted-foreground/10 flex items-center justify-center text-xs text-muted-foreground border">
-                        No Image
-                      </div>
-                    )}
                     <div className="min-w-0 flex-1">
-                      <div className="font-medium truncate">
-                        {alt.name}
-                      </div>
-                      {alt.description && (
-                        <div className="text-sm text-muted-foreground">
-                          {alt.description}
+                      <div className="flex justify-start items-center gap-2">
+                        {alt.imageUrl ? (
+                          <img
+                            src={alt.imageUrl}
+                            alt={alt.name}
+                            className="w-12 h-12 rounded object-cover border"
+                          />
+                        ) : (
+                          <div
+                            className="w-12 h-12 rounded bg-muted-foreground/10
+                              flex items-center justify-center text-xs text-muted-foreground border"
+                          >
+                            No Image
+                          </div>
+                        )}
+                        <div className="flex flex-col">
+                          <div className="font-medium truncate">
+                            {alt.name}
+                          </div>
+                          {alt.description && (
+                            <div className="text-sm text-muted-foreground">
+                              {alt.description}
+                            </div>
+                          )}
                         </div>
-                      )}
+                      </div>
                       <div className="flex justify-end items-center gap-1">
                         <Button
                           size="icon"
