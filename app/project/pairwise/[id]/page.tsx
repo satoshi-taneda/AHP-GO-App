@@ -1,4 +1,5 @@
 "use client"
+import type { Criterion, Alternative } from "@/lib/types"
 import { useEffect, useState } from "react"
 import { useRouter, useParams } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext"
@@ -34,6 +35,10 @@ type Pairwise = {
   altDescription: { a: string, b: string }
 }
 
+type Review = {
+  description: string
+}
+
 export default function PairWiseComparison() {
   let totalLoop = 0
   const router = useRouter()
@@ -44,6 +49,7 @@ export default function PairWiseComparison() {
   const [loading, setLoading] = useState(true)
   const [ahpLoading, setAhpLoading] = useState(true)
   const [complete, setComplete] = useState(false)
+  const [complete2, setComplete2] = useState(false)
   const [ciCheck, setCiCheck] = useState(false)
   const [selected, setSelected] = useState<number>(0)
   const [numCriteria, setNumCriteria] = useState<number>(0)
@@ -55,6 +61,7 @@ export default function PairWiseComparison() {
   const [row, setRow] = useState<number>(0)
   const [column, setColumn] = useState<number>(1)
   const [matrices, setMatrices] = useState<ComparisonMatrix[]>([])
+  const [review, setReview] = useState<Review[]>([])
   const [weight, setWeight] = useState<Weight>({
     weightCriteria: [],
     weightAlternatives: [],
@@ -331,7 +338,6 @@ export default function PairWiseComparison() {
       ...prev,
       score: score
     }))
-
     // 完了フラグ
     setComplete(true)
   }
@@ -477,19 +483,45 @@ export default function PairWiseComparison() {
   }, [row, column, project])
 
   useEffect(() => {
-    if (!complete || !project) return
-    console.log(weight)
-    const updateWeight = async () => {
+    if (loading || !complete || !project) return
+    let strResult = ""
+    strResult = "最終目標は「" + project.goal + "」"
+    strResult = strResult + "\n評価基準について、"
+      + project.criteria.map((c: Criterion, i: number) => "「" + c.name + "」" + "のウェイトが" +  weight.weightCriteria[i].toFixed(3)).join("、 ")
+    strResult = strResult + "\n代替案について、"
+      + project.alternatives.map((alt: Alternative, i: number) =>  "「" + alt.name + "」" + "のスコアが" +  weight.score[i].toFixed(3)).join("、 ")
+    const updateReview = async () => {
+      setLoading(true)
+      const res = await fetch("/api/generate-review", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ strResult }),
+      })
+      if (!res.ok) {
+        const text = await res.text()
+        console.error("API error", text)
+        toast("APIエラー", { description: "サーバ側でエラーが発生しました。" })
+        setLoading(false)
+        return
+      }
+      const data = await res.json()
+      setReview(data.review || [])
+      setComplete2(true)
+    }
+    updateReview()
+  }, [complete])
 
-      // Supabase-criteriaテーブルの更新日と完了フラグの更新
+  useEffect(() => {
+    if (!review || !complete2 || !project) return
+    const updateWeight = async () => {
+      // Supabase-criteriaテーブルの更新日、完了フラグ、総評の更新
       const { error } = await supabase
         .from('project')
-        .update({updated_at: new Date(), completed: true})
+        .update({updated_at: new Date(), completed: true, general_review: review[0]?.description})
         .eq('project_id', projectId)
       if (error) {
         console.error(`プロジェクト更新失敗`)
       }
-
       // Supabase-criteriaテーブルのweight更新
       for (let i = 0; i < numCriteria; i++) {
         const { error } = await supabase
@@ -514,11 +546,10 @@ export default function PairWiseComparison() {
           break
         }
       }
+      setLoading(false)
     }
-    setLoading(true)
     updateWeight()
-    setLoading(false)
-  }, [complete])
+  }, [complete2, review])
 
   // ロード中の場合は、ローディングスピナーを表示
   if (loading) return <LoadingSpinner />
@@ -537,7 +568,7 @@ export default function PairWiseComparison() {
             </div>
             <div className="flex flex-col gap-1">
               <p>スライダー操作で一対比較を行い、[次の比較へ]ボタンを押してください。</p>
-              <p>テーマごとの比較が完了すると、CIを確認できます。</p>
+              <p>一対比較が完了すると、CIを確認できます。</p>
               <div className="space-y-6">
                 <h2 className="font-semibold flex items-center justify-start">
                   AHPにおけるCIとは？
@@ -785,27 +816,28 @@ export default function PairWiseComparison() {
           >
             これでAHPは終了です!
           </motion.p>
-            <div className="max-w-xl mx-auto flex justify-between items-center mt-8">
-              <Button
-                size="lg"
-                variant="ghost"
-                disabled={loading || counter === 1}
-                onClick={() => {
-                  handlePrev(numAlternatives)
-                  setAhpLoading(true)
-                }}
-              >
-                やり直す
-              </Button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600"
-                onClick={() => router.push(`/project/${projectId}`)}
-              >
-                結果をみる
-              </motion.button>
-            </div>
+          <div className="max-w-xl mx-auto flex justify-between items-center mt-8">
+            <Button
+              size="lg"
+              variant="ghost"
+              onClick={() => {
+                handlePrev(numAlternatives)
+                setAhpLoading(true)
+                setComplete(false)
+                setComplete2(false)
+              }}
+            >
+              やり直す
+            </Button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600"
+              onClick={() => router.push(`/project/${projectId}`)}
+            >
+              結果をみる
+            </motion.button>
           </div>
+        </div>
       )}
     </>
   )

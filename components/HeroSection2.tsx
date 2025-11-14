@@ -44,9 +44,9 @@ export default function HeroSection2() {
         <Image
           src="/images/pcm.png"
           alt="意思決定のイラスト"
-          width={320}
-          height={320}
-          className="h-auto w-auto rounded-2xl shadow-lg"
+          width={150}
+          height={120}
+          className="w-auto h-auto rounded-xl shadow-xl"
         />
       </motion.div>
       </div>

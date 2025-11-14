@@ -19,6 +19,7 @@ export default function ProjectPage() {
   const [project, setProject] = useState<AHPProject>()
   const [customerId, setCustomerId] = useState("")
   const [owner, setOwner] = useState("")
+  const [review, setReview] = useState("")
   const [loading, setLoading] = useState(true)
   const [result, setResult] = useState(true)
   const [deletingId, setDeletingId] = useState<string | null>(null)
@@ -62,6 +63,7 @@ export default function ProjectPage() {
 
       setOwner(projectData.owner)
       setCustomerId(projectData.customer_id)
+      setReview(projectData.general_review)
 
       setProject({
         id: projectData.project_id,
@@ -230,6 +232,7 @@ export default function ProjectPage() {
               {project.criteria.map((c) => (
                 <Card key={c.id} className="p-4 hover:shadow-md transition-all">
                   <h3 className="font-semibold text-foreground">{c.name}</h3>
+                  <p className="text-lg text-blue-500">{c.weight.toFixed(3)}</p>
                 </Card>
               ))}
             </div>
@@ -256,6 +259,11 @@ export default function ProjectPage() {
           </div>
         ) : (
           <AHPResultCharts project={project} />
+        )}
+        {review && (
+          <Card className="p-4 hover:scale-[1.01] transition-transform mt-8">
+            <p className="whitespace-pre-line text-muted-foreground text-sm">{review}</p>
+          </Card>
         )}
       </Card>
       <ReturnButton />
