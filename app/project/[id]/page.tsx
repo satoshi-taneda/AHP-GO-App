@@ -183,31 +183,31 @@ export default function ProjectPage() {
           </div>
         )}
         <div className="flex justify-between items-top">
-          <div className="flex flex-col gap-1">
-            <h1 className="text-2xl font-semibold text-foreground mb-2">{project.goal}</h1>
-            <p className="text-muted-foreground">ステータス: {project.completed ? "完了" : "実施中"}</p>
-            <p className="text-muted-foreground">公開設定: {project.published ? "公開中" : "非公開"}</p>
+          <div className="flex flex-col">
+            <h1 className="text-2xl font-semibold text-foreground">{project.goal}</h1>
+            <p className="text-muted-foreground mt-4">・ステータス: {project.completed ? "完了" : "実施中"}</p>
+            <p className="text-muted-foreground">・公開設定: {project.published ? "公開中" : "非公開"}</p>
             <p className="text-muted-foreground">
-              更新日: {new Date(project.updatedAt).toLocaleDateString("ja-JP", {
+              ・更新日: {new Date(project.updatedAt).toLocaleDateString("ja-JP", {
               timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"
               })}
             </p>
             <p className="text-muted-foreground">
-              作成日: {new Date(project.createdAt).toLocaleDateString("ja-JP", {
+              ・作成日: {new Date(project.createdAt).toLocaleDateString("ja-JP", {
               timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"
               })}
             </p>
-            <p className="text-muted-foreground">作成者: {owner || "匿名"}</p>
+            <p className="text-muted-foreground">・作成者: {owner || "匿名"}</p>
           </div>
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center mt-8">
           <div className="space-y-6">
             <h2 className="text-lg font-semibold flex items-center">
               結果について
               <Help text={helpTexts.result.short} title="結果について" more={helpTexts.result.long} />
             </h2>
           </div>
-          <div className="flex justify-end items-end gap-2 mt-2">
+          <div className="flex justify-end items-end gap-2">
             <Button
               variant="ghost"
               size="sm"
@@ -228,7 +228,8 @@ export default function ProjectPage() {
         </div>
         {result ? (
           <div>
-            <div className="grid md:grid-cols-5 gap-4 mt-8">
+            <h3 className="mt-8">評価基準:</h3>
+            <div className="grid md:grid-cols-5 gap-4">
               {project.criteria.map((c) => (
                 <Card key={c.id} className="p-4 hover:shadow-md transition-all">
                   <h3 className="font-semibold text-foreground">{c.name}</h3>
@@ -236,7 +237,8 @@ export default function ProjectPage() {
                 </Card>
               ))}
             </div>
-            <div className="grid md:grid-cols-3 gap-6 mt-8">
+            <h3 className="mt-8">候補:</h3>
+            <div className="grid md:grid-cols-3 gap-6">
               {project.alternatives.map((alt, i) => (
                 <Card key={alt.id} className="p-4 hover:scale-[1.01] transition-transform">
                   {project.completed && (
@@ -258,12 +260,18 @@ export default function ProjectPage() {
             </div>
           </div>
         ) : (
-          <AHPResultCharts project={project} />
+          <div className="mt-8">
+            <h3>図:</h3>
+            <AHPResultCharts project={project} />
+          </div>
         )}
         {review && (
-          <Card className="p-4 hover:scale-[1.01] transition-transform mt-8">
-            <p className="whitespace-pre-line text-muted-foreground text-sm">{review}</p>
-          </Card>
+          <div className="mt-8">
+            <h3>考察:</h3>
+            <Card className="p-8 hover:scale-[1.01] transition-transform">
+              <p className="whitespace-pre-line text-muted-foreground text-sm">{review}</p>
+            </Card>
+          </div>
         )}
       </Card>
       <ReturnButton />
