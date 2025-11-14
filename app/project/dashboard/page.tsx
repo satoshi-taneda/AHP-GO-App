@@ -142,10 +142,15 @@ export default function DashBoard() {
           <p className="text-muted-foreground">現在プロジェクトがありません。</p>
         )}
       </div>
-      <div className="flex justify-end">
+      <div className="max-w-4xl mx-auto relative py-4">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t" />
+        </div>
+      </div>
+      <div className="flex justify-center">
         <motion.button
           whileHover={{ scale: 1.05 }}
-          className="bg-blue-500 text-white p-2 rounded-lg shadow hover:bg-blue-600"
+          className="max-w-xs w-full bg-blue-500 text-white p-2 rounded-lg shadow hover:bg-blue-600"
           onClick={() => router.push(`/project/pairwise/1762139916553-bblcw9fd3`)}
         >
           <span>チュートリアル開始</span>
