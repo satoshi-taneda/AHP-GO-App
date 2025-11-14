@@ -36,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </AHPProvider>
           </main>
           <footer className="mx-auto text-sm border-t border-border mt-64">
-            <p className="m-2 text-center text-muted-foreground">&copy; 2025 AHP-GO v6.2.1 All rights reserved.</p>
+            <p className="m-2 text-center text-muted-foreground">&copy; 2025 AHP-GO v6.2.2 All rights reserved.</p>
             <div className="flex flex-col justify-center items-center gap-2 py-2 text-muted-foreground">
               <p>本サイトの回答機能はGoogle Gemini APIを利用しています。 Powered by Google Gemini</p>
               <div className="flex">
