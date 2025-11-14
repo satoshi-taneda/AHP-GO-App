@@ -559,12 +559,9 @@ export default function PairWiseComparison() {
       {counter <= total ? (
         <>
           <div className="max-w-4xl mx-auto space-y-4">
-            <div className="flex justify-between">
-              <div className="flex items-center gap-2">
-                <Lightbulb className="text-yellow-500" />
-                <h3 className="text-foreground text-3xl font-semibold">{project?.goal}</h3>
-              </div>
-            <ProgressCircle step={counter} total={total} />
+            <div className="flex items-center gap-2">
+              <Lightbulb className="text-yellow-500" size={32} />
+              <h3 className="text-foreground text-3xl font-semibold">{project?.goal}</h3>
             </div>
             <div className="flex flex-col gap-1">
               <p>スライダー操作で一対比較を行い、[次の比較へ]ボタンを押してください。</p>
@@ -742,6 +739,9 @@ export default function PairWiseComparison() {
               ) :  (
                 <AhpCompaisonSlider itemA={pairwise.criteriaName.a} itemB={pairwise.criteriaName.b} value={selected} onValueChange={setSelected} />
               )}
+              <div className="flex justify-end">
+                <ProgressCircle step={counter} total={total} />
+              </div>
             </div>
           </div>
           <div className="max-w-lg mx-auto flex justify-between items-center mt-4">
