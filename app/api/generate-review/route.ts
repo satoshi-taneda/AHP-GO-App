@@ -8,9 +8,9 @@ export async function POST(req: Request) {
 
     const prompt = `
       あなたはAHP（階層分析法）の専門家です。
-      AHPを実施した結果は以下のようになりました。結果の考察をお願いします。
+      AHPを実施した結果は以下のようになりました。実施結果の考察をお願いします。
       ${strResult}
-      次のJSON構造で考察を回答してください。
+      次のJSON構造で考察を回答してください。データの数は1つのみで構いません。
         {
           "review": [
             { "description": "考察" }

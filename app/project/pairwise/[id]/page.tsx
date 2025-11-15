@@ -485,11 +485,12 @@ export default function PairWiseComparison() {
   useEffect(() => {
     if (loading || !complete || !project) return
     let strResult = ""
-    strResult = "最終目標は「" + project.goal + "」"
+    strResult = `最終目標は「${project.goal}」です。`
     strResult = strResult + "\n評価基準について、"
-      + project.criteria.map((c: Criterion, i: number) => "「" + c.name + "」" + "のウェイトが" +  weight.weightCriteria[i].toFixed(3)).join("、 ")
-    strResult = strResult + "\n代替案について、"
-      + project.alternatives.map((alt: Alternative, i: number) =>  "「" + alt.name + "」" + "のスコアが" +  weight.score[i].toFixed(3)).join("、 ")
+      + project.criteria.map((c: Criterion, i: number) =>
+      `${c.name}のウェイトは${weight.weightCriteria[i].toFixed(3)}`).join("です。")
+    strResult = strResult + "\n代替案について、" + project.alternatives.map((alt: Alternative, i: number) =>
+      `「${alt.name}(${alt.description})」のスコアは${weight.score[i].toFixed(3)}`).join("です。")
     const updateReview = async () => {
       setLoading(true)
       const res = await fetch("/api/generate-review", {
