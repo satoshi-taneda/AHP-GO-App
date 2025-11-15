@@ -18,7 +18,7 @@ AHPの一対比較画面のイメージです。
 - PC・スマホ両対応です。
 
 ## 使用技術
-- フロントエンド：Next.js、React(React HooksまたはContext API)、Tailwind CSS
+- フロントエンド：TypeScript、React(React HooksまたはContext API)、Tailwind CSS
 - バックエンド：Next.js
 - データベース：Supabase
 - デプロイ：Vercel
