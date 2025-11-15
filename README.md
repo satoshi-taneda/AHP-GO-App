@@ -1,6 +1,6 @@
 # AHP-GO - 意思決定サポートアプリ
-- 更新日: 2025/11/15
-- バージョン: v6.3.0 リリース
+- 更新日: 2025/11/15(土)
+- バージョン: v6.4.0
 
 ## アプリ概要
 - AHP-GOは、ユーザーが複数の候補（商品やサービス）を合理的に比較し、最適な選択を支援する意思決定サポートアプリです。
@@ -25,7 +25,7 @@ AHPの一対比較画面のイメージです。
 - バージョン管理：Git／GitHub
 - テスト・デバッグ：DevTools（Safari）
 - CI/CD：GitHub Actions（ESLint）
-- API: Google Gemini API、Google OAuth、Supabase Auth、Rakuten Developers
+- API: Google Gemini API(model: gemini-2.0-flash)、Google OAuth、Supabase Auth、Rakuten Developers
 
 ## 設計ドキュメント
 [要件定義・基本設計・詳細設計の一覧_Googleスプレットシート](https://docs.google.com/spreadsheets/d/1V91GRCaYrSsLrcwU9XdJmRWXALMv9mCTmsPwTVjy8nw/edit?usp=share_link)

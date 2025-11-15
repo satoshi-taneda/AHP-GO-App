@@ -38,9 +38,9 @@ const AHPContext = createContext<AHPContextType | undefined>(undefined)
 
 // 初期プロジェクト
 const defaultCriteria: Criterion[] = [
-  { id: generateId(), name: "価格", weight: 0 },
-  { id: generateId(), name: "デザイン", weight: 0 },
   { id: generateId(), name: "性能", weight: 0 },
+  { id: generateId(), name: "デザイン", weight: 0 },
+  { id: generateId(), name: "目新しさ", weight: 0 },
 ]
 
 const defaultAlternative: Alternative[] = [
