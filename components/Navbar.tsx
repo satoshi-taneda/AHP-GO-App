@@ -41,7 +41,6 @@ function LoggedInMenu({ user, profile, router, onLogout }: {user: any, profile: 
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => router.push("/")}>ホーム</DropdownMenuItem>
         <DropdownMenuItem onClick={() => router.push("/project/dashboard")}>ダッシュボード</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => router.push("/project/dashboard")}>操作方法(準備中...)</DropdownMenuItem>
         <DropdownMenuItem onClick={onLogout}>ログアウト</DropdownMenuItem>
       </DropdownMenuContent>
       </DropdownMenu>
