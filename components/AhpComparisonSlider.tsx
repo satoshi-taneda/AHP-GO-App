@@ -62,7 +62,7 @@ export default function AhpComparisonSlider({
 
       {/* 現在値をスライダー中央に表示 */}
       {value !== -9 && (
-        <span className="text-center text-muted-foreground font-semibold text-3xl">{Math.abs(value) + 1}</span>
+        <span className="flex justify-center text-muted-foreground font-semibold text-3xl">{Math.abs(value) + 1}</span>
       )}
       <div className="flex justify-between text-sm text-gray-600">
         <span>←{itemA}重視</span>
