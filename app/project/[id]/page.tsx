@@ -11,6 +11,9 @@ import { Card } from "@/components/ui/card"
 import { Award, BarChart3, Pencil, Trash, Crown } from "lucide-react"
 import { helpTexts } from "@/data/helpTexts"
 import { Help } from "@/components/Help"
+import ReactMarkdown from "react-markdown"
+import remarkMath from "remark-math"
+import rehypeKatex from "rehype-katex"
 import ReturnButton from "@/components/ReturnButton"
 import LoadingSpinner from "@/components/LoadingSpinner"
 import AHPResultCharts from "@/components/AHPResultCharts"
@@ -262,8 +265,13 @@ export default function ProjectPage() {
         {review && (
           <div className="mt-8">
             <h3>考察:</h3>
-            <Card className="p-8 hover:scale-[1.01] transition-transform hover:shadow-lg">
-              <p className="whitespace-pre-line text-muted-foreground text-sm">{review}</p>
+            <Card className="text-sm p-8 hover:scale-[1.01] transition-transform hover:shadow-lg">
+              <ReactMarkdown
+                remarkPlugins={[remarkMath]}
+                rehypePlugins={[rehypeKatex]}
+              >
+                {review}
+              </ReactMarkdown>
             </Card>
           </div>
         )}

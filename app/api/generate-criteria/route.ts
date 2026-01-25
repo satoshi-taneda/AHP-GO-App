@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server"
-import { GoogleGenerativeAI } from "@google/generative-ai"
+import { GoogleGenAI } from "@google/genai"
+
+const ai = new GoogleGenAI({});
 
 export async function POST(req: Request) {
-    const { goal } = await req.json()
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" })
-
-    const prompt = `
+  const { goal } = await req.json()
+  const response = await ai.models.generateContent({
+    model: "gemini-2.5-flash",
+    contents: `
       あなたはAHP（階層分析法）の専門家です。
       最終目標「${goal}」を達成するために最適な評価基準を提案してください。
       各評価基準には簡潔な説明をつけてください。
@@ -19,18 +20,17 @@ export async function POST(req: Request) {
       }
       ただし、"name"は1つの概念を表す単語や短いフレーズにしてください。
     `
+  })
+  const text = response.text!.trim()
 
-    const result = await model.generateContent(prompt)
-    const text = result.response.text().trim()
-
-    try {
-      // Geminiの出力がJSON文字列なら直接parse
-      const json = JSON.parse(text)
-      return NextResponse.json(json)
-    } catch {
-      // JSONとしてパースできない場合は抽出
-      const jsonText = text.match(/\{[\s\S]*\}/)?.[0]
-      if (jsonText) return NextResponse.json(JSON.parse(jsonText))
-      return NextResponse.json({ error: "JSON抽出に失敗しました", raw: text })
-    }
+  try {
+    // Geminiの出力がJSON文字列なら直接parse
+    const json = JSON.parse(text)
+    return NextResponse.json(json)
+  } catch {
+    // JSONとしてパースできない場合は抽出
+    const jsonText = text.match(/\{[\s\S]*\}/)?.[0]
+    if (jsonText) return NextResponse.json(JSON.parse(jsonText))
+    return NextResponse.json({ error: "JSON抽出に失敗しました", raw: text })
+  }
 }
