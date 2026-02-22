@@ -34,12 +34,6 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     )
 
-    // profiles削除
-    await supabaseAdmin
-      .from("profiles")
-      .delete()
-      .eq("id", userId)
-
     // Authユーザー削除
     const { error } =
       await supabaseAdmin.auth.admin.deleteUser(userId)
@@ -63,7 +57,5 @@ Deno.serve(async (req) => {
         headers: corsHeaders
       }
     )
-
   }
-
 })
