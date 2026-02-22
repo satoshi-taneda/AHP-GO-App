@@ -230,7 +230,9 @@ export default function ProjectPage() {
               {project.criteria.map((c) => (
                 <Card key={c.id} className="p-4 hover:shadow-md transition-all hover-shadow-lg">
                   <h3 className="font-semibold text-foreground">{c.name}</h3>
-                  <p className="text-lg text-blue-500">{c.weight.toFixed(3)}</p>
+                  {project.completed && (
+                    <p className="text-lg text-blue-500">{c.weight.toFixed(3)}</p>
+                  )}
                 </Card>
               ))}
             </div>

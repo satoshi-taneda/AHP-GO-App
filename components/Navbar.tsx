@@ -4,18 +4,60 @@ import { useRouter } from "next/navigation"
 import { usePathname } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
-import { motion } from "framer-motion"
+import { useState } from "react"
+import { supabase } from "@/lib/supabaseClient"
 import { LogIn } from "lucide-react"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import Image from "next/image"
 
 function LoggedInMenu({ user, profile, router, onLogout }: {user: any, profile: any, router: any,  onLogout: () => void; }) {
+  const [loading, setLoading] = useState(false)
   const displayName =
     profile?.name ||
     user?.user_metadata?.full_name ||
     user?.email ||
     "ゲスト"
   const avatarUrl = user?.user_metadata?.avatar_url
+
+  const deleteAccount = async () => {
+    const confirmed = window.confirm("本当に退会しますか？")
+    if (!confirmed) return
+    setLoading(true)
+
+    if (!user) {
+      alert("ログインしていません")
+      setLoading(false)
+      return
+    }
+
+    const { error } =
+      await supabase.functions.invoke(
+        "delete-user",
+        {
+          body: { userId: user.id }
+        }
+      )
+    if (error) {
+      console.error(error)
+      alert("削除失敗")
+      setLoading(false)
+      return
+    }
+
+    const { error: error2 } = await supabase
+      .from("customer")
+      .delete()
+      .eq("customer_id", user.id)
+
+    if (error2) {
+      console.error(error2)
+    }
+
+    await supabase.auth.signOut()
+    alert("退会しました")
+
+    router.replace("/")
+  }
 
   return (
     <div className="flex justify-end gap-4">
@@ -41,6 +83,7 @@ function LoggedInMenu({ user, profile, router, onLogout }: {user: any, profile: 
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => router.push("/")}>ホーム</DropdownMenuItem>
         <DropdownMenuItem onClick={() => router.push("/project/dashboard")}>ダッシュボード</DropdownMenuItem>
+        <DropdownMenuItem onClick={deleteAccount} disabled={loading || user.id === "a623f996-e0b0-4de0-9782-71313b0b4840"}>会員削除</DropdownMenuItem>
         <DropdownMenuItem onClick={onLogout}>ログアウト</DropdownMenuItem>
       </DropdownMenuContent>
       </DropdownMenu>
