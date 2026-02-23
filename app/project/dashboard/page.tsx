@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext"
 import { supabase } from "@/lib/supabaseClient"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
-import { CheckCircle2, Globe, Plus, Loader2 } from "lucide-react"
+import { Target, CheckCircle2, Globe, Plus } from "lucide-react"
 import { helpTexts } from "@/data/helpTexts"
 import { Help } from "@/components/Help"
 import Link from "next/link"
@@ -49,12 +49,24 @@ export default function DashBoard() {
   if (loading) return <LoadingSpinner />
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      <div className="space-y-6">
+    <div className="max-w-5xl mx-auto space-y-6">
+      <div className="flex justify-between items-center">
         <h2 className="text-lg font-semibold flex items-center">
           AHPとは？
           <Help text={helpTexts.ahp.short} title="AHPとは？" more={helpTexts.ahp.long} />
         </h2>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          className="max-w-xs bg-green-500 text-white p-2 rounded-lg shadow hover:bg-green-600"
+          onClick={() => router.push(`/project/pairwise/1762139916553-bblcw9fd3`)}
+        >
+          <span>チュートリアル開始</span>
+        </motion.button>
+      </div>
+      <div className="max-w-5xl mx-auto relative py-4">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t" />
+        </div>
       </div>
       <div className="flex justify-between items-center">
         <h2 className="text-lg font-semibold">Projects</h2>
@@ -92,7 +104,10 @@ export default function DashBoard() {
                         )}
                       </div>
                     </div>
-                    <h2 className="font-semibold text-lg mt-2">{p.goal}</h2>
+                    <div className="flex justify-start items-center gap-2">
+                      <Target className="rounded-full text-foreground" size={18} />
+                      <h2 className="font-semibold text-lg mt-2">{p.goal}</h2>
+                    </div>
                   </Link>
                 </div>
             </div>
@@ -101,7 +116,7 @@ export default function DashBoard() {
           <p className="text-muted-foreground">現在プロジェクトがありません。</p>
         )}
       </div>
-      <div className="max-w-4xl mx-auto relative py-4">
+      <div className="max-w-5xl mx-auto relative py-4">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
         </div>
@@ -132,7 +147,10 @@ export default function DashBoard() {
                         )}
                       </div>
                     </div>
-                    <h2 className="font-semibold text-lg mt-2">{p.goal}</h2>
+                    <div className="flex justify-start items-center gap-2">
+                      <Target className="rounded-full text-foreground" size={18} />
+                      <h2 className="font-semibold text-lg mt-2">{p.goal}</h2>
+                    </div>
                     <p className="text-foreground text-xs text-end">{p.customer.name || "匿名"}</p>
                   </Link>
                 </div>
@@ -142,19 +160,10 @@ export default function DashBoard() {
           <p className="text-muted-foreground">現在プロジェクトがありません。</p>
         )}
       </div>
-      <div className="max-w-4xl mx-auto relative py-4">
+      <div className="max-w-5xl mx-auto relative py-4">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
         </div>
-      </div>
-      <div className="flex justify-center">
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          className="max-w-xs w-full bg-blue-500 text-white p-2 rounded-lg shadow hover:bg-blue-600"
-          onClick={() => router.push(`/project/pairwise/1762139916553-bblcw9fd3`)}
-        >
-          <span>チュートリアル開始</span>
-        </motion.button>
       </div>
     </div>
   )

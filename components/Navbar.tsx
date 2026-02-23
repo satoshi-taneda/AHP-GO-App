@@ -83,8 +83,8 @@ function LoggedInMenu({ user, profile, router, onLogout }: {user: any, profile: 
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => router.push("/")}>ホーム</DropdownMenuItem>
         <DropdownMenuItem onClick={() => router.push("/project/dashboard")}>ダッシュボード</DropdownMenuItem>
-        <DropdownMenuItem onClick={deleteAccount} disabled={loading || user.id === "a623f996-e0b0-4de0-9782-71313b0b4840"}>会員削除</DropdownMenuItem>
         <DropdownMenuItem onClick={onLogout}>ログアウト</DropdownMenuItem>
+        <DropdownMenuItem onClick={deleteAccount} disabled={loading || user.id === "a623f996-e0b0-4de0-9782-71313b0b4840"}>退会</DropdownMenuItem>
       </DropdownMenuContent>
       </DropdownMenu>
     </div>

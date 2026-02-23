@@ -162,11 +162,11 @@ export default function ProjectPage() {
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       <Card className="relative overflow-hidden p-4 bg-gradient-to-r from-muted/50">
-        {user?.id === customerId && projectId !== "1762139916553-bblcw9fd3" && (
+        {user?.id === customerId && (
           <div className="flex justify-end gap-2">
             <Button
               className="text-green-800"
-              disabled={loading}
+              disabled={loading || projectId === "1762139916553-bblcw9fd3"}
               size="sm"
               variant="ghost"
               onClick={() => handleEdit(projectId)}
@@ -176,7 +176,7 @@ export default function ProjectPage() {
             <Button
               onClick={() => handleDelete(user.id, projectId)}
               className="text-destructive"
-              disabled={loading}
+              disabled={loading || projectId === "1762139916553-bblcw9fd3"}
               size="sm"
               variant="ghost"
             >
