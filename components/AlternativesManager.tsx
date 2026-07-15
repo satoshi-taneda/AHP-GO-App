@@ -2,7 +2,6 @@
 import type { Alternative } from "@/lib/types"
 import { useState } from "react"
 import { useAHP } from "@/contexts/AHPContext"
-import { fetchRakutenItems } from "@/lib/rakutenApi"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
@@ -101,9 +100,20 @@ export function AlternativesManager() {
   // 楽天検索
   const handleSearch = async () => {
     if (!keyword) return
+
     try {
       setSearchLoading(true)
-      const items = await fetchRakutenItems(keyword)
+
+      const res = await fetch(
+        `/api/rakuten?keyword=${encodeURIComponent(keyword)}`
+      )
+
+      if (!res.ok) {
+        throw new Error("データ取得に失敗しました")
+      }
+
+      const items = await res.json()
+
       setResults(items.slice(0, 2))
       setIsSearched(true)
     } catch (err) {
@@ -120,7 +130,17 @@ export function AlternativesManager() {
     if (itemCount < 30) {
       try {
         setSearchLoading(true)
-        const items = await fetchRakutenItems(keyword)
+
+        const res = await fetch(
+          `/api/rakuten?keyword=${encodeURIComponent(keyword)}`
+        )
+
+        if (!res.ok) {
+          throw new Error("データ取得に失敗しました")
+        }
+
+        const items = await res.json()
+
         setItemCount((prev: number) => {
           const nextCount = prev + 2
           setResults(items.slice(nextCount, nextCount + 2))
@@ -139,7 +159,15 @@ export function AlternativesManager() {
     if (itemCount > 0) {
       try {
         setSearchLoading(true)
-        const items = await fetchRakutenItems(keyword)
+        const res = await fetch(
+          `/api/rakuten?keyword=${encodeURIComponent(keyword)}`
+        )
+
+        if (!res.ok) {
+          throw new Error("データ取得に失敗しました")
+        }
+
+        const items = await res.json()
         setItemCount((prev: number) => {
           const newCount = prev - 2
           setResults(items.slice(newCount, newCount + 2))
