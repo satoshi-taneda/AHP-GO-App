@@ -33,7 +33,12 @@ export async function GET(request: NextRequest) {
     `&hits=30`;
 
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, {
+      headers: {
+        Referer: "https://ahp-go-app.vercel.app",
+        Orign: "https://ahp-go-app.vercel.app",
+      },
+    });
 
     if (!res.ok) {
       const error = await res.text();
