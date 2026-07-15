@@ -36,7 +36,9 @@ export async function GET(request: NextRequest) {
     const res = await fetch(url, {
       headers: {
         Referer: "https://ahp-go-app.vercel.app",
-        Orign: "https://ahp-go-app.vercel.app",
+        Origin: "https://ahp-go-app.vercel.app",
+        accessKey: accessKey,
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0 Safari/537.36",
       },
     });
 
