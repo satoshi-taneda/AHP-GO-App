@@ -1,0 +1,339 @@
+" An example for a vimrc file.
+
+" Maintainer:  The Vim Project <https://github.com/vim/vim>
+" Last Change:  2023 Aug 10
+" Former Maintainer:  Bram Moolenaar <Bram@vim.org>
+
+" To use it, copy it to
+" for Unix:  ~/.vimrc
+" for Amiga:  s:.vimrc
+" for MS-Windows:  $VIM\_vimrc
+" for Haiku:  ~/config/settings/vim/vimrc
+" for OpenVMS:  sys$login:.vimrc
+
+" When started as "evim", evim.vim will already have done these settings, bail
+" out.
+if v:progname =~? "evim"
+  finish
+endif
+
+" Get the defaults that most users want.  source $VIMRUNTIME/defaults.vim
+
+if has("vms")
+  set nobackup                                  " do not keep a backup file, use versions instead
+else
+  set backup                                    " keep a backup file (restore to previous version)
+  if has('persistent_undo')
+  set undofile                                  " keep an undo file (undo changes after closing)
+  endif
+endif
+if &t_Co > 2 || has("gui_running")
+                                                " Switch on highlighting the last used search pattern.
+  set hlsearch
+endif
+
+" Put these in an autocmd group, so that we can delete them easily.
+augroup vimrcEx
+  au!
+
+  " For all text files set 'textwidth' to 78 characters.
+  autocmd FileType text setlocal textwidth=78
+augroup END
+
+" Add optional packages.
+" The matchit plugin makes the % command work better, but it is not backwards
+" compatible.
+" The ! means the package won't be loaded right away but when plugins are
+" loaded during initialization.
+if has('syntax') && has('eval')
+  packadd! matchit
+endif
+
+let s:cache_dir = expand('~/.cache/vim')
+
+" make backup file.
+let s:backupdir = s:cache_dir . '/backup'
+if !isdirectory(s:backupdir)
+  call mkdir(s:backupdir, 'p')
+endif
+execute 'set backupdir=' . s:backupdir
+""set backup
+
+" make swap file.
+let s:swapdir = s:cache_dir . '/swap'
+if !isdirectory(s:swapdir)
+  call mkdir(s:swapdir, 'p')
+endif
+execute 'set directory=' . s:swapdir
+set swapfile
+
+" make undo file.
+let s:undodir = s:cache_dir . '/undo'
+if isdirectory(s:undodir)
+  call mkdir(s:undodir, 'p')
+endif
+execute 'set undodir=' . s:undodir
+set undofile
+
+
+" ── 基本設定 ─────────────────────────────────────────────────
+set nocompatible
+set encoding=utf-8
+set fileencoding=utf-8
+set number                                      " 行番号表示
+set cursorline                                  " カーソル行をハイライト
+set visualbell                                  " ビープ音を可視化
+set signcolumn=yes                              " サインカラム常時表示（LSPエラー表示用）
+set updatetime=300                              " レスポンス向上
+set hidden                                      " バッファを隠す
+set nobackup
+set termguicolors                               " True Color 有効化
+set splitright
+set splitbelow
+set incsearch
+set hlsearch
+set ignorecase
+set smartcase
+set scrolloff=8
+set list
+set clipboard=unnamed                           " クリップボード設定
+set autoread                                    " 編集中のファイルが変更されたら自動で読み直す
+set smartindent                                 " Smart indent.
+set expandtab                                   " Insert tab with half-width space.
+set shiftwidth=2                                " The amount of blank space to insert with each command or smart indent.
+set tabstop=2                                   " Tab width with 2 spaces.
+set softtabstop=2                               " Insert a tab with 2 minutes of half-width space.
+set hidden
+set listchars=tab:ˆ/,trail:~,extends:>,precedes:<,space:˙
+""set noswapfile                                " swapfile機能無効化
+""set relativenumber                            " 相対行番号
+let mapleader = " "                             " LeaderをSpace に
+nnoremap <leader>f :Files<CR>
+nnoremap <leader>w :w<CR>
+nnoremap <leader>h :bprevious<CR>
+nnoremap <leader>l :bnext<CR>
+nnoremap <leader>bd :bd<CR>
+nnoremap <Esc><Esc> :nohlsearch<CR>
+nnoremap <leader>g :Rg<CR>
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+inoremap <expr> <S-TAB> pumvisible() ? '<C-p>' : '<C-h>'
+inoremap <expr> <Enter> pumvisible() ? '<LEFT><RIGHT>' : '<Enter>'
+inoremap {<Enter> {<Enter>}<ESC><S-o>
+inoremap { {}<LEFT>
+inoremap [ []<LEFT>
+inoremap ( ()<LEFT>
+inoremap " ""<LEFT>
+inoremap ' ''<LEFT>
+inoremap ` ``<LEFT>
+inoremap jj <ESC>
+inoremap っj <ESC>
+inoremap <C-f> <RIGHT>
+inoremap <C-b> <LEFT>
+
+vnoremap p "_dP
+
+" ── vim-plug プラグイン ──────────────────────────────────────
+" 初回インストール方法:
+"   curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+"     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+" その後 Vim を開いて :PlugInstall を実行
+
+call plug#begin('~/.vim/plugged')
+
+" --- LSP ---
+Plug 'prabirshrestha/vim-lsp'                   " LSP クライアント
+Plug 'mattn/vim-lsp-settings'                   " LSP サーバー自動インストール
+Plug 'prabirshrestha/asyncomplete.vim'          " 補完エンジン
+Plug 'prabirshrestha/asyncomplete-lsp.vim'      " LSP補完ソース
+
+" --- シンタックス / ハイライト ---
+Plug 'pangloss/vim-javascript'                  " JavaScript ハイライト
+Plug 'leafgarland/typescript-vim'               " TypeScript ハイライト
+Plug 'maxmellon/vim-jsx-pretty'                 " JSX/TSX ハイライト
+" --- ステータスライン ---
+Plug 'itchyny/lightline.vim'
+
+" --- カラースキーム ---
+Plug 'joshdick/onedark.vim'
+
+Plug 'alvan/vim-closetag'
+Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'tpope/vim-fugitive'
+call plug#end()
+
+" ── カラースキーム ───────────────────────────────────────────
+" silent! でエラーを抑制（PlugInstall前でも起動できるようにする）
+set background=dark
+let g:onedark_terminal_italics = 1              " イタリック有効（対応ターミナルのみ）
+silent! colorscheme onedark
+hi SpecialKey ctermfg=8 guifg=#666666
+highlight LineNr ctermfg=226 guifg=#ffd700
+highlight CursorLineNr ctermfg=226 guifg=#f0c674 ""gui=bold
+highlight Comment ctermfg=65 guifg=#5f875f ""cterm=italic gui=italic
+
+" ── LSP 設定 ─────────────────────────────────────────────────
+" vim-lsp-settings が typescript-language-server を自動でインストール
+" :LspInstallServer を実行すると現在のファイルタイプ用サーバーが入る
+
+if executable('/usr/local/bin/typescript-language-server')
+  au User lsp_setup call lsp#register_server({
+        \ 'name': 'typescript-language-server',
+        \ 'cmd': {server_info->['/usr/local/bin/typescript-language-server', '--stdio']},
+        \ 'allowlist': ['typescript', 'typescript.tsx', 'typescriptreact', 'javascript', 'javascriptreact'],
+        \ })
+endif
+
+" LSP 機能のキーマップ（LSP接続時のみ有効）
+function! s:on_lsp_buffer_enabled() abort
+  setlocal omnifunc=lsp#complete
+
+  nmap <buffer> gd <plug>(lsp-definition)
+                                                " 型定義ジャンプ
+  nmap <buffer> gy <plug>(lsp-type-definition)
+                                                " 参照一覧
+  nmap <buffer> gr <plug>(lsp-references)
+                                                " 実装ジャンプ
+  nmap <buffer> gi <plug>(lsp-implementation)
+                                                " ホバー（型情報・ドキュメント表示）
+  nmap <buffer> K  <plug>(lsp-hover)
+                                                " リネーム
+  nmap <buffer> <leader>rn <plug>(lsp-rename)
+                                                " コードアクション（クイックフィックス等）
+  nmap <buffer> <leader>ca <plug>(lsp-code-action)
+                                                " 前後のエラーに移動
+  nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+  nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+                                                " エラー一覧
+  nmap <buffer> <leader>e <plug>(lsp-document-diagnostics)
+endfunction
+augroup lsp_install
+  autocmd!
+  autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+
+" 診断メッセージの表示設定
+let g:lsp_diagnostics_echo_cursor = 1           " カーソル位置のエラーをステータスバーに表示
+let g:lsp_diagnostics_virtual_text_enabled = 0  " インライン表示はオフ（好みで 1 に）
+let g:lsp_diagnostics_signs_enabled = 1
+let g:lsp_diagnostics_signs_error   = {'text': '✗'}
+let g:lsp_diagnostics_signs_warning = {'text': '⚠'}
+let g:lsp_diagnostics_signs_hint    = {'text': '💡'}
+
+set pumheight=10
+set completeopt=menuone,noinsert,noselect
+let g:asyncomplete_min_chars = 2
+let g:asyncomplete_matchfuzzy = 1
+
+" ── asyncomplete 補完設定 ────────────────────────────────────
+" Tab/Shift-Tab で補完候補を選択
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <CR>    pumvisible() ? asyncomplete#close_popup() : "\<CR>"
+
+let g:asyncomplete_auto_popup = 1
+let g:asyncomplete_auto_completeopt = 1
+let g:asyncomplete_popup_delay = 100
+
+" ── ステータスライン ─────────────────────────────────────────
+set laststatus=2
+let g:lightline = {
+      \ 'colorscheme': 'onedark',
+      \ 'active': {
+      \   'left':  [['mode', 'paste'], ['gitbranch'], ['filename', 'modified']],
+      \   'right': [['lineinfo'], ['percent'], ['fileencoding'], ['filetype']]
+      \ },
+      \ 'component': {
+      \   'filename': '%f',
+      \   'fileencoding': '%{&fileencoding ==# "" ? &encofing : &fileencoding}',
+      \   'gitbranch': '%{FugitiveHead()}'
+      \ }
+      \ }
+
+" ── 全角スペースのハイライト ─────────────────────────────────
+function! s:highlight_zenkaku_space() abort
+  highlight ZenkakuSpace cterm=underline ctermfg=Red guibg=#e06c75
+endfunction
+
+augroup zenkaku_space
+  autocmd!
+  autocmd ColorScheme * call s:highlight_zenkaku_space()
+  autocmd BufRead,BufNew * match ZenkakuSpace /　/
+augroup END
+
+call s:highlight_zenkaku_space()
+
+" ── Swapファイル検出時 ───────────────────────────────────────
+""autocmd SwapExists * let v:swapchoice = 'a'
+autocmd SwapExists * call s:WarnSwapExists()
+function! s:WarnSwapExists() abort
+  echohl WarningMsg
+  echom "⚠ 既に編集中のファイルです: " . expand("<afile>") . " (swap: " . v:swapname . ")"
+  echohl None
+  redraw
+  sleep 1
+  let v:swapchoice = 'a'
+endfunction
+
+" ── 前回位置保存 ─────────────────────────────────────────────
+autocmd BufReadPost *
+  \ if line("'\"") > 1 && line("'\"") <= line("$") |
+  \   exe "normal! g`\"" |
+  \ endif
+
+" ── インデント設定 ───────────────────────────────────────────
+augroup filetypeIndent
+  autocmd!
+  autocmd FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType php    setlocal tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType javascript,javascriptreact,typescript,typescriptreact
+        \ setlocal tabstop=2 softtabstop=2 shiftwidth=2
+augroup END
+
+" ── コメント整列 ─────────────────────────────────────────────
+nnoremap <leader>aa :%call AlignComment()<CR>
+function! AlignComment() range
+  let maxcol = 0
+  for lnum in range(a:firstline, a:lastline)
+    let text = getline(lnum)
+    let idx = match(text, ' // ')
+    if idx < 0
+      continue
+    endif
+    let width = strdisplaywidth(strpart(text, 0, idx))
+    if width > maxcol
+      let maxcol = width
+    endif
+  endfor
+
+  for lnum in range(a:firstline, a:lastline)
+    let text = getline(lnum)
+    let idx = match(text, ' // ')
+    if idx < 0
+      continue
+    endif
+    let before = strpart(text, 0, idx)
+    let after = strpart(text, idx)
+    let pad = maxcol - strdisplaywidth(before)
+    call setline(lnum, before . repeat(' ', pad) . after)
+  endfor
+endfunction
+
+" ── コメント処理 ─────────────────────────────────────────────
+vnoremap cc :<C-U>'<,'>call ToggleComment()<CR>
+function! ToggleComment() range
+  for lnum in range(a:firstline, a:lastline)
+    let text = getline(lnum)
+    if text =~# '^// '
+      let newtext = substitute(text, '^// ', '', '')
+    else
+      let newtext = '// ' . text
+    endif
+    call setline(lnum, newtext)
+  endfor
+endfunction
+
