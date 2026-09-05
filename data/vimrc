@@ -81,7 +81,7 @@ set nocompatible
 set encoding=utf-8
 set fileencoding=utf-8
 set number                                      " 行番号表示
-set cursorline                                  " カーソル行をハイライト
+set cursorline                                " カーソル行をハイライト
 set visualbell                                  " ビープ音を可視化
 set signcolumn=yes                              " サインカラム常時表示（LSPエラー表示用）
 set updatetime=300                              " レスポンス向上
@@ -136,123 +136,123 @@ inoremap <C-b> <LEFT>
 
 vnoremap p "_dP
 
-" ── vim-plug プラグイン ──────────────────────────────────────
-" 初回インストール方法:
-"   curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-"     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-" その後 Vim を開いて :PlugInstall を実行
-
-call plug#begin('~/.vim/plugged')
-
-" --- LSP ---
-Plug 'prabirshrestha/vim-lsp'                   " LSP クライアント
-Plug 'mattn/vim-lsp-settings'                   " LSP サーバー自動インストール
-Plug 'prabirshrestha/asyncomplete.vim'          " 補完エンジン
-Plug 'prabirshrestha/asyncomplete-lsp.vim'      " LSP補完ソース
-
-" --- シンタックス / ハイライト ---
-Plug 'pangloss/vim-javascript'                  " JavaScript ハイライト
-Plug 'leafgarland/typescript-vim'               " TypeScript ハイライト
-Plug 'maxmellon/vim-jsx-pretty'                 " JSX/TSX ハイライト
-" --- ステータスライン ---
-Plug 'itchyny/lightline.vim'
-
-" --- カラースキーム ---
-Plug 'joshdick/onedark.vim'
-
-Plug 'alvan/vim-closetag'
-Plug 'junegunn/fzf.vim'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'tpope/vim-fugitive'
-call plug#end()
-
-" ── カラースキーム ───────────────────────────────────────────
-" silent! でエラーを抑制（PlugInstall前でも起動できるようにする）
-set background=dark
-let g:onedark_terminal_italics = 1              " イタリック有効（対応ターミナルのみ）
-silent! colorscheme onedark
-hi SpecialKey ctermfg=8 guifg=#666666
-highlight LineNr ctermfg=226 guifg=#ffd700
-highlight CursorLineNr ctermfg=226 guifg=#f0c674 ""gui=bold
-highlight Comment ctermfg=65 guifg=#5f875f ""cterm=italic gui=italic
-
-" ── LSP 設定 ─────────────────────────────────────────────────
-" vim-lsp-settings が typescript-language-server を自動でインストール
-" :LspInstallServer を実行すると現在のファイルタイプ用サーバーが入る
-
-if executable('/usr/local/bin/typescript-language-server')
-  au User lsp_setup call lsp#register_server({
-        \ 'name': 'typescript-language-server',
-        \ 'cmd': {server_info->['/usr/local/bin/typescript-language-server', '--stdio']},
-        \ 'allowlist': ['typescript', 'typescript.tsx', 'typescriptreact', 'javascript', 'javascriptreact'],
-        \ })
-endif
-
-" LSP 機能のキーマップ（LSP接続時のみ有効）
-function! s:on_lsp_buffer_enabled() abort
-  setlocal omnifunc=lsp#complete
-
-  nmap <buffer> gd <plug>(lsp-definition)
-                                                " 型定義ジャンプ
-  nmap <buffer> gy <plug>(lsp-type-definition)
-                                                " 参照一覧
-  nmap <buffer> gr <plug>(lsp-references)
-                                                " 実装ジャンプ
-  nmap <buffer> gi <plug>(lsp-implementation)
-                                                " ホバー（型情報・ドキュメント表示）
-  nmap <buffer> K  <plug>(lsp-hover)
-                                                " リネーム
-  nmap <buffer> <leader>rn <plug>(lsp-rename)
-                                                " コードアクション（クイックフィックス等）
-  nmap <buffer> <leader>ca <plug>(lsp-code-action)
-                                                " 前後のエラーに移動
-  nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-  nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-                                                " エラー一覧
-  nmap <buffer> <leader>e <plug>(lsp-document-diagnostics)
-endfunction
-augroup lsp_install
-  autocmd!
-  autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-augroup END
-
-" 診断メッセージの表示設定
-let g:lsp_diagnostics_echo_cursor = 1           " カーソル位置のエラーをステータスバーに表示
-let g:lsp_diagnostics_virtual_text_enabled = 0  " インライン表示はオフ（好みで 1 に）
-let g:lsp_diagnostics_signs_enabled = 1
-let g:lsp_diagnostics_signs_error   = {'text': '✗'}
-let g:lsp_diagnostics_signs_warning = {'text': '⚠'}
-let g:lsp_diagnostics_signs_hint    = {'text': '💡'}
-
-set pumheight=10
-set completeopt=menuone,noinsert,noselect
-let g:asyncomplete_min_chars = 2
-let g:asyncomplete_matchfuzzy = 1
-
-" ── asyncomplete 補完設定 ────────────────────────────────────
-" Tab/Shift-Tab で補完候補を選択
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <CR>    pumvisible() ? asyncomplete#close_popup() : "\<CR>"
-
-let g:asyncomplete_auto_popup = 1
-let g:asyncomplete_auto_completeopt = 1
-let g:asyncomplete_popup_delay = 100
-
-" ── ステータスライン ─────────────────────────────────────────
+""" ── vim-plug プラグイン ──────────────────────────────────────
+""" 初回インストール方法:
+"""   curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+"""     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+""" その後 Vim を開いて :PlugInstall を実行
+""
+""call plug#begin('~/.vim/plugged')
+""
+""" --- LSP ---
+""Plug 'prabirshrestha/vim-lsp'                   " LSP クライアント
+""Plug 'mattn/vim-lsp-settings'                   " LSP サーバー自動インストール
+""Plug 'prabirshrestha/asyncomplete.vim'          " 補完エンジン
+""Plug 'prabirshrestha/asyncomplete-lsp.vim'      " LSP補完ソース
+""
+""" --- シンタックス / ハイライト ---
+""Plug 'pangloss/vim-javascript'                  " JavaScript ハイライト
+""Plug 'leafgarland/typescript-vim'               " TypeScript ハイライト
+""Plug 'maxmellon/vim-jsx-pretty'                 " JSX/TSX ハイライト
+""" --- ステータスライン ---
+""Plug 'itchyny/lightline.vim'
+""
+""" --- カラースキーム ---
+""Plug 'joshdick/onedark.vim'
+""
+""Plug 'alvan/vim-closetag'
+""Plug 'junegunn/fzf.vim'
+""Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+""Plug 'tpope/vim-fugitive'
+""call plug#end()
+""
+""" ── LSP 設定 ─────────────────────────────────────────────────
+""" vim-lsp-settings が typescript-language-server を自動でインストール
+""" :LspInstallServer を実行すると現在のファイルタイプ用サーバーが入る
+""
+""if executable('/usr/local/bin/typescript-language-server')
+""  au User lsp_setup call lsp#register_server({
+""        \ 'name': 'typescript-language-server',
+""        \ 'cmd': {server_info->['/usr/local/bin/typescript-language-server', '--stdio']},
+""        \ 'allowlist': ['typescript', 'typescript.tsx', 'typescriptreact', 'javascript', 'javascriptreact'],
+""        \ })
+""endif
+""
+""" LSP 機能のキーマップ（LSP接続時のみ有効）
+""function! s:on_lsp_buffer_enabled() abort
+""  setlocal omnifunc=lsp#complete
+""
+""  nmap <buffer> gd <plug>(lsp-definition)
+""                                                " 型定義ジャンプ
+""  nmap <buffer> gy <plug>(lsp-type-definition)
+""                                                " 参照一覧
+""  nmap <buffer> gr <plug>(lsp-references)
+""                                                " 実装ジャンプ
+""  nmap <buffer> gi <plug>(lsp-implementation)
+""                                                " ホバー（型情報・ドキュメント表示）
+""  nmap <buffer> K  <plug>(lsp-hover)
+""                                                " リネーム
+""  nmap <buffer> <leader>rn <plug>(lsp-rename)
+""                                                " コードアクション（クイックフィックス等）
+""  nmap <buffer> <leader>ca <plug>(lsp-code-action)
+""                                                " 前後のエラーに移動
+""  nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+""  nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+""                                                " エラー一覧
+""  nmap <buffer> <leader>e <plug>(lsp-document-diagnostics)
+""endfunction
+""augroup lsp_install
+""  autocmd!
+""  autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+""augroup END
+""
+""" 診断メッセージの表示設定
+""let g:lsp_diagnostics_echo_cursor = 1           " カーソル位置のエラーをステータスバーに表示
+""let g:lsp_diagnostics_virtual_text_enabled = 0  " インライン表示はオフ（好みで 1 に）
+""let g:lsp_diagnostics_signs_enabled = 1
+""let g:lsp_diagnostics_signs_error   = {'text': '✗'}
+""let g:lsp_diagnostics_signs_warning = {'text': '⚠'}
+""let g:lsp_diagnostics_signs_hint    = {'text': '💡'}
+""
+""set pumheight=10
+""set completeopt=menuone,noinsert,noselect
+""let g:asyncomplete_min_chars = 2
+""let g:asyncomplete_matchfuzzy = 1
+""
+""" ── asyncomplete 補完設定 ────────────────────────────────────
+""" Tab/Shift-Tab で補完候補を選択
+""inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+""inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+""inoremap <expr> <CR>    pumvisible() ? asyncomplete#close_popup() : "\<CR>"
+""
+""let g:asyncomplete_auto_popup = 1
+""let g:asyncomplete_auto_completeopt = 1
+""let g:asyncomplete_popup_delay = 100
+""
+""" ── ステータスライン ─────────────────────────────────────────
 set laststatus=2
-let g:lightline = {
-      \ 'colorscheme': 'onedark',
-      \ 'active': {
-      \   'left':  [['mode', 'paste'], ['gitbranch'], ['filename', 'modified']],
-      \   'right': [['lineinfo'], ['percent'], ['fileencoding'], ['filetype']]
-      \ },
-      \ 'component': {
-      \   'filename': '%f',
-      \   'fileencoding': '%{&fileencoding ==# "" ? &encofing : &fileencoding}',
-      \   'gitbranch': '%{FugitiveHead()}'
-      \ }
-      \ }
+""let g:lightline = {
+""      \ 'colorscheme': 'onedark',
+""      \ 'active': {
+""      \   'left':  [['mode', 'paste'], ['gitbranch'], ['filename', 'modified']],
+""      \   'right': [['lineinfo'], ['percent'], ['fileencoding'], ['filetype']]
+""      \ },
+""      \ 'component': {
+""      \   'filename': '%f',
+""      \   'fileencoding': '%{&fileencoding ==# "" ? &encofing : &fileencoding}',
+""      \   'gitbranch': '%{FugitiveHead()}'
+""      \ }
+""      \ }
+
+""" ── カラースキーム ───────────────────────────────────────────
+""" silent! でエラーを抑制（PlugInstall前でも起動できるようにする）
+""set background=dark
+""let g:onedark_terminal_italics = 1              " イタリック有効（対応ターミナルのみ）
+""silent! colorscheme onedark
+""hi SpecialKey ctermfg=8 guifg=#666666
+""highlight LineNr ctermfg=226 guifg=#ffd700
+""highlight CursorLineNr ctermfg=226 guifg=#f0c674 ""gui=bold
+""highlight Comment ctermfg=65 guifg=#5f875f ""cterm=italic gui=italic
 
 " ── 全角スペースのハイライト ─────────────────────────────────
 function! s:highlight_zenkaku_space() abort
@@ -300,7 +300,7 @@ function! AlignComment() range
   let maxcol = 0
   for lnum in range(a:firstline, a:lastline)
     let text = getline(lnum)
-    let idx = match(text, ' // ')
+    let idx = match(text, ' # ')
     if idx < 0
       continue
     endif
@@ -312,7 +312,7 @@ function! AlignComment() range
 
   for lnum in range(a:firstline, a:lastline)
     let text = getline(lnum)
-    let idx = match(text, ' // ')
+    let idx = match(text, ' # ')
     if idx < 0
       continue
     endif
@@ -328,12 +328,11 @@ vnoremap cc :<C-U>'<,'>call ToggleComment()<CR>
 function! ToggleComment() range
   for lnum in range(a:firstline, a:lastline)
     let text = getline(lnum)
-    if text =~# '^// '
-      let newtext = substitute(text, '^// ', '', '')
+    if text =~# '^## '
+      let newtext = substitute(text, '^## ', '', '')
     else
-      let newtext = '// ' . text
+      let newtext = '## ' . text
     endif
     call setline(lnum, newtext)
   endfor
 endfunction
-
